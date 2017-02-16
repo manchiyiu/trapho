@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "express": "^4.14.1",
+    "vue": "^2.1.10"
+  },
+  "name": "frontend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "author": "ymcatar",
+  "license": "MIT",
+  "scripts": {
+    "start": "serve --port 5000 dist",
+    "dev": "vbuild --port 5000 ./src/index.js --dev",
+    "build": "vbuild ./src/index.js"
+  }
+}

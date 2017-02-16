@@ -1,0 +1,25 @@
+version: '2'
+
+volumes:
+  mongodata:
+    external: true
+
+services:
+
+  mongo:
+    image: mongo:3.2
+    command: "mongod --logpath /dev/null --smallfiles --setParameter failIndexKeyTooLong=false"
+    ports:
+     - "27018:27018"
+    volumes:
+     - mongodata:/data/db
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+     - "3000:3000"
+
+  frontend:
+    build: ./frontend
+    ports:
+     - "5000:5000"
