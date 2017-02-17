@@ -3,9 +3,9 @@
     "express": "^4.14.1",
     "seneca": "^3.3.0"
   },
-  "name": "api-gateway",
+  "name": "activity-microservice",
   "version": "1.0.0",
-  "description": "An express.js app that routes endpoint to various microservice.",
+  "description": "A microservice for handling activity planning related logic.",
   "main": "index.js",
   "author": "ymcatar",
   "license": "MIT",

@@ -18,6 +18,11 @@ services:
     build: ./api-gateway
     ports:
      - "3000:3000"
+    links:
+     - activity-microservice
+
+  activity-microservice:
+    build: ./activity-microservice
 
   frontend:
     build: ./frontend
