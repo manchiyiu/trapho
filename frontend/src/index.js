@@ -1,6 +1,11 @@
 import Vue from 'vue';
 
+import './theme';
+import './compoments/login-page/module';
+
+import App from './app.vue';
+
 new Vue({
   el: '#app',
-  render: h => <h1>This is fine.</h1>
+  render: h => h(App)
 });
