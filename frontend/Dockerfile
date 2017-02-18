@@ -14,7 +14,7 @@ RUN yarn global add serve vbuild
 
 # Bundle app source
 COPY ./ /usr/src/app
-RUN vbuild ./src/index.js
+RUN yarnpkg build
 
 EXPOSE 3000
 CMD [ "yarnpkg", "start" ]
