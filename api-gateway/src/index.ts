@@ -1,13 +1,13 @@
-const express = require('express');
-const seneca = require('seneca')();
+import * as express from 'express';
+import * as seneca from 'seneca';
 
 const app = express();
 
-seneca
+seneca()
   .client({ host: 'activity-microservice' });
 
 app.get('/', (req, res) => {
-  seneca.act({ role: 'math', cmd: 'sum', left: 1, right: 2 }, (err, result) => {
+  seneca().act({ role: 'math', cmd: 'sum', left: 1, right: 2 }, (err, result) => {
     res.send(result);
   });
 });

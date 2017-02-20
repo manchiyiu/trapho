@@ -9,6 +9,7 @@ WORKDIR /usr/src/app
 # Install app dependencies
 COPY package.json /usr/src/app/
 
+RUN yarn global add typescript
 RUN yarn install
 
 # Bundle app source

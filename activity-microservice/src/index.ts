@@ -1,9 +1,9 @@
-const express = require('express');
-const seneca = require('seneca')();
+import * as express from 'express';
+import * as seneca from 'seneca';
 
 const app = express();
 
-seneca
+seneca()
   .add('role:math,cmd:sum', (msg, reply) => {
     reply(null, { answer: (msg.left + msg.right) });
   })

@@ -26,6 +26,7 @@ After doing so, run this:
 ```bash
 sudo npm -g install yarn
 yarn global add serve
+yarn global add typescript
 ```
 
 ### Starting the whole system (production build)
