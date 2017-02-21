@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   html: {
-    title: 'test',
+    title: 'Trapho',
     template: path.join(__dirname, './index.html')
   }
 };

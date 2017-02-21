@@ -44,5 +44,7 @@ services:
 
   frontend:
     build: ./frontend
+    links:
+     - api-gateway
     ports:
      - "5000:5000"

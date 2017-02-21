@@ -39,6 +39,7 @@
 
 <script>
 import Vue from 'vue';
+import { post } from '../../utils';
 
 export default {
   data: () => ({
@@ -49,8 +50,12 @@ export default {
     isFilled: function () { return this.username.length <= 0 || this.password.length <= 0; }
   },
   methods: {
-    submit: function () {
-      alert(`sending request ${this.username} ${this.password}`);
+    submit: async function () {
+      let result = await post('auth/login', {
+        username: this.username,
+        password: this.password
+      });
+      console.log(result);
     }
   }
 }
