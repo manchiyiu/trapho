@@ -1,8 +1,6 @@
 {
   "dependencies": {
-    "@types/express": "^4.0.35",
     "@types/seneca": "^2.1.5",
-    "express": "^4.14.1",
     "seneca": "^3.3.0"
   },
   "name": "activity-microservice",
