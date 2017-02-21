@@ -1,2 +1,0 @@
-webpackJsonp([1,2],[function(e,n,r){"use strict";Object.defineProperty(n,"__esModule",{value:!0});var o=r(2),t=r.n(o);new t.a({el:"#app",render:function(e){return e("h1",null,["Hello World!"])}})},,,function(e,n,r){e.exports=r(0)}],[3]);
-//# sourceMappingURL=client.6e46987d.js.map

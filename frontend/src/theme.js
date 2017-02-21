@@ -4,8 +4,14 @@ import VueMaterial from 'vue-material';
 Vue.use(VueMaterial);
 
 Vue.material.registerTheme('default', {
-  accent: 'green',
-  primary: 'blue',
+  primary: {
+    color: 'indigo',
+    hue: 'A200'
+  },
+  accent: {
+    color: 'yello',
+    hue: '500'
+  },
   warn: 'red',
   background: 'white'
 });
