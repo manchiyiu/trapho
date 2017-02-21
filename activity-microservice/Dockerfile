@@ -14,6 +14,7 @@ RUN yarn install
 
 # Bundle app source
 COPY ./ /usr/src/app
+RUN yarnpkg build
 
 EXPOSE 3000
 CMD [ "yarnpkg", "start" ]
