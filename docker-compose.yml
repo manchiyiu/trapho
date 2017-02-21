@@ -14,15 +14,31 @@ services:
     volumes:
      - mongodata:/data/db
 
+  activity-microservice:
+    build: ./activity-microservice
+
+  auth-microservice:
+    build: ./auth-microservice
+
+  location-microservice:
+    build: ./location-microservice
+
+  storage-microservice:
+    build: ./storage-microservice
+
+  timeline-microservice:
+    build: ./timeline-microservice
+
   api-gateway:
     build: ./api-gateway
     ports:
      - "3000:3000"
     links:
      - activity-microservice
-
-  activity-microservice:
-    build: ./activity-microservice
+     - auth-microservice
+     - location-microservice
+     - storage-microservice
+     - timeline-microservice
 
   frontend:
     build: ./frontend

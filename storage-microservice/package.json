@@ -1,15 +1,13 @@
 {
   "dependencies": {
-    "@types/bluebird": "^3.0.37",
     "@types/express": "^4.0.35",
     "@types/seneca": "^2.1.5",
-    "bluebird": "^3.4.7",
     "express": "^4.14.1",
     "seneca": "^3.3.0"
   },
-  "name": "api-gateway",
+  "name": "storage-microservice",
   "version": "1.0.0",
-  "description": "An express.js app that routes endpoint to various microservice.",
+  "description": "A microservice for handling photo storage related logic.",
   "main": "index.js",
   "author": "ymcatar",
   "license": "MIT",
