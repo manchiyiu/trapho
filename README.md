@@ -36,6 +36,7 @@ Do the following:
 ```bash
 docker-compose build # will build all the docker iamges
 docker-compose up # start the docker images
+docker-compose up -d --build --no-deps api-gateway # to rebulid and restart only api-gateway, etc.
 ```
 
 Then, you can access the frontend at `localhost:5000` and the backend at `localhost:4000`.

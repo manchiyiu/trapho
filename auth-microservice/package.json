@@ -1,6 +1,8 @@
 {
   "dependencies": {
+    "@types/mongoose": "^4.7.6",
     "@types/seneca": "^2.1.5",
+    "mongoose": "^4.8.4",
     "seneca": "^3.3.0"
   },
   "name": "auth-microservice",

@@ -10,7 +10,7 @@ services:
     image: mongo:3.2
     command: "mongod --logpath /dev/null --smallfiles --setParameter failIndexKeyTooLong=false"
     ports:
-     - "27018:27018"
+     - "27017:27017"
     volumes:
      - mongodata:/data/db
 
@@ -19,6 +19,8 @@ services:
 
   auth-microservice:
     build: ./auth-microservice
+    links:
+     - mongo
 
   location-microservice:
     build: ./location-microservice
