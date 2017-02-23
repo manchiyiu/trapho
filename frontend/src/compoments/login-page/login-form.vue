@@ -39,7 +39,7 @@
 
 <script>
 import Vue from 'vue';
-import { post } from '../../utils';
+import { login } from '../../utils';
 
 export default {
   data: () => ({
@@ -51,11 +51,11 @@ export default {
   },
   methods: {
     submit: async function () {
-      let result = await post('auth/login', {
+      let { status, err, token } = await login({
         username: this.username,
         password: this.password
       });
-      console.log(result);
+      window._token = token;
     }
   }
 }
