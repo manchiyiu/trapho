@@ -3,14 +3,17 @@ import * as passport from 'passport';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as cors from 'cors';
+import * as http from 'http';
+import * as expressJwt from 'express-jwt';
 
-import { seneca, act } from './utils';
+import { seneca, act, SERVER_SECRET } from './utils';
 
 import './passport';
 
 /* import routes */
 
 import auth from './routes/auth';
+import test from './routes/test';
 
 const app = express();
 
@@ -22,7 +25,17 @@ app.use(cors());
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(
+  expressJwt({ secret: SERVER_SECRET }).unless({
+    path: [
+      '/auth/login',
+      '/auth/signup'
+    ]
+  })
+);
+
 app.use('/auth', auth);
+app.use('/test', test);
 
 seneca
   .client({ host: 'activity-microservice', pin: 'role:activity' })
@@ -31,6 +44,4 @@ seneca
   .client({ host: 'storage-microservice', pin: 'role:storage' })
   .client({ host: 'timeline-microservice', pin: 'role:timeline' });
 
-app.listen(3000, () => {
-  console.log('App listening on port 3000.');
-});
+http.createServer(app).listen(3000);
