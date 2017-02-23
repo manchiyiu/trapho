@@ -7,7 +7,7 @@ import * as http from 'http';
 import * as _ from 'lodash';
 import * as expressJwt from 'express-jwt';
 
-import { seneca, act, SERVER_SECRET } from './utils';
+import { seneca, act, errorMiddleware, SERVER_SECRET } from './utils';
 
 import './passport';
 
@@ -38,13 +38,7 @@ app.use(
 app.use('/auth', auth);
 app.use('/test', test);
 
-app.use((err, req, res, next) => {
-  let error = 'unknownError';
-  if (err.seneca === true) { /* is a seneca error */
-    error = err.details.message;
-  }
-  res.status(500).json({ status: 'error', error });
-}); // keep this as last middleware, which catches all error
+app.use(errorMiddleware); // keep this as last middleware, which catches all error
 
 seneca
   .client({ host: 'activity-microservice', pin: 'role:activity' })

@@ -14,6 +14,13 @@ router.post('/login',
 });
 
 router.post('/signup', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    await act({ role: 'auth', cmd: 'signup', username, password });
+    res.json({ status: 'ok' });
+  } catch (err) {
+    res.json({ status: 'error', error: err.details.message });
+  }
 });
 
 export default router;

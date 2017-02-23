@@ -6,7 +6,7 @@
       <login-page-login-form></login-page-login-form>
     </md-tab>
     <md-tab md-label="Sign up" md-icon="supervisor_account">
-      <p>Sign up</p>
+      <login-page-signup-form></login-page-signup-form>
     </md-tab>
   </md-tabs>
 </template>

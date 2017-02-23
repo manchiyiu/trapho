@@ -15,7 +15,7 @@
             <label>Password</label>
             <md-input required v-model="password" type="password"></md-input>
           </md-input-container>
-          <md-button class="md-primary md-raised" :disabled="isFilled" @click.native="submit">Login</md-button>
+          <md-button class="md-primary md-raised" :disabled="isFilled" @click.native="submit">Sign Up</md-button>
         </form>
       </md-card-content>
     </md-card>
@@ -42,7 +42,7 @@
 
 <script>
 import Vue from 'vue';
-import { login } from '../../utils';
+import { post } from '../../utils';
 
 export default {
   data: () => ({
@@ -55,14 +55,14 @@ export default {
   },
   methods: {
     submit: async function () {
-      let { status, error, token } = await login({
+      let { status, error, token } = await post('auth/signup', {
         username: this.username,
         password: this.password
       });
       if (error) {
         switch (error) {
-          case 'invalidUser':
-            this.errorMessage = 'User does not exist. Please try again';
+          case 'alreadyExist':
+            this.errorMessage = 'User already exists. Please try again';
             break;
           default:
             this.errorMessage = error;

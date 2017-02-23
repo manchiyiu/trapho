@@ -12,7 +12,7 @@ export default async (msg, reply) => {
   const user = new User({ username, password });
   try {
     await user.save();
-    reply(null, { err: null });
+    reply(null, null);
   } catch (e) {
     reply(new Error('databaseError'), null);
   }
