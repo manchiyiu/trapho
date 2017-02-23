@@ -62,7 +62,10 @@ export default {
       if (error) {
         switch (error) {
           case 'invalidUser':
-            this.errorMessage = 'User does not exist. Please try again';
+            this.errorMessage = 'User does not exist. Please try again.';
+            break;
+          case 'wrongPassword':
+            this.errorMessage = 'Wrong password. Please try again.';
             break;
           default:
             this.errorMessage = error;

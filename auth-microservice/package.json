@@ -2,6 +2,7 @@
   "dependencies": {
     "@types/mongoose": "^4.7.6",
     "@types/seneca": "^2.1.5",
+    "bcryptjs": "^2.4.3",
     "mongoose": "^4.8.4",
     "seneca": "^3.3.0"
   },

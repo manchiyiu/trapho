@@ -1,7 +1,10 @@
+import * as bcrypt from 'bcryptjs';
+
 import { User } from '../database';
 
 export default async (msg, reply) => {
   let { username, password } = msg;
+  password = await bcrypt.hash(password, 10);
   /* check if user already exists */
   let result = await User.findOne({ username });
   if (result) { /* user already exist */
