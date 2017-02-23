@@ -19,6 +19,9 @@
         </form>
       </md-card-content>
     </md-card>
+    <md-snackbar md-position="bottom center" ref="snackbar" :md-duration="4000">
+      <span>{{ errorMessage }}</span>
+    </md-snackbar>
   </div>
 </template>
 
@@ -44,18 +47,30 @@ import { login } from '../../utils';
 export default {
   data: () => ({
     username: '',
-    password: ''
+    password: '',
+    errorMessage: ''
   }),
   computed: {
     isFilled: function () { return this.username.length <= 0 || this.password.length <= 0; }
   },
   methods: {
     submit: async function () {
-      let { status, err, token } = await login({
+      let { status, error, token } = await login({
         username: this.username,
         password: this.password
       });
-      window._token = token;
+      if (error) {
+        switch (error) {
+          case 'invalidUser':
+            this.errorMessage = 'User does not exist. Please try again';
+            break;
+          default:
+            this.errorMessage = error;
+        }
+        this.$refs.snackbar.open();
+      } else {
+        window._token = token;
+      }
     }
   }
 }
