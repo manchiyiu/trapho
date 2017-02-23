@@ -1,5 +1,5 @@
 <name>app</name>
 
 <template>
-  <login-page-view></login-page-view>
+  <router-view></router-view>
 </template>
