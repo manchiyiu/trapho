@@ -5,7 +5,7 @@ export default async (msg, reply) => {
   /* check if user already exists */
   let result = await User.findOne({ username });
   if (result) { /* user already exist */
-    reply(null, { err: 'alreadyExist' });
+    reply(new Error('alreadyExist'), null);
     return;
   }
   /* create new user */
@@ -14,6 +14,6 @@ export default async (msg, reply) => {
     await user.save();
     reply(null, { err: null });
   } catch (e) {
-    reply(null, { err: 'databaseError' });
+    reply(new Error('databaseError'), null);
   }
 };

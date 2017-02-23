@@ -4,8 +4,8 @@ export default async (msg, reply) => {
   const { username, password } = msg;
   let user = await User.findOne({ username, password });
   if (!user) {
-    reply(null, { err: 'invalidUser' });
+    reply(new Error('invalidUser'), null);
     return;
   }
-  reply(null, { err: null, user });
+  reply(null, user);
 };
