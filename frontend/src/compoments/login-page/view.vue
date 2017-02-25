@@ -8,3 +8,15 @@
     </md-layout>
   </div>
 </template>
+
+<script>
+import Vue from 'vue';
+
+export default {
+  beforeMount: function() {
+    if (localStorage.token) { /* if the user has logged in */
+      this.$router.push('feed');
+    }
+  }
+};
+</script>

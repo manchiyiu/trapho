@@ -5,14 +5,11 @@ import * as _ from 'lodash';
 const BASE_PATH = 'http://localhost:3000/';
 
 const helper = async (router, path, method, options, func) => {
-  let result = await fetch(BASE_PATH + path, _.merge({ method }, options));
-  if (result.status === 403) {
+  let res = await fetch(BASE_PATH + path, _.merge({ method }, options));
+  if (res.status === 403) {
     router.push('/');
   }
-  if (result.status !== 200) {
-    throw new Error(result.status);
-  }
-  result = await result.json();
+  let result = await res.json();
   func && func(result);
   return result;
 };

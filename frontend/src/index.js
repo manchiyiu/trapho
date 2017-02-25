@@ -3,8 +3,10 @@ import VueRouter from 'vue-router';
 
 import './theme';
 import './compoments/login-page/module';
+import './compoments/photo-feed/module';
 
 import App from './app.vue';
+
 import LoginPageView from './compoments/login-page/view.vue';
 import PhotoFeedView from './compoments/photo-feed/view.vue';
 
