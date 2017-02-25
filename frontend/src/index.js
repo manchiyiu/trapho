@@ -6,11 +6,13 @@ import './compoments/login-page/module';
 
 import App from './app.vue';
 import LoginPageView from './compoments/login-page/view.vue';
+import PhotoFeedView from './compoments/photo-feed/view.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
-  { path: '/', component: LoginPageView }
+  { path: '/', component: LoginPageView },
+  { path: '/feed', component: PhotoFeedView }
 ];
 
 const router = new VueRouter({ routes });

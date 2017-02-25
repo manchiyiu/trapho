@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     submit: async function () {
-      let { status, error, token } = await login({
+      let { status, error, token } = await login(this.$router, {
         username: this.username,
         password: this.password
       });
@@ -72,7 +72,7 @@ export default {
         }
         this.$refs.snackbar.open();
       } else {
-        window._token = token;
+        this.$router.push('feed');
       }
     }
   }
