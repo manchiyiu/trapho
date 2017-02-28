@@ -10,7 +10,7 @@ WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
 
 RUN yarn install
-RUN yarn global add serve vbuild
+RUN yarn global add serve vbuild@6.9.1
 
 # Bundle app source
 COPY ./ /usr/src/app
