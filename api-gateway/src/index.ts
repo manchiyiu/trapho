@@ -15,6 +15,7 @@ import './passport';
 
 import auth from './routes/auth';
 import test from './routes/test';
+import location from './routes/location';
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.use(
 );
 
 app.use('/auth', auth);
+app.use('/location', location);
 app.use('/test', test);
 
 app.use(errorMiddleware); // keep this as last middleware, which catches all error

@@ -1,0 +1,93 @@
+import * as mongoose from 'mongoose';
+import * as _ from 'lodash';
+
+export default class Location {
+
+  id: string = null;
+  name: string = null;
+  coordinates: [number, number] = [null, null]
+  description: string = null;
+  rating: number = null;
+  personRated: number = null;
+
+  static schema = new mongoose.Schema({
+    name: String,
+    coordinates: [Number],
+    description: String,
+    rating: Number,
+    personRated: Number
+  });
+
+  static model = mongoose.model('Location', Location.schema);
+
+  static async retrieve(query: Object) {
+    let result;
+    try {
+      result = await this.model.findOne(query);
+      if (!result) throw new Error();
+    } catch (e) {
+      return null;
+    }
+    return new Location(result);
+  }
+
+  constructor(object: any) {
+    const { name, coordinates, description, rating, personRated, _id: id } = object;
+    this.name = name;
+    this.coordinates = coordinates;
+    this.description = description
+    this.rating = rating;
+    this.id = id;
+    this.personRated = personRated;
+    if(typeof this.rating === "undefined"){
+      this.rating = 0;
+    }
+    if(typeof this.personRated === "undefined"){
+      this.personRated = 0;
+    }
+  }
+
+  async save() {
+    const model = new Location.model({
+      name: this.name,
+      coordinates: this.coordinates,
+      description: this.description,
+      rating: this.rating,
+      personRated: this.personRated
+    });
+    var result;
+    await model.save().then(function(product){
+      result = mongoose.Types.ObjectId(product._id);
+      console.log("Result1:", result);
+    });
+    return result;
+  }
+
+  update(){
+    const modifiedLocation = {
+      name: this.name,
+      coordinates: this.coordinates,
+      description: this.description,
+      rating: this.rating,
+      personRated: this.personRated
+    };
+    return Location.model.findOneAndUpdate({"_id": this.id}, modifiedLocation, function (err, docs) {
+      if(err){
+        console.log("Err when updating location: ", err);
+      }
+    });
+  }
+
+  static async retrieveMany(conditions:Object){
+    let searchResult, result = [];
+    try{
+      searchResult = await Location.model.find(conditions,function (err, docs) {});
+    }catch(e){
+      return null;
+    }
+    for(var index in searchResult){
+      result.push(new Location(searchResult[index]));
+    }
+    return result;
+  }
+}
