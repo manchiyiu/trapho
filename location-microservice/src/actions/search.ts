@@ -3,12 +3,12 @@ import * as _ from 'lodash';
 import Location from '../model';
 
 export default async (msg, reply) => {
-    const simpleSearchKeys = ["name", "coordinates", "description"];
-    const strictResult = [false, true, false];
+    const simpleSearchKeys = ["name", "description"]
     const rangeSearchKeys = ["rating", "personRated"];
 
     var resultLimit = msg.resultLimit;
     const conditions = {};
+    const {coordinates, maxDistance} = msg;
 
     if(typeof msg.id != "undefined"){
         conditions["_id"] = msg.id;
@@ -16,8 +16,13 @@ export default async (msg, reply) => {
     if(typeof resultLimit != "number"){
         resultLimit = Infinity;
     }
+    if(typeof maxDistance != "undefined" && typeof coordinates === "undefined"){
+        reply(new Error("unspecifiedCoordinatesError"), null);
+    }else if(typeof coordinates != "undefined" && typeof maxDistance === "undefined"){
+        conditions["coordinates"] = coordinates;
+    }
     for(var i = 0; i<simpleSearchKeys.length; i++){
-        simpleKeyParser(simpleSearchKeys[i])(conditions, msg[simpleSearchKeys[i]], strictResult[i]);
+        simpleKeyParser(simpleSearchKeys[i])(conditions, msg[simpleSearchKeys[i]]);
     }
     for(var i = 0; i<rangeSearchKeys.length; i++){
         try{
@@ -28,7 +33,13 @@ export default async (msg, reply) => {
         }
     }
     try{
-        const result:Location[] = await Location.retrieveMany(conditions, resultLimit);
+        var result:Location[] = [];
+        //result = await Location.retrieveMany(conditions, resultLimit);
+        if(typeof maxDistance === "undefined"){
+           result = await Location.retrieveMany(conditions, resultLimit);
+        }else{
+            result = await Location.retrieveManyByDist(conditions, coordinates, maxDistance, resultLimit);
+        }
         reply(null, {result: result});
     }catch(e){
         reply(new Error('databaseError'), null);
@@ -36,14 +47,9 @@ export default async (msg, reply) => {
 }
 
 function simpleKeyParser(key){
-    const verifier = function(conditions, value, strictResult){
+    const verifier = function(conditions, value){
         if(typeof value != "undefined"){
-            if(strictResult){
-                conditions[key] = value;
-            }else{
-                conditions[key] = new RegExp(value, "i");
-            }
-            
+            conditions[key] = new RegExp(value, "i");
         }
     }
     return verifier;

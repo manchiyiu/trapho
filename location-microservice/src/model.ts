@@ -5,7 +5,7 @@ export default class Location {
 
   id: string = null;
   name: string = null;
-  coordinates: [number, number] = [null, null]
+  coordinates: [number, number] = [null, null] //Longitude, Latitude
   description: string = null;
   rating: number = null;
   personRated: number = null;
@@ -13,12 +13,13 @@ export default class Location {
 
   static schema = new mongoose.Schema({
     name: String,
-    coordinates: [Number],
+    coordinates: {type: [Number], default: [0,0], index: "2dsphere"},
     description: String,
     rating: Number,
     personRated: Number,
     photoRated: {}
   });
+  
 
   static model = mongoose.model('Location', Location.schema);
 
@@ -95,10 +96,31 @@ export default class Location {
       }
       
     }catch(e){
+      console.log("Err:", e);
       return null;
     }
     for(var index in searchResult){
       result.push(new Location(searchResult[index]));
+    }
+    return result;
+  }
+
+  static async retrieveManyByDist(conditions:Object, coordinates:number[], maxDistance:number, resultLimit:number){
+    var searchResult, result = [];
+    let point =  { coordinates: coordinates, type: 'Point' };    
+    try{
+      if(resultLimit != Infinity){
+        searchResult = await Location.model.geoNear(point, {maxDistance: maxDistance, spherical: true, query:conditions, limit:resultLimit}, function(err, res, stats){});
+      }else{
+        searchResult = await Location.model.geoNear(point, {maxDistance: maxDistance, spherical: true, query:conditions}, function(err, res, stats){});
+      }
+    }catch(e){
+      console.log("Err:", e);
+      return null;
+    }
+
+    for(var index in searchResult){
+      result.push(new Location(searchResult[index].obj));
     }
     return result;
   }
