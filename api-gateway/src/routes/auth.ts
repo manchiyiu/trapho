@@ -12,7 +12,6 @@ const router = express.Router();
  * @apiPermission None
  * @apiGroup Authentication
  *
- * @apiSuccess {String} status Possible value: 'ok', 'wrongPassword', 'invalidUser', etc.
  * @apiSuccess {Object} user User Object
  * @apiSuccess {String} user.id User ID
  * @apiSuccess {String} user.username Username
@@ -20,13 +19,20 @@ const router = express.Router();
  *
  * @apiSuccessExample {json} Success-Response:
  *    {
- *      "status": "ok",
  *      "user": {
  *        "id": "58af171ace68fe000f732753",
  *        "username": "isaac"
  *      },
  *      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE0ODgzNjkzODUsImV4cCI6MTQ4ODM3NjU4NX0.-fNQqa3zJZaCPB14G4wd6PoZTg3FV7dATkf9LCS_Rxg"
  *    }
+ *
+ * @apiError (Error 500) {String} error Possible value: 'wrongPassword', 'invalidUser', etc.
+ * @apiErrorExample {json} Error-Response:
+ *    {
+ *      "error": "wrongPassword"
+ *    }
+ *
+ *
  */
 router.post('/login',
   passport.authenticate('local', { session: false, failWithError: true }),
@@ -52,7 +58,7 @@ router.post('/login',
  *      "id": "58af171ace68fe000f732753"
  *    }
  *
- * @apiError {String} error Possible value: 'alreadyExist', 'databaseError', etc.
+ * @apiError (Error 500) {String} error Possible value: 'alreadyExist', 'databaseError', etc.
  * @apiErrorExample {json} Error-Response:
  *    {
  *      "error": "alreadyExist"
@@ -65,7 +71,7 @@ router.post('/signup', async (req, res) => {
     const id = await act({ role: 'auth', cmd: 'signup', username, password });
     res.json({ id });
   } catch (err) {
-    res.status(403).json({ error: err.details.message });
+    res.status(500).json({ error: err.details.message });
   }
 });
 
