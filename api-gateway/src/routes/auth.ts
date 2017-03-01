@@ -32,8 +32,9 @@ router.post('/login',
   passport.authenticate('local', { session: false, failWithError: true }),
   generateTokenMiddleware,
   async (req: any, res) => {
-    res.json({ status: 'ok', user: req.user, token: req.token });
-});
+    res.json({ user: req.user, token: req.token });
+  }
+);
 
 /**
  * @api {post} /auth/signup Signup User
@@ -61,10 +62,10 @@ router.post('/login',
 router.post('/signup', async (req, res) => {
   const { username, password } = req.body;
   try {
-    await act({ role: 'auth', cmd: 'signup', username, password });
-    res.json({ status: 'ok' });
+    const id = await act({ role: 'auth', cmd: 'signup', username, password });
+    res.json({ id });
   } catch (err) {
-    res.json({ status: 'error', error: err.details.message });
+    res.status(403).json({ error: err.details.message });
   }
 });
 
