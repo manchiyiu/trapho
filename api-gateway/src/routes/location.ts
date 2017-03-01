@@ -24,9 +24,9 @@ router.post('/modify', async (req, res) => {
 })
 
 router.post('/search', async(req,res) => {
-  const {id, name, coordinates, description} = req.body;
+  const {id, name, coordinates, description, rating, personRated, resultLimit} = req.body;
   try {
-    let msg = await act({ role: 'location', cmd: 'search', id, name, coordinates, description });
+    let msg = await act({ role: 'location', cmd: 'search', id, name, coordinates, description, rating, personRated, resultLimit });
     res.json({ status: 'ok' , result:msg.result});
   } catch (err) {
     res.json({ status: 'error', error: err.details.message });

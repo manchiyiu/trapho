@@ -85,10 +85,15 @@ export default class Location {
     });
   }
 
-  static async retrieveMany(conditions:Object){
+  static async retrieveMany(conditions:Object, resultLimit:number){
     let searchResult, result = [];
     try{
-      searchResult = await Location.model.find(conditions,function (err, docs) {});
+      if(resultLimit != Infinity){
+        searchResult = await Location.model.find(conditions,function (err, docs) {}).sort({_id:-1}).limit(resultLimit);
+      }else{
+        searchResult = await Location.model.find(conditions,function (err, docs) {});
+      }
+      
     }catch(e){
       return null;
     }
