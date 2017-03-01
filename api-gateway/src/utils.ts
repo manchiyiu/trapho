@@ -16,5 +16,5 @@ export const errorMiddleware
     res.status(403).json({ status: 'error', error });
     return;
   }
-  res.status(500).json({ status: 'error', error });
+  res.status(403).json({ status: 'error', error });
 };
