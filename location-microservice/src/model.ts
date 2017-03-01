@@ -9,13 +9,15 @@ export default class Location {
   description: string = null;
   rating: number = null;
   personRated: number = null;
+  photoRated: {} = {};
 
   static schema = new mongoose.Schema({
     name: String,
     coordinates: [Number],
     description: String,
     rating: Number,
-    personRated: Number
+    personRated: Number,
+    photoRated: {}
   });
 
   static model = mongoose.model('Location', Location.schema);
@@ -32,18 +34,22 @@ export default class Location {
   }
 
   constructor(object: any) {
-    const { name, coordinates, description, rating, personRated, _id: id } = object;
+    const { name, coordinates, description, rating, personRated, photoRated, _id: id } = object;
     this.name = name;
     this.coordinates = coordinates;
     this.description = description
     this.rating = rating;
     this.id = id;
     this.personRated = personRated;
+    this.photoRated = photoRated;
     if(typeof this.rating === "undefined"){
       this.rating = 0;
     }
     if(typeof this.personRated === "undefined"){
       this.personRated = 0;
+    }
+    if(typeof this.photoRated === "undefined"){
+      this.photoRated = {};
     }
   }
 
@@ -53,12 +59,12 @@ export default class Location {
       coordinates: this.coordinates,
       description: this.description,
       rating: this.rating,
-      personRated: this.personRated
+      personRated: this.personRated,
+      photoRated: this.photoRated
     });
     var result;
     await model.save().then(function(product){
       result = mongoose.Types.ObjectId(product._id);
-      console.log("Result1:", result);
     });
     return result;
   }
@@ -69,7 +75,8 @@ export default class Location {
       coordinates: this.coordinates,
       description: this.description,
       rating: this.rating,
-      personRated: this.personRated
+      personRated: this.personRated,
+      photoRated: this.photoRated
     };
     return Location.model.findOneAndUpdate({"_id": this.id}, modifiedLocation, function (err, docs) {
       if(err){

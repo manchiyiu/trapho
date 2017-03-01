@@ -5,7 +5,7 @@ import Location from '../model'
 export default async (msg, reply) => {
     const id = msg.id;
     if(typeof id == "undefined"){
-        reply(new Error("invalidIDError"), null);
+        reply(new Error("invalidLocationIDError"), null);
         return;
     }
     const location: Location = await Location.retrieve({"_id": id})
@@ -22,6 +22,6 @@ export default async (msg, reply) => {
             reply(new Error("databaseError"), null);
         }
     }else{
-        reply(new Error("locationNotFoundError"), null);
+        reply(new Error("invalidLocationIDError"), null);
     }
 };

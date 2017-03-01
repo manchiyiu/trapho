@@ -8,9 +8,7 @@ export default async (msg, reply) => {
     const location = new Location({name, coordinates, description});
     try{
         let result = await location.save();
-        console.log("Result:", result);
-        console.log("Type:", typeof result);
-        reply(null, String(result));
+        reply(null, {result: String(result)});
     }catch(e){
         reply(new Error('databaseError'), null);
     }

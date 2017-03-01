@@ -14,7 +14,7 @@ export default async (msg, reply) => {
     }
     try{
         const result:Location[] = await Location.retrieveMany(conditions);
-        reply(null, result);
+        reply(null, {result: result});
     }catch(e){
         reply(new Error('databaseError'), null);
     }

@@ -6,7 +6,8 @@ import { seneca } from './utils';
 import add from './actions/add';
 import modify from './actions/modify';
 import search from './actions/search';
-//import rate from './actions/rate';
+import rate from './actions/rate';
+import unrate from './actions/unrate';
 
 mongoose.connect('mongodb://mongo/location');
 
@@ -18,5 +19,6 @@ seneca
   .add('cmd:add', add)
   .add('cmd:modify', modify)
   .add('cmd:search', search)
-//  .add('cmd:rate', rate)
+  .add('cmd:rate', rate)
+  .add('cmd:unrate', unrate)
   .listen();
