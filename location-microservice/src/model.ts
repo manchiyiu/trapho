@@ -8,7 +8,7 @@ export default class Location {
   coordinates: [number, number] = [null, null] //Longitude, Latitude
   description: string = null;
   rating: number = null;
-  personRated: number = null;
+  numberRated: number = null;
   photoRated: {} = {};
 
   static schema = new mongoose.Schema({
@@ -16,7 +16,7 @@ export default class Location {
     coordinates: {type: [Number], default: [0,0], index: "2dsphere"},
     description: String,
     rating: Number,
-    personRated: Number,
+    numberRated: Number,
     photoRated: {}
   });
   
@@ -35,19 +35,19 @@ export default class Location {
   }
 
   constructor(object: any) {
-    const { name, coordinates, description, rating, personRated, photoRated, _id: id } = object;
+    const { name, coordinates, description, rating, numberRated, photoRated, _id: id } = object;
     this.name = name;
     this.coordinates = coordinates;
     this.description = description
     this.rating = rating;
     this.id = id;
-    this.personRated = personRated;
+    this.numberRated = numberRated;
     this.photoRated = photoRated;
     if(typeof this.rating === "undefined"){
       this.rating = 0;
     }
-    if(typeof this.personRated === "undefined"){
-      this.personRated = 0;
+    if(typeof this.numberRated === "undefined"){
+      this.numberRated = 0;
     }
     if(typeof this.photoRated === "undefined"){
       this.photoRated = {};
@@ -60,7 +60,7 @@ export default class Location {
       coordinates: this.coordinates,
       description: this.description,
       rating: this.rating,
-      personRated: this.personRated,
+      numberRated: this.numberRated,
       photoRated: this.photoRated
     });
     var result;
@@ -76,7 +76,7 @@ export default class Location {
       coordinates: this.coordinates,
       description: this.description,
       rating: this.rating,
-      personRated: this.personRated,
+      numberRated: this.numberRated,
       photoRated: this.photoRated
     };
     return Location.model.findOneAndUpdate({"_id": this.id}, modifiedLocation, function (err, docs) {

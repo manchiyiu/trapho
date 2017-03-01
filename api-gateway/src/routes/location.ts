@@ -24,9 +24,9 @@ router.post('/modify', async (req, res) => {
 })
 
 router.post('/search', async(req,res) => {
-  const {id, name, coordinates, maxDistance, description, rating, personRated, resultLimit} = req.body;
+  const {id, name, coordinates, maxDistance, description, rating, numberRated, resultLimit} = req.body;
   try {
-    let msg = await act({ role: 'location', cmd: 'search', id, name, coordinates, maxDistance, description, rating, personRated, resultLimit });
+    let msg = await act({ role: 'location', cmd: 'search', id, name, coordinates, maxDistance, description, rating, numberRated, resultLimit });
     res.json({ status: 'ok' , result:msg.result});
   } catch (err) {
     res.json({ status: 'error', error: err.details.message });
@@ -37,7 +37,7 @@ router.post('/rate', async(req,res) => {
   const {id, rating, photoID} = req.body;
   try {
     let msg = await act({ role: 'location', cmd: 'rate', id, rating, photoID });
-    res.json({ status: 'ok' , rating:msg.rating, personRated: msg.personRated});
+    res.json({ status: 'ok' , rating:msg.rating, numberRated: msg.numberRated});
   } catch (err) {
     res.json({ status: 'error', error: err.details.message });
   }
@@ -47,7 +47,7 @@ router.post('/unrate', async(req,res) => {
   const {id, photoID} = req.body;
   try {
     let msg = await act({ role: 'location', cmd: 'unrate', id, photoID });
-    res.json({ status: 'ok' , rating:msg.rating, personRated: msg.personRated});
+    res.json({ status: 'ok' , rating:msg.rating, numberRated: msg.numberRated});
   } catch (err) {
     res.json({ status: 'error', error: err.details.message });
   }

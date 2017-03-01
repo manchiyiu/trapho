@@ -18,15 +18,15 @@ export default async (msg, reply) => {
     // TODO: Add logic to check validity of photoID
     if(location){
         if(typeof location.photoRated[photoID] != "undefined"){
-            reply(new Error("AlreadyRatedError"), null);
+            reply(new Error("alreadyRatedError"), null);
             return;
         }
-        location.rating = (location.rating*location.personRated+rating)/(location.personRated+1);
-        location.personRated += 1;
+        location.rating = (location.rating*location.numberRated+rating)/(location.numberRated+1);
+        location.numberRated += 1;
         location.photoRated[photoID] = rating;
         try{
             let result = await location.update();
-            reply(null, {rating: location.rating, personRated: location.personRated});
+            reply(null, {rating: location.rating, numberRated: location.numberRated});
         }catch(e){
             reply(new Error("databaseError"), null);
         }

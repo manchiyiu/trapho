@@ -4,7 +4,7 @@ import Location from '../model';
 
 export default async (msg, reply) => {
     const simpleSearchKeys = ["name", "description"]
-    const rangeSearchKeys = ["rating", "personRated"];
+    const rangeSearchKeys = ["rating", "numberRated"];
 
     var resultLimit = msg.resultLimit;
     const conditions = {};
