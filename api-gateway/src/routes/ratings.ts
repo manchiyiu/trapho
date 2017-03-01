@@ -6,7 +6,7 @@ import { act } from '../utils';
 const router = express.Router();
 
 /**
- * @api {get} /ratings/users/:userId Retrieve ratings by userId
+ * @api {get} /ratings/:userId Retrieve ratings by userId
  * @apiName ratings_userid
  * @apiPermission User
  * @apiGroup Locations Ratings
@@ -31,7 +31,7 @@ const router = express.Router();
  */
 
 /**
- * @api {get} /ratings/users/:userId/:locationId Retrieve ratings by userId and locationId
+ * @api {get} /ratings/:userId/:locationId Retrieve ratings by userId and locationId
  * @apiName ratings_userid_locationid
  * @apiPermission User
  * @apiGroup Locations Ratings
@@ -56,7 +56,7 @@ const router = express.Router();
  */
 
 /**
- * @api {patch} /ratings/users/:userId/:locationId Patch ratings by userId and locationId
+ * @api {patch} /ratings/:userId/:locationId Patch ratings by userId and locationId
  * @apiName ratings_patch_userid_locationid
  * @apiPermission User
  * @apiGroup Locations Ratings
@@ -81,7 +81,7 @@ const router = express.Router();
  */
 
 /**
- * @api {delete} /ratings/users/:userId/:locationId Delete ratings by userId and locationId
+ * @api {delete} /ratings/:userId/:locationId Delete ratings by userId and locationId
  * @apiName ratings_delete_userid_locationid
  * @apiPermission User
  * @apiGroup Locations Ratings
