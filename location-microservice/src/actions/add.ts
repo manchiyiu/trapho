@@ -9,6 +9,14 @@ export default async (msg, reply) => {
         reply(new Error("invalidCoordinatesError"), null);
         return;
     }
+    if(typeof name === "undefined"){
+        reply(new Error("invalidNameError"), null);
+        return;
+    }
+    if(typeof description === "undefined"){
+        reply(new Error("invalidDescriptionError"), null);
+        return;
+    }
     const location = new Location({name, coordinates, description});
     try{
         let result = await location.save();
