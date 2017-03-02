@@ -106,4 +106,29 @@ const router = express.Router();
  *    }
  */
 
+/**
+ * @api {delete} /ratings/:userId/:locationId Create ratings by userId and locationId
+ * @apiName ratings_create_userid_locationid
+ * @apiPermission User
+ * @apiGroup Locations Ratings
+ *
+ * @apiDescription Creates a rating object.
+ *
+ * @apiParam {String} userId                  User id
+ * @apiParam {String} locationId              Location id
+ * @apiParam {String} rating                  Rating value
+ *
+ * @apiSuccess {String} id                    ID of the rating record added
+ * @apiSuccessExample  {json} Success-Response:
+ *   {
+ *     "id": "1234567",
+ *   }
+ *
+ * @apiError (Error 500) {String} error Possible value: 'userNotExist', 'locationNotExist', etc.
+ * @apiErrorExample {json} Error-Response:
+ *    {
+ *      "error": "userNotExist"
+ *    }
+ */
+
 export default router;
