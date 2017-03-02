@@ -20,14 +20,16 @@ const router = express.Router();
  * @apiSuccess {Number} ratings.rating         Rating value ([0, 10])
  *
  ** @apiSuccessExample  {json} Success-Response:
- *   [{
- *     "locationId": "1234567",
- *     "rating": 5.8
- *   },
  *   {
- *     "locationId": "2135sadas",
- *     "rating": 6.89
- *   }]
+ *     "ratings": [{
+ *        "locationId": "1234567",
+ *        "rating": 5.8
+ *      },
+ *      {
+ *        "locationId": "2135sadas",
+ *        "rating": 6.89
+ *      }]
+ *   }
  */
 
 /**

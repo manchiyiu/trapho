@@ -47,13 +47,15 @@ const router = express.Router();
  * @apiSuccess {Photo[]} photos                 array containing all related photos object
  *
  ** @apiSuccessExample  {json} Success-Response:
- *   [{
- *     id: "asdasd123123",
- *     userId: "asdsad213fas",
- *     locationId: "asd21jg34543",
- *     url: "http://trapho.com/whatver/fsdfsdfsdf.jpg",
- *     description: "Wow. This is amazing."
- *   }]
+ *   {
+ *     "photos": [{
+ *        id: "asdasd123123",
+ *        userId: "asdsad213fas",
+ *        locationId: "asd21jg34543",
+ *        url: "http://trapho.com/whatver/fsdfsdfsdf.jpg",
+ *        description: "Wow. This is amazing."
+ *      }]
+ *   }
  */
 
 /**

@@ -24,18 +24,20 @@ const router = express.Router();
  * @apiSuccess {Location[]} locations               Array containing all matching locations, empty array if no match. For detailed strucuture, please refer to "Retrieve location by id".
  *
  ** @apiSuccessExample  {json} Success-Response:
- *   [{
- *     "id": "1234567",
- *     "name": "Small Bridge Flowing Water",
- *     "description": "Some fun place.",
- *     "tags": ["CUHK", "fun"],
- *     "coordinates": {
- *       "lat": 23.02323,
- *       "lng": -23.323223
- *     },
- *     "rating": 7.8,
- *     "photoIds": ["dasddasd", "asd23ewaasd"]
- *   }]
+ *   { "locations":
+ *      [{
+ *        "id": "1234567",
+ *        "name": "Small Bridge Flowing Water",
+ *        "description": "Some fun place.",
+ *        "tags": ["CUHK", "fun"],
+ *        "coordinates": {
+ *          "lat": 23.02323,
+ *          "lng": -23.323223
+ *        },
+ *        "rating": 7.8,
+ *        "photoIds": ["dasddasd", "asd23ewaasd"]
+ *      }]
+ *  }
  *
  */
 router.get('/', async (req, res) => {
