@@ -6,7 +6,7 @@ import { act } from '../utils';
 const router = express.Router();
 
 /**
- * @api {get} /photos/:photoId Retrieve photo by photoId
+ * @api {get} /photos/id/:photoId Retrieve photo by photoId
  * @apiName photos_photoId
  * @apiPermission User
  * @apiGroup Photos
@@ -89,7 +89,7 @@ const router = express.Router();
  */
 
 /**
- * @api {patch} /photos/:photoId Patch a photo
+ * @api {patch} /photos/id/:photoId Patch a photo
  * @apiName photos_patch
  * @apiPermission User
  * @apiGroup Photos
@@ -116,7 +116,7 @@ const router = express.Router();
  *
  */
 /**
- * @api {delete} /photos/:photoId Delete a photo
+ * @api {delete} /photos/id/:photoId Delete a photo
  * @apiName photos_delete
  * @apiPermission User
  * @apiGroup Photos

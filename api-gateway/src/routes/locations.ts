@@ -6,7 +6,7 @@ import { act } from '../utils';
 const router = express.Router();
 
 /**
- * @api {get} /locations/:locationId Retrieve locations
+ * @api {get} /locations/id/:locationId Retrieve locations
  * @apiName location_get
  * @apiPermission User
  * @apiGroup Locations
@@ -45,7 +45,7 @@ router.get('/', async (req, res) => {
 
 
 /**
- * @api {get} /locations/:locationId Retrieve location by id
+ * @api {get} /locations/id/:locationId Retrieve location by id
  * @apiName location_get_id
  * @apiPermission User
  * @apiGroup Locations
@@ -111,7 +111,7 @@ router.post('/', async (req, res) => {
 });
 
 /**
- * @api {patch} /locations/:locationId Patch a location
+ * @api {patch} /locations/id/:locationId Patch a location
  * @apiName location_patch
  * @apiPermission User
  * @apiGroup Locations
@@ -138,7 +138,7 @@ router.patch('/:locationId', async (req, res) => {
 });
 
 /**
- * @api {delete} /locations/:locationId Delete a location
+ * @api {delete} /locations/id/:locationId Delete a location
  * @apiName location_delete
  * @apiPermission User
  * @apiGroup Locations
