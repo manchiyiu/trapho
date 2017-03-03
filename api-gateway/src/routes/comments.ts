@@ -21,14 +21,12 @@
  *      [{
  *        "id": "1234567",
  *        "userId": "asdasdas",
- *        "photoId": "fsdfd23",
  *        "timestamp": "2017-03-02T16:39:27+00:00",
  *        "content": "wow. first!"
  *      },
  *      {
  *        "id": "3123",
  *        "userId": "asd213asdas",
- *        "photoId": "fsdfd12312323",
  *        "timestamp": "2017-03-02T16:40:27+00:00",
  *        "content": "wow. second!"
  *      }]
@@ -55,14 +53,12 @@
  *   { "comments":
  *      [{
  *        "id": "1234567",
- *        "userId": "asdasdas",
  *        "photoId": "fsdfd23",
  *        "timestamp": "2017-03-02T16:39:27+00:00",
  *        "content": "wow. first!"
  *      },
  *      {
  *        "id": "3123",
- *        "userId": "asd213asdas",
  *        "photoId": "fsdfd12312323",
  *        "timestamp": "2017-03-02T16:40:27+00:00",
  *        "content": "wow. second!"
@@ -87,7 +83,7 @@
  * @apiSuccess {String}     id                      ID of the comment
  * @apiSuccess {String}     userId                  UserId of the comment poster
  * @apiSuccess {String}     photoId                 PhotoId associated with the comment
- * @apiSucesss {String}     timestamp               Timestamp when the comment was created
+ * @apiSuccess {String}     timestamp               Timestamp when the comment was created
  * @apiSuccess {String}     content                 Content of the comment
  *
  * @apiSuccessExample  {json} Success-Response:
