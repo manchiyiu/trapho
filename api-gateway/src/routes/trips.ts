@@ -1,4 +1,36 @@
 /**
+ * @api {get} /trips/users/:userId Retrieve all trips by userId
+ * @apiName trips_userId
+ * @apiPermission User
+ * @apiGroup Trips
+ *
+ * @apiParam {String}       userId                 ID of the user
+ *
+ * @apiSuccess {Trip[]}     trips                  Array containing trip object, see the GET by tripId endpoint for format.
+ * @apiSuccessExample  {json} Success-Response:
+ *   [{
+ *      "id": "sadadasd",
+ *      "name": "Taiwan Trip",
+ *      "userId": "asadasd123",
+ *      "timestamp": "2017-03-02T16:39:27+00:00",
+ *      "locations": [
+ *        {
+ *          "id": "asdsaddas213",
+ *          "startTime": "2017-04-02T10:39:27+00:00",
+ *          "endTime": "2017-04-02T16:39:27+00:00",
+ *          "comment": "Must visit this, fun place!"
+ *        }
+ *      ]
+ *   }]
+ *
+ * @apiError (Error 500) {String} apiError            Error message ('userNotExist', 'databaseError', etc.)
+ * @apiErrorExample {json} Error-Response:
+ *   {
+ *     "error": "userNotExist"
+ *   }
+ */
+
+/**
  * @api {get} /trips/id/:tripId Retrieve trip by tripId
  * @apiName trips_id
  * @apiPermission User
