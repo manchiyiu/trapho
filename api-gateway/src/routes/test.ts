@@ -11,7 +11,6 @@ const router = express.Router();
  * @apiPermission User
  * @apiGroup Test
  *
- *
  * @apiSuccess {String} status Status, only having an 'ok' value.
  */
 router.get('/', async (req, res) => {

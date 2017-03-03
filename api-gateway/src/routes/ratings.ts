@@ -6,8 +6,8 @@ import { act } from '../utils';
 const router = express.Router();
 
 /**
- * @api {get} /ratings/:userId Retrieve ratings by userId
- * @apiName ratings_userid
+ * @api {get} /ratings/users/:userId Retrieve all ratings by userId
+ * @apiName ratings_retrieve_userid
  * @apiPermission User
  * @apiGroup Locations Ratings
  *
@@ -15,100 +15,90 @@ const router = express.Router();
  *
  * @apiParam {String} userId                   User id
  *
- * @apiSuccess {Ratings[]} ratings             Array containing all ratings object
- * @apiSuccess {String} ratings.locationId     Location ID of the location associated with that rating
- * @apiSuccess {Number} ratings.rating         Rating value ([0, 10])
+ * @apiUse ratingsArray
  *
- ** @apiSuccessExample  {json} Success-Response:
+ * @apiError (Error 500) {String} apiError Error message ('userNotExist', 'databaseError', etc.)
+ * @apiErrorExample {json} Error-Response:
  *   {
- *     "ratings": [{
- *        "locationId": "1234567",
- *        "rating": 5.8
- *      },
- *      {
- *        "locationId": "2135sadas",
- *        "rating": 6.89
- *      }]
+ *     "error": "userNotExist"
  *   }
  */
+router.get('/users/:userId', async (req, res) => {
+  const { userId } = req.params;
+  res.json({ 'status': 'not_implemented_yet' });
+});
 
 /**
- * @api {get} /ratings/:userId/:locationId Retrieve ratings by userId and locationId
- * @apiName ratings_userid_locationid
+ * @api {get} /ratings/users/:userId/locations/:locationId Retrieve ratings by userId and locationId
+ * @apiName ratings_retrieve_userid_locationId
  * @apiPermission User
  * @apiGroup Locations Ratings
  *
  * @apiParam {String} userId                   User id
  * @apiParam {String} locationId               Location id
  *
- * @apiSuccess {String} locationId     Location ID of the location associated with that rating
- * @apiSuccess {Number} rating         Rating value ([0, 10])
+ * @apiUse ratings
  *
- * @apiSuccessExample  {json} Success-Response:
- *   {
- *     "locationId": "1234567",
- *     "rating": 5.8
- *   }
- *
- * @apiError (Error 500) {String} error Possible value: 'ratingNotExist', etc.
+ * @apiError (Error 500) {String} error Possible value: 'userNotExist', 'locationNotExist', 'ratingNotExist', etc.
  * @apiErrorExample {json} Error-Response:
  *    {
  *      "error": "ratingNotExist"
  *    }
  */
+router.get('/users/:userId/locations/:locationId', async (req, res) => {
+  const { userId, locationId } = req.params;
+  res.json({ 'status': 'not_implemented_yet' });
+});
 
 /**
- * @api {patch} /ratings/:userId/:locationId Patch ratings by userId and locationId
+ * @api {patch} /ratings/users/:userId/locations/:locationId Patch ratings by userId and locationId
  * @apiName ratings_patch_userid_locationid
  * @apiPermission User
  * @apiGroup Locations Ratings
- *
- * @apiDescription Patch a rating object.
  *
  * @apiParam {String} userId                  User id
  * @apiParam {String} locationId              Location id
  * @apiParam {String} rating                  New rating value
  *
- * @apiSuccess {String} id                    ID of the rating record
- * @apiSuccessExample  {json} Success-Response:
- *   {
- *     "id": "1234567",
- *   }
+ * @apiUse objectId
  *
- * @apiError (Error 500) {String} error Possible value: 'ratingNotExist', etc.
+ * @apiError (Error 500) {String} error Possible value: 'userNotExist', 'locationNotExist', 'ratingNotExist', etc.
  * @apiErrorExample {json} Error-Response:
  *    {
  *      "error": "ratingNotExist"
  *    }
  */
+router.patch('/users/:userId/locations/:locationId', async (req, res) => {
+  const { userId, locationId } = req.params;
+  const { rating } = req.body;
+  res.json({ 'status': 'not_implemented_yet' });
+});
 
 /**
- * @api {delete} /ratings/:userId/:locationId Delete ratings by userId and locationId
+ * @api {delete} /ratings/users/:userId/locations/:locationId Delete ratings by userId and locationId
  * @apiName ratings_delete_userid_locationid
  * @apiPermission User
  * @apiGroup Locations Ratings
  *
- * @apiDescription Delete a rating object.
- *
  * @apiParam {String} userId                  User id
  * @apiParam {String} locationId              Location id
  *
- * @apiSuccess {String} id                    ID of the rating record deleted
- * @apiSuccessExample  {json} Success-Response:
- *   {
- *     "id": "1234567",
- *   }
+ * @apiUse objectId
  *
- * @apiError (Error 500) {String} error Possible value: 'ratingNotExist', etc.
+ * @apiError (Error 500) {String} error Possible value: 'userNotExist', 'locationNotExist', 'ratingNotExist', etc.
  * @apiErrorExample {json} Error-Response:
  *    {
  *      "error": "ratingNotExist"
  *    }
  */
+router.delete('/users/:userId/locations/:locationId', async (req, res) => {
+  const { userId, locationId } = req.params;
+  res.json({ 'status': 'not_implemented_yet' });
+});
 
 /**
- * @api {delete} /ratings/:userId/:locationId Create ratings by userId and locationId
- * @apiName ratings_create_userid_locationid
+ * @api {post} /ratings Create ratings
+ * @apiName ratings_create
  * @apiPermission User
  * @apiGroup Locations Ratings
  *
@@ -118,17 +108,17 @@ const router = express.Router();
  * @apiParam {String} locationId              Location id
  * @apiParam {String} rating                  Rating value
  *
- * @apiSuccess {String} id                    ID of the rating record added
- * @apiSuccessExample  {json} Success-Response:
- *   {
- *     "id": "1234567",
- *   }
+ * @apiUse objectId
  *
  * @apiError (Error 500) {String} error Possible value: 'userNotExist', 'locationNotExist', etc.
  * @apiErrorExample {json} Error-Response:
  *    {
- *      "error": "userNotExist"
+ *      "error": "locationNotExist"
  *    }
  */
+router.post('/', async (req, res) => {
+  const { userId, locationId, rating } = req.params;
+  res.json({ 'status': 'not_implemented_yet' });
+});
 
 export default router;

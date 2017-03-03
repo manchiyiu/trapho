@@ -1,69 +1,41 @@
-// {
-//   _id: String,
-//   userId: String,
-//   photoId: String
-//   timestamp: String,
-//   content: String
-// }
+import * as express from 'express';
+import * as passport from 'passport';
+
+import { act } from '../utils';
+import { generateTokenMiddleware } from '../passport';
+
+const router = express.Router();
 
 /**
  * @api {get} /comments/photos/:photoId Retrieve all comments by photoId
- * @apiName comments_photoId
+ * @apiName comments_retrieve_photoId
  * @apiPermission User
  * @apiGroup Comments
  *
- * @apiParam {String}       photoId                 ID of the photo
+ * @apiParam {String} photoId ID of the photo
  *
- * @apiSuccess {Comment[]}  comments                Array containing comments associated with a photo, sorted by timestamp
+ * @apiUse commentsArray
  *
- * @apiSuccessExample  {json} Success-Response:
- *   { "comments":
- *      [{
- *        "id": "1234567",
- *        "userId": "asdasdas",
- *        "timestamp": "2017-03-02T16:39:27+00:00",
- *        "content": "wow. first!"
- *      },
- *      {
- *        "id": "3123",
- *        "userId": "asd213asdas",
- *        "timestamp": "2017-03-02T16:40:27+00:00",
- *        "content": "wow. second!"
- *      }]
- *  }
- *
- * @apiError (Error 500) {String} apiError            Error message ('photoNotExist', 'databaseError', etc.)
+ * @apiError (Error 500) {String} apiError Error message ('photoNotExist', 'databaseError', etc.)
  * @apiErrorExample {json} Error-Response:
  *   {
  *     "error": "photoNotExist"
  *   }
  */
+router.get('/photos/:photoId', async (req, res) => {
+  const { photoId } = req.params;
+  res.json({ 'status': 'not_implemented_yet' });
+});
 
 /**
  * @api {get} /comments/users/:userId Retrieve all comments by userId
- * @apiName comments_userId
+ * @apiName comments_retrieve_userId
  * @apiPermission User
  * @apiGroup Comments
  *
  * @apiParam {String}       userId                  ID of the user
  *
- * @apiSuccess {Comment[]}  comments                Array containing comments associated with a photo, sorted by timestamp
- *
- * @apiSuccessExample  {json} Success-Response:
- *   { "comments":
- *      [{
- *        "id": "1234567",
- *        "photoId": "fsdfd23",
- *        "timestamp": "2017-03-02T16:39:27+00:00",
- *        "content": "wow. first!"
- *      },
- *      {
- *        "id": "3123",
- *        "photoId": "fsdfd12312323",
- *        "timestamp": "2017-03-02T16:40:27+00:00",
- *        "content": "wow. second!"
- *      }]
- *  }
+ * @apiUse commentsArray
  *
  * @apiError (Error 500) {String} apiError            Error message ('userNotExist', 'databaseError', etc.)
  * @apiErrorExample {json} Error-Response:
@@ -71,29 +43,20 @@
  *     "error": "userNotExist"
  *   }
  */
+router.get('/users/:userId', async (req, res) => {
+  const { userId } = req.params;
+  res.json({ 'status': 'not_implemented_yet' });
+});
 
 /**
  * @api {get} /comments/id/:commentId Retrieve comment by commentId
- * @apiName comments_commentId
+ * @apiName comments_retrieve_commentId
  * @apiPermission User
  * @apiGroup Comments
  *
  * @apiParam {String}       commentId               ID of the comment
  *
- * @apiSuccess {String}     id                      ID of the comment
- * @apiSuccess {String}     userId                  UserId of the comment poster
- * @apiSuccess {String}     photoId                 PhotoId associated with the comment
- * @apiSuccess {String}     timestamp               Timestamp when the comment was created
- * @apiSuccess {String}     content                 Content of the comment
- *
- * @apiSuccessExample  {json} Success-Response:
- *   {
- *      "id": "1234567",
- *      "userId": "asdasdas",
- *      "photoId": "fsdfd23",
- *      "timestamp": "2017-03-02T16:39:27+00:00",
- *      "content": "wow. first!"
- *   }
+ * @apiUse comments
  *
  * @apiError (Error 500) {String} apiError            Error message ('commentNotExist', 'databaseError', etc.)
  * @apiErrorExample {json} Error-Response:
@@ -101,9 +64,13 @@
  *     "error": "commentNotExist"
  *   }
  */
+router.get('/id/:commentId', async (req, res) => {
+  const { commentId } = req.params;
+  res.json({ 'status': 'not_implemented_yet' });
+});
 
 /**
- * @api {post} /comments/ Create new comment
+ * @api {post} /comments Create new comment
  * @apiName comments_create
  * @apiPermission User
  * @apiGroup Comments
@@ -113,13 +80,13 @@
  * @apiParam {String}     timestamp               Timestamp when the comment was created
  * @apiParam {String}     content                 Content of the comment
  *
- * @apiSuccess {String}   id                      ID of the newly created comment
- * @apiSuccessExample  {json} Success-Response:
- *   {
- *      "id": "1234567"
- *   }
+ * @apiUse objectId
  *
  */
+router.post('/', async (req, res) => {
+  const { userId, photoId, timestamp, content } = req.body;
+  res.json({ 'status': 'not_implemented_yet' });
+});
 
 /**
  * @api {patch} /comments/id/:commentId Patch a comment
@@ -133,11 +100,7 @@
  * @apiParam {String}     [timestamp]             Timestamp when the comment was created
  * @apiParam {String}     [content]               Content of the comment
  *
- * @apiSuccess {String}   id                      ID of the patched comment
- * @apiSuccessExample  {json} Success-Response:
- *   {
- *      "id": "1234567"
- *   }
+ * @apiUse objectId
  *
  * @apiError (Error 500) {String} apiError        Error message ('commentNotExist', 'databaseError', etc.)
  * @apiErrorExample {json} Error-Response:
@@ -145,6 +108,11 @@
  *     "error": "commentNotExist"
  *   }
  */
+router.patch('/id/:commentId', async (req, res) => {
+  const { commentId } = req.params;
+  const { userId, photoId, timestamp, content } = req.body;
+  res.json({ 'status': 'not_implemented_yet' });
+});
 
 /**
  * @api {delete} /comments/id/:commentId Delete a comment
@@ -154,11 +122,7 @@
  *
  * @apiParam {String}     commentId               ID of the comment
  *
- * @apiSuccess {String}   id                      ID of the deleted comment
- * @apiSuccessExample  {json} Success-Response:
- *   {
- *      "id": "1234567"
- *   }
+ * @apiUse objectId
  *
  * @apiError (Error 500) {String} apiError        Error message ('commentNotExist', 'databaseError', etc.)
  * @apiErrorExample {json} Error-Response:
@@ -166,3 +130,9 @@
  *     "error": "commentNotExist"
  *   }
  */
+router.delete('/id/:commentId', async (req, res) => {
+  const { commentId } = req.params;
+  res.json({ 'status': 'not_implemented_yet' });
+});
+
+export default router;

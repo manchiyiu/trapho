@@ -6,8 +6,8 @@ import { act } from '../utils';
 const router = express.Router();
 
 /**
- * @api {get} /locations/id/:locationId Retrieve locations
- * @apiName location_get
+ * @api {get} /locations Retrieve locations by query
+ * @apiName location_retrieve_query
  * @apiPermission User
  * @apiGroup Locations
  *
@@ -21,58 +21,22 @@ const router = express.Router();
  * @apiParam {String[]}  [query.tags]              Tags to search
  * @apiParam {String}    [query.name]              Name of the location
  *
- * @apiSuccess {Location[]} locations               Array containing all matching locations, empty array if no match. For detailed strucuture, please refer to "Retrieve location by id".
- *
- ** @apiSuccessExample  {json} Success-Response:
- *   { "locations":
- *      [{
- *        "id": "1234567",
- *        "name": "Small Bridge Flowing Water",
- *        "description": "Some fun place.",
- *        "tags": ["CUHK", "fun"],
- *        "coordinates": {
- *          "lat": 23.02323,
- *          "lng": -23.323223
- *        },
- *        "rating": 7.8,
- *        "photoIds": ["dasddasd", "asd23ewaasd"]
- *      }]
- *  }
- *
+ * @apiUse locationsArray
  */
 router.get('/', async (req, res) => {
+  const { query } = req.body;
+  res.json({ 'status': 'not_implemented_yet' });
 });
 
-
 /**
- * @api {get} /locations/id/:locationId Retrieve location by id
- * @apiName location_get_id
+ * @api {get} /locations/id/:locationId Retrieve location by locationId
+ * @apiName location_retrieve_locationId
  * @apiPermission User
  * @apiGroup Locations
  *
- * @apiSuccess {String} id                ID of the location
- * @apiSuccess {String} name              Name of the location
- * @apiSuccess {String} description       Description of the location
- * @apiSuccess {String[]} tags            Tags associated with the location (e.g. 'beach')
- * @apiSuccess {Object} coordinates       Coordinate of the location
- * @apiSuccess {Number} coordinates.lat   Latitude coordinate of the location
- * @apiSuccess {Number} coordinates.lng   Longitude coordinate of the location
- * @apiSuccess {Number} rating            Rating of the location, which is calcuated using Rating table.
- * @apiSuccess {String[]} photoIds        IDs of all the photos taken at the location
+ * @apiParam {String} locationId      ID of the location
  *
- * @apiSuccessExample  {json} Success-Response:
- *   {
- *     "id": "1234567",
- *     "name": "Small Bridge Flowing Water",
- *     "description": "Some fun place.",
- *     "tags": ["CUHK", "fun"],
- *     "coordinates": {
- *       "lat": 23.02323,
- *       "lng": -23.323223
- *     },
- *     "rating": 7.8,
- *     "photoIds": ["dasddasd", "asd23ewaasd"]
- *   }
+ * @apiUse locations
  *
  * @apiError (Error 500) {String} apiError            Error message ('locationNotExist', 'databaseError', etc.)
  * @apiErrorExample {json} Error-Response:
@@ -80,14 +44,14 @@ router.get('/', async (req, res) => {
  *     "error": "locationNotExist"
  *   }
  */
-router.get('/:locationId', async (req, res) => {
+router.get('/id/:locationId', async (req, res) => {
   const { locationId } = req.params;
-  res.json({ status: 'ok' });
+  res.json({ 'status': 'not_implemented_yet' });
 });
 
 /**
- * @api {post} /locations/ Add new location
- * @apiName location_add
+ * @api {post} /locations Create new location
+ * @apiName location_create
  * @apiPermission User
  * @apiGroup Locations
  *
@@ -99,15 +63,11 @@ router.get('/:locationId', async (req, res) => {
  * @apiParam {Number} coordinates.lng   Longitude coordinate of the location
  * @apiParam {String[]} photoIds        IDs of all the photos taken at the location
  *
- * @apiSuccess {String} id              ID of the newly created object
- *
- * @apiSuccessExample  {json} Success-Response:
- *   {
- *     "id": "1234567"
- *   }
- *
+ * @apiUse objectId
  */
 router.post('/', async (req, res) => {
+  const { name, description, tags, coordinate, photoIds } = req.body;
+  res.json({ 'status': 'not_implemented_yet' });
 });
 
 /**
@@ -122,19 +82,21 @@ router.post('/', async (req, res) => {
  * @apiParam {String} [description]       Description of the location
  * @apiParam {String[]} [tags]            Tags associated with the location (e.g. 'beach')
  * @apiParam {Object} [coordinates]       Coordinate of the location
- * @apiParam {Number} coordinates.lat   Latitude coordinate of the location
- * @apiParam {Number} coordinates.lng   Longitude coordinate of the location
+ * @apiParam {Number} [coordinates.lat]   Latitude coordinate of the location
+ * @apiParam {Number} [coordinates.lng]   Longitude coordinate of the location
  * @apiParam {String[]} [photoIds]        IDs of all the photos taken at the location
  *
- * @apiSuccess {String} id              ID of the newly created object
+ * @apiUse objectId
  *
- * @apiSuccessExample  {json} Success-Response:
+ * @apiError (Error 500) {String} apiError            Error message ('locationNotExist', 'databaseError', etc.)
+ * @apiErrorExample {json} Error-Response:
  *   {
- *     "id": "1234567"
+ *     "error": "locationNotExist"
  *   }
- *
  */
-router.patch('/:locationId', async (req, res) => {
+router.patch('/id/:locationId', async (req, res) => {
+  const { name, description, tags, coordinate, photoIds } = req.body;
+  res.json({ 'status': 'not_implemented_yet' });
 });
 
 /**
@@ -143,17 +105,19 @@ router.patch('/:locationId', async (req, res) => {
  * @apiPermission User
  * @apiGroup Locations
  *
- * @apiDescription This endpoint is probably just for debugging purposes.
+ * @apiParam {String} locationId          ID of the location
  *
- * @apiParam {String} id                ID of the location
+ * @apiUse objectId
  *
- * @apiSuccess {String} id              ID of the delected object
- * @apiSuccessExample  {json} Success-Response:
+ * @apiError (Error 500) {String} apiError            Error message ('locationNotExist', 'databaseError', etc.)
+ * @apiErrorExample {json} Error-Response:
  *   {
- *     "id": "1234567"
+ *     "error": "locationNotExist"
  *   }
- *
  */
-
+router.delete('/id/:locationId', async (req, res) => {
+  const { locationId } = req.params;
+  res.json({ 'status': 'not_implemented_yet' });
+});
 
 export default router;

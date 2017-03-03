@@ -1,3 +1,10 @@
+import * as express from 'express';
+import * as passport from 'passport';
+
+import { act } from '../utils';
+
+const router = express.Router();
+
 /**
  * @api {get} /trips/users/:userId Retrieve all trips by userId
  * @apiName trips_userId
@@ -6,22 +13,7 @@
  *
  * @apiParam {String}       userId                 ID of the user
  *
- * @apiSuccess {Trip[]}     trips                  Array containing trip object, see the GET by tripId endpoint for format.
- * @apiSuccessExample  {json} Success-Response:
- *   [{
- *      "id": "sadadasd",
- *      "name": "Taiwan Trip",
- *      "userId": "asadasd123",
- *      "timestamp": "2017-03-02T16:39:27+00:00",
- *      "locations": [
- *        {
- *          "id": "asdsaddas213",
- *          "startTime": "2017-04-02T10:39:27+00:00",
- *          "endTime": "2017-04-02T16:39:27+00:00",
- *          "comment": "Must visit this, fun place!"
- *        }
- *      ]
- *   }]
+ * @apiUse tripsArray
  *
  * @apiError (Error 500) {String} apiError            Error message ('userNotExist', 'databaseError', etc.)
  * @apiErrorExample {json} Error-Response:
@@ -29,6 +21,10 @@
  *     "error": "userNotExist"
  *   }
  */
+router.get('/users/:userId', async (req, res) => {
+  const { userId } = req.params;
+  res.json({ 'status': 'not_implemented_yet' });
+});
 
 /**
  * @api {get} /trips/id/:tripId Retrieve trip by tripId
@@ -38,30 +34,7 @@
  *
  * @apiParam {String}       tripID                 ID of the trip
  *
- * @apiSuccess {String}     id                     ID of the trip
- * @apiSuccess {String}     name                   Name of the trip
- * @apiSuccess {String}     userId                 ID of the user who created the trip
- * @apiSuccess {String}     timestamp              Timestamp when the trip is created
- * @apiSuccess {Object[]}   locations              See below for object structure
- * @apiSuccess {String}     locations.id           ID of the locationId
- * @apiSuccess {String}     locations.startTime    Timestamp when the location visit starts
- * @apiSuccess {String}     locations.endTime      Timestamp when the location visit ends
- * @apiSuccess {String}     [locations.comment]    Custom user comments on the location
- * @apiSuccessExample  {json} Success-Response:
- *   {
- *      "id": "sadadasd",
- *      "name": "Taiwan Trip",
- *      "userId": "asadasd123",
- *      "timestamp": "2017-03-02T16:39:27+00:00",
- *      "locations": [
- *        {
- *          "id": "asdsaddas213",
- *          "startTime": "2017-04-02T10:39:27+00:00",
- *          "endTime": "2017-04-02T16:39:27+00:00",
- *          "comment": "Must visit this, fun place!"
- *        }
- *      ]
- *   }
+ * @apiUse trips
  *
  * @apiError (Error 500) {String} apiError            Error message ('tripNotExist', 'databaseError', etc.)
  * @apiErrorExample {json} Error-Response:
@@ -69,6 +42,10 @@
  *     "error": "tripNotExist"
  *   }
  */
+router.get('/id/:tripId', async (req, res) => {
+  const { tripId } = req.params;
+  res.json({ 'status': 'not_implemented_yet' });
+});
 
 /**
  * @api {post} /trips/ Create a trip
@@ -85,13 +62,17 @@
  * @apiParam {String}     locations.endTime      Timestamp when the location visit ends
  * @apiParam {String}     [locations.comment]    Custom user comments on the location
  *
- * @apiSuccess {String}   id                     ID of the newly created trip
- * @apiSuccessExample  {json} Success-Response:
- *   {
- *      "id": "sadadasd"
- *   }
- *
+ * @apiUse objectId
+ * @apiError (Error 500) {String} error Possible value: 'userNotExist', etc.
+ * @apiErrorExample {json} Error-Response:
+ *    {
+ *      "error": "ratingNotExist"
+ *    }
  */
+router.post('/', async (req, res) => {
+  const { name, userId, timestamp, locations } = req.body;
+  res.json({ 'status': 'not_implemented_yet' });
+});
 
 /**
  * @api {patch} /trips/id/:tripId Patch a trip
@@ -109,13 +90,18 @@
  * @apiParam {String}     locations.endTime      Timestamp when the location visit ends
  * @apiParam {String}     [locations.comment]    Custom user comments on the location
  *
- * @apiSuccess {String}   id                     ID of the patched trip
- * @apiSuccessExample  {json} Success-Response:
- *   {
- *      "id": "sadadasd"
- *   }
+ * @apiUse objectId
  *
+ * @apiError (Error 500) {String} apiError       Error message ('tripNotExist', 'databaseError', etc.)
+ * @apiErrorExample {json} Error-Response:
+ *   {
+ *     "error": "tripNotExist"
+ *   }
  */
+router.patch('/id/:tripId', async (req, res) => {
+  const { tripId } = req.params;
+  res.json({ 'status': 'not_implemented_yet' });
+});
 
 /**
  * @api {delete} /trips/id/:tripId Delete a trip
@@ -125,16 +111,17 @@
  *
  * @apiParam {String}     tripId                 ID of the trip to be patched
  *
- * @apiSuccess {String}   id                     ID of the patched trip
- * @apiSuccessExample  {json} Success-Response:
- *   {
- *      "id": "sadadasd"
- *   }
+ * @apiUse objectId
  *
  * @apiError (Error 500) {String} apiError       Error message ('tripNotExist', 'databaseError', etc.)
  * @apiErrorExample {json} Error-Response:
  *   {
  *     "error": "tripNotExist"
  *   }
- *
  */
+router.delete('/id/:tripId', async (req, res) => {
+  const { tripId } = req.params;
+  res.json({ 'status': 'not_implemented_yet' });
+});
+
+export default router;
