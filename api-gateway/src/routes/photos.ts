@@ -6,7 +6,7 @@ import { act } from '../utils';
 const router = express.Router();
 
 /**
- * @api {get} /photos/:photoId Retrieve photo by photoId
+ * @api {get} /photos/id/:photoId Retrieve photo by photoId
  * @apiName photos_photoId
  * @apiPermission User
  * @apiGroup Photos
@@ -16,16 +16,18 @@ const router = express.Router();
  * @apiSuccess {String} id                      photo id
  * @apiSuccess {String} userId                  user id of the uploader
  * @apiSuccess {String} locationId              location id where the photo is taken
+ * @apiSuccess {String} timestamp               time when the photo is uploaded (ISO 8601 format)
  * @apiSuccess {String} url                     url path of the photo
  * @apiSuccess {String} description             description of the photo added by the user
  *
  ** @apiSuccessExample  {json} Success-Response:
  *   {
- *     id: "asdasd123123",
- *     userId: "asdsad213fas",
- *     locationId: "asd21jg34543",
- *     url: "http://trapho.com/whatver/fsdfsdfsdf.jpg",
- *     description: "Wow. This is amazing."
+ *     "id": "asdasd123123",
+ *     "userId": "asdsad213fas",
+ *     "locationId": "asd21jg34543",
+ *     "timestamp": "2017-03-02T16:39:27+00:00",
+ *     "url": "http://trapho.com/whatver/fsdfsdfsdf.jpg",
+ *     "description": "Wow. This is amazing."
  *   }
  *
  * @apiError (Error 500) {String} apiError            Error message ('photoNotExist', 'databaseError', etc.)
@@ -47,13 +49,16 @@ const router = express.Router();
  * @apiSuccess {Photo[]} photos                 array containing all related photos object
  *
  ** @apiSuccessExample  {json} Success-Response:
- *   [{
- *     id: "asdasd123123",
- *     userId: "asdsad213fas",
- *     locationId: "asd21jg34543",
- *     url: "http://trapho.com/whatver/fsdfsdfsdf.jpg",
- *     description: "Wow. This is amazing."
- *   }]
+ *   {
+ *     "photos": [{
+ *        "id": "asdasd123123",
+ *        "userId": "asdsad213fas",
+ *        "timestamp": "2017-03-02T16:39:27+00:00",
+ *        "locationId": "asd21jg34543",
+ *        "url": "http://trapho.com/whatver/fsdfsdfsdf.jpg",
+ *        "description": "Wow. This is amazing."
+ *      }]
+ *   }
  */
 
 /**
@@ -72,12 +77,19 @@ const router = express.Router();
  * @apiSuccess {String} id                    id of the saved photo item
  * @apiSuccessExample  {json} Success-Response:
  *   {
- *     id: "asdasd123123"
+ *     "id": "asdasd123123"
  *   }
+ *
+  * @apiError (Error 500) {String} apiError            Error message ('userNotExist', 'locationNotExist', etc.)
+ * @apiErrorExample {json} Error-Response:
+ *   {
+ *     "error": "userNotExist"
+ *   }
+ *
  */
 
 /**
- * @api {patch} /photos/:photoId Patch a photo
+ * @api {patch} /photos/id/:photoId Patch a photo
  * @apiName photos_patch
  * @apiPermission User
  * @apiGroup Photos
@@ -93,7 +105,7 @@ const router = express.Router();
  * @apiSuccess {String} id                    id of the updated photo item
  * @apiSuccessExample  {json} Success-Response:
  *   {
- *     id: "asdasd123123"
+ *     "id": "asdasd123123"
  *   }
  *
  * @apiError (Error 500) {String} apiError            Error message ('photoNotExist', 'databaseError', etc.)
@@ -103,9 +115,8 @@ const router = express.Router();
  *   }
  *
  */
-
 /**
- * @api {delete} /photos/:photoId Delete a photo
+ * @api {delete} /photos/id/:photoId Delete a photo
  * @apiName photos_delete
  * @apiPermission User
  * @apiGroup Photos
@@ -115,7 +126,7 @@ const router = express.Router();
  * @apiSuccess {String} id                    id of the deleted photo item
  * @apiSuccessExample  {json} Success-Response:
  *   {
- *     id: "asdasd123123"
+ *     "id": "asdasd123123"
  *   }
  *
  * @apiError (Error 500) {String} apiError            Error message ('photoNotExist', 'databaseError', etc.)
@@ -126,5 +137,26 @@ const router = express.Router();
  *
  *
  */
+
+ /**
+ * @api {delete} /photos/upload Upload a photo to disk storage
+ * @apiName photos_delete
+ * @apiPermission User
+ * @apiGroup Photos
+ *
+ * @apiDescription Isaac will implement this.
+ *
+ * @apiParam {Files[]} files                  array representing files to be uploaded
+ *
+ * @apiSuccess {String} url                   url path of the uploaded file
+ * @apiSuccessExample  {json} Success-Response:
+ *   {
+ *     "url": "http://www.trapho.com/static/sf1412ffsdfasdase1123.jpg"
+ *   }
+ *
+ */
+router.post('/upload', async (req, res) => {
+  /* Isaac will write this */
+});
 
 export default router;

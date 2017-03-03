@@ -6,7 +6,7 @@ import { act } from '../utils';
 const router = express.Router();
 
 /**
- * @api {get} /locations/:locationId Retrieve locations
+ * @api {get} /locations/id/:locationId Retrieve locations
  * @apiName location_get
  * @apiPermission User
  * @apiGroup Locations
@@ -24,18 +24,20 @@ const router = express.Router();
  * @apiSuccess {Location[]} locations               Array containing all matching locations, empty array if no match. For detailed strucuture, please refer to "Retrieve location by id".
  *
  ** @apiSuccessExample  {json} Success-Response:
- *   [{
- *     "id": "1234567",
- *     "name": "Small Bridge Flowing Water",
- *     "description": "Some fun place.",
- *     "tags": ["CUHK", "fun"],
- *     "coordinates": {
- *       "lat": 23.02323,
- *       "lng": -23.323223
- *     },
- *     "rating": 7.8,
- *     "photoIds": ["dasddasd", "asd23ewaasd"]
- *   }]
+ *   { "locations":
+ *      [{
+ *        "id": "1234567",
+ *        "name": "Small Bridge Flowing Water",
+ *        "description": "Some fun place.",
+ *        "tags": ["CUHK", "fun"],
+ *        "coordinates": {
+ *          "lat": 23.02323,
+ *          "lng": -23.323223
+ *        },
+ *        "rating": 7.8,
+ *        "photoIds": ["dasddasd", "asd23ewaasd"]
+ *      }]
+ *  }
  *
  */
 router.get('/', async (req, res) => {
@@ -43,7 +45,7 @@ router.get('/', async (req, res) => {
 
 
 /**
- * @api {get} /locations/:locationId Retrieve location by id
+ * @api {get} /locations/id/:locationId Retrieve location by id
  * @apiName location_get_id
  * @apiPermission User
  * @apiGroup Locations
@@ -109,7 +111,7 @@ router.post('/', async (req, res) => {
 });
 
 /**
- * @api {patch} /locations/:locationId Patch a location
+ * @api {patch} /locations/id/:locationId Patch a location
  * @apiName location_patch
  * @apiPermission User
  * @apiGroup Locations
@@ -136,7 +138,7 @@ router.patch('/:locationId', async (req, res) => {
 });
 
 /**
- * @api {delete} /locations/:locationId Delete a location
+ * @api {delete} /locations/id/:locationId Delete a location
  * @apiName location_delete
  * @apiPermission User
  * @apiGroup Locations

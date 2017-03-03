@@ -19,6 +19,7 @@ import auth from './routes/auth';
 import locations from './routes/locations';
 import ratings from './routes/ratings';
 import photos from './routes/photos';
+import comments from './routes/comments';
 
 const app = express();
 
@@ -40,11 +41,12 @@ app.use(
 );
 
 app.use('test', test);
-
 app.use('auth', auth);
+
 app.use('locations', locations);
 app.use('ratings', ratings);
 app.use('photos', photos);
+app.use('comments', comments);
 
 app.use(errorMiddleware); // keep this as last middleware, which catches all error
 
