@@ -17,46 +17,34 @@ services:
   activity-microservice:
     build:
       context: ./activity-microservice
-      dockerfile: Dockerfile-dev
-#    volumes:
-#     - ./activity-microservice:/usr/src/app
+      dockerfile: Dockerfile-prod
 
   auth-microservice:
     build:
       context: ./auth-microservice
-      dockerfile: Dockerfile-dev
-#    volumes:
-#     - ./auth-microservice:/usr/src/app
+      dockerfile: Dockerfile-prod
     links:
      - mongo
 
   location-microservice:
     build:
       context: ./location-microservice
-      dockerfile: Dockerfile-dev
-    volumes:
-     - ./location-microservice:/usr/src/app
+      dockerfile: Dockerfile-prod
 
   storage-microservice:
     build:
       context: ./storage-microservice
-      dockerfile: Dockerfile-dev
-    volumes:
-      - ./storage-microservice:/usr/src/app
+      dockerfile: Dockerfile-prod
 
   timeline-microservice:
     build:
       context: ./timeline-microservice
-      dockerfile: Dockerfile-dev
-    volumes:
-      - ./timeline-microservice:/usr/src/app
+      dockerfile: Dockerfile-prod
 
   api-gateway:
     build:
       context: ./api-gateway
-      dockerfile: Dockerfile-dev
-    volumes:
-     - ./api-gateway:/usr/src/app
+      dockerfile: Dockerfile-prod
     ports:
      - "3000:3000"
     links:
@@ -71,8 +59,6 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile-prod
-#   volumes:
-#     - ./frontend:/usr/src/app
     links:
      - api-gateway
     ports:
