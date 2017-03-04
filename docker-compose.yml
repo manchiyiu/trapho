@@ -15,24 +15,36 @@ services:
      - mongodata:/data/db
 
   activity-microservice:
-    build: ./activity-microservice
+    build:
+      context: ./activity-microservice
+      dockerfile: Dockerfile-prod
 
   auth-microservice:
-    build: ./auth-microservice
+    build:
+      context: ./auth-microservice
+      dockerfile: Dockerfile-prod
     links:
      - mongo
 
   location-microservice:
-    build: ./location-microservice
+    build:
+      context: ./location-microservice
+      dockerfile: Dockerfile-prod
 
   storage-microservice:
-    build: ./storage-microservice
+    build:
+      context: ./storage-microservice
+      dockerfile: Dockerfile-prod
 
   timeline-microservice:
-    build: ./timeline-microservice
+    build:
+      context: ./timeline-microservice
+      dockerfile: Dockerfile-prod
 
   api-gateway:
-    build: ./api-gateway
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile-prod
     ports:
      - "3000:3000"
     links:
@@ -44,7 +56,9 @@ services:
      - timeline-microservice
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile-prod
     links:
      - api-gateway
     ports:
