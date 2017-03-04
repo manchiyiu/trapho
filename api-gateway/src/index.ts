@@ -41,14 +41,14 @@ app.use(
   })
 );
 
-app.use('test', test);
-app.use('auth', auth);
+app.use('/test', test);
+app.use('/auth', auth);
 
-app.use('locations', locations);
-app.use('ratings', ratings);
-app.use('photos', photos);
-app.use('comments', comments);
-app.use('trips', trips);
+app.use('/locations', locations);
+app.use('/ratings', ratings);
+app.use('/photos', photos);
+app.use('/comments', comments);
+app.use('/trips', trips);
 
 app.use(errorMiddleware); // keep this as last middleware, which catches all error
 
