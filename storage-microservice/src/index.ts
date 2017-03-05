@@ -1,7 +1,21 @@
-import * as seneca from 'seneca';
+import * as mongoose from 'mongoose';
 
-seneca()
-  .add('cmd:sum', (msg, reply) => {
-    reply(null, { answer: (msg.left + msg.right) });
-  })
+import { seneca } from './utils';
+
+import photoCreate from './actions/photo-create';
+import photoDelete from './actions/photo-delete';
+import photoPatch from './actions/photo-patch';
+import photoRetrieve from './actions/photo-retrieve';
+
+mongoose.connect('mongodb://mongo/photo');
+
+mongoose.connection.on('error', () => {
+  console.error('MongoDB connection error.');
+});
+
+seneca
+  .add('cmd:photoCreate', photoCreate)
+  .add('cmd:photoDelete', photoDelete)
+  .add('cmd:photoPatch', photoPatch)
+  .add('cmd:photoRetrieve', photoRetrieve)
   .listen();
