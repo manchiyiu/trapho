@@ -55,8 +55,20 @@
 // ------------- likes --------------
 
 /**
+ * @apiDefine likes
+ * @apiSuccess {Likes}  likes                   Like object
+ * @apiSuccessExample  {json} Success-Response:
+ *   {
+ *     "id": "{{id-placeholder}}",
+ *     "userId": "{{id-placeholder}}",
+ *     "timestamp": "2017-03-02T16:30:27+00:00"
+ *   }
+ */
+
+
+/**
  * @apiDefine likesArray
- * @apiSuccess {Comment[]}  likes                   Array containing likes, sorted by timestamp
+ * @apiSuccess {Likes[]}  likes                   Array containing likes, sorted by timestamp
  * @apiSuccessExample  {json} Success-Response:
  *   { "likes":
  *      [{

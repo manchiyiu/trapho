@@ -24,7 +24,12 @@ const router = express.Router();
  */
 router.get('/photos/:photoId', async (req, res) => {
   const { photoId } = req.params;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { comments } = await act({ act: 'timeline', cmd: 'commentRetrive', photoId });
+    res.json({ comments });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -45,7 +50,12 @@ router.get('/photos/:photoId', async (req, res) => {
  */
 router.get('/users/:userId', async (req, res) => {
   const { userId } = req.params;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { comments } = await act({ act: 'timeline', cmd: 'commentRetrive', userId });
+    res.json({ comments });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -66,7 +76,12 @@ router.get('/users/:userId', async (req, res) => {
  */
 router.get('/id/:commentId', async (req, res) => {
   const { commentId } = req.params;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const comments = await act({ act: 'timeline', cmd: 'commentRetrive', commentId });
+    res.json(comments);
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -85,7 +100,12 @@ router.get('/id/:commentId', async (req, res) => {
  */
 router.post('/', async (req, res) => {
   const { userId, photoId, timestamp, content } = req.body;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { id } = await act({ act: 'timeline', cmd: 'commentCreate', userId, photoId, timestamp, content });
+    res.json({ id });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -111,7 +131,12 @@ router.post('/', async (req, res) => {
 router.patch('/id/:commentId', async (req, res) => {
   const { commentId } = req.params;
   const { userId, photoId, timestamp, content } = req.body;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { id } = await act({ act: 'timeline', cmd: 'commentPatch', commentId, userId, photoId, timestamp, content });
+    res.json({ id });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -132,7 +157,12 @@ router.patch('/id/:commentId', async (req, res) => {
  */
 router.delete('/id/:commentId', async (req, res) => {
   const { commentId } = req.params;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { id } = await act({ act: 'timeline', cmd: 'commentDelete', commentId });
+    res.json({ id });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 export default router;

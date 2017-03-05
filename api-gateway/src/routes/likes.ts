@@ -24,7 +24,12 @@ const router = express.Router();
  */
 router.get('/photos/:photoId', async (req, res) => {
   const { photoId } = req.params;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { likes } = await act({ act: 'timeline', cmd: 'likeRetrieve', photoId });
+    res.json({ likes });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -45,7 +50,12 @@ router.get('/photos/:photoId', async (req, res) => {
  */
 router.get('/users/:userId', async (req, res) => {
   const { userId } = req.params;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { likes } = await act({ act: 'timeline', cmd: 'likeRetrieve', userId });
+    res.json({ likes });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -57,11 +67,7 @@ router.get('/users/:userId', async (req, res) => {
  * @apiParam {String}       userId                 ID of the user
  * @apiParam {String}       photoId                ID of the photo
  *
- * @apiParam {boolean}      liked                  Whether user liked the photo or not
- * @apiSuccessExample  {json} Success-Response:
- *   {
- *     "liked": true
- *   }
+ * @apiUse likes
  *
  * @apiError (Error 500) {String} apiError          Error message ('userNotExist', 'photoNotExist', 'likeNotExist', 'databaseError', etc.)
  * @apiErrorExample {json} Error-Response:
@@ -71,7 +77,12 @@ router.get('/users/:userId', async (req, res) => {
  */
 router.get('/users/:userId/photos/:photoId', async (req, res) => {
   const { userId, photoId } = req.params;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { likes } = await act({ act: 'timeline', cmd: 'likeRetrieve', userId, photoId });
+    res.json(likes[0]); // there should be only one result
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -93,7 +104,12 @@ router.get('/users/:userId/photos/:photoId', async (req, res) => {
  */
 router.post('/', async (req, res) => {
   const { userId, photoId } = req.body;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { id } = await act({ act: 'timeline', cmd: 'likeCreate', userId, photoId });
+    res.json({ id });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -115,7 +131,12 @@ router.post('/', async (req, res) => {
  */
 router.delete('/', async (req, res) => {
   const { userId, photoId } = req.body;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { id } = await act({ act: 'timeline', cmd: 'likeDelete', userId, photoId });
+    res.json({ id });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 export default router;

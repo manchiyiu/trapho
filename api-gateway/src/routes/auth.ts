@@ -59,7 +59,7 @@ router.post('/login',
 router.post('/signup', async (req, res) => {
   const { username, password } = req.body;
   try {
-    const id = await act({ role: 'auth', cmd: 'signup', username, password });
+    const id = await act({ role: 'auth', cmd: 'userCreate', username, password });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });

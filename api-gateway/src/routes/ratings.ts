@@ -25,7 +25,12 @@ const router = express.Router();
  */
 router.get('/users/:userId', async (req, res) => {
   const { userId } = req.params;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { ratings } = await act({ act: 'locations', cmd: 'ratingRetrieve', userId });
+    res.json({ ratings });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -47,7 +52,12 @@ router.get('/users/:userId', async (req, res) => {
  */
 router.get('/users/:userId/locations/:locationId', async (req, res) => {
   const { userId, locationId } = req.params;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { ratings } = await act({ act: 'locations', cmd: 'ratingRetrieve', userId, locationId });
+    res.json(ratings[0]); // there should be only one result
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -71,7 +81,12 @@ router.get('/users/:userId/locations/:locationId', async (req, res) => {
 router.patch('/users/:userId/locations/:locationId', async (req, res) => {
   const { userId, locationId } = req.params;
   const { rating } = req.body;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { id } = await act({ act: 'locations', cmd: 'ratingPatch', userId, locationId });
+    res.json({ id });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -93,7 +108,12 @@ router.patch('/users/:userId/locations/:locationId', async (req, res) => {
  */
 router.delete('/users/:userId/locations/:locationId', async (req, res) => {
   const { userId, locationId } = req.params;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { id } = await act({ act: 'locations', cmd: 'ratingDelete', userId, locationId });
+    res.json({ id });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -118,7 +138,12 @@ router.delete('/users/:userId/locations/:locationId', async (req, res) => {
  */
 router.post('/', async (req, res) => {
   const { userId, locationId, rating } = req.params;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { id } = await act({ act: 'locations', cmd: 'ratingCreate', userId, locationId, rating });
+    res.json({ id });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 export default router;

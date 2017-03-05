@@ -25,7 +25,12 @@ const router = express.Router();
  */
 router.get('/', async (req, res) => {
   const { query } = req.body;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { locations } = await act({ act: 'location', cmd: 'locationRetrieve', query });
+    res.json({ locations });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -46,7 +51,12 @@ router.get('/', async (req, res) => {
  */
 router.get('/id/:locationId', async (req, res) => {
   const { locationId } = req.params;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const locations = await act({ act: 'location', cmd: 'locationRetrieve', locationId });
+    res.json(locations);
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -67,7 +77,12 @@ router.get('/id/:locationId', async (req, res) => {
  */
 router.post('/', async (req, res) => {
   const { name, description, tags, coordinate, photoIds } = req.body;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { id } = await act({ act: 'location', cmd: 'locationCreate', name, description, tags, coordinate, photoIds });
+    res.json({ id });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -96,7 +111,12 @@ router.post('/', async (req, res) => {
  */
 router.patch('/id/:locationId', async (req, res) => {
   const { name, description, tags, coordinate, photoIds } = req.body;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { id } = await act({ act: 'location', cmd: 'locationPatch', name, description, tags, coordinate, photoIds });
+    res.json({ id });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -117,7 +137,12 @@ router.patch('/id/:locationId', async (req, res) => {
  */
 router.delete('/id/:locationId', async (req, res) => {
   const { locationId } = req.params;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { id } = await act({ act: 'location', cmd: 'locationDelete', locationId });
+    res.json({ id });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 export default router;

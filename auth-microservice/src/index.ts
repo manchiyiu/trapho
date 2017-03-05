@@ -2,8 +2,8 @@ import * as mongoose from 'mongoose';
 
 import { seneca } from './utils';
 
-import login from './actions/login';
-import signup from './actions/signup';
+import userLogin from './actions/user-login';
+import userCreate from './actions/user-create';
 
 mongoose.connect('mongodb://mongo/user');
 
@@ -12,6 +12,6 @@ mongoose.connection.on('error', () => {
 });
 
 seneca
-  .add('cmd:login', login)
-  .add('cmd:signup', signup)
+  .add('cmd:userLogin', userLogin)
+  .add('cmd:userCreate', userCreate)
   .listen();

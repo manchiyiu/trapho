@@ -7,7 +7,7 @@ import { act, SERVER_SECRET } from './utils';
 passport.use(new LocalStrategy(
   async (username, password, cb) => {
     try {
-      const user = await act({ role: 'auth', cmd: 'login', username, password });
+      const user = await act({ role: 'auth', cmd: 'userLogin', username, password });
       return cb(null, user);
     } catch (err) {
       return cb(err, null);

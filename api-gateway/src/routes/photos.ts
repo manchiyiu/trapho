@@ -23,7 +23,12 @@ const router = express.Router();
  */
 router.get('/id/:photoId', async (req, res) => {
   const { photoId } = req.params;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const photos = await act({ act: 'storage', cmd: 'photoRetrieve', photoId });
+    res.json(photos);
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -44,7 +49,12 @@ router.get('/id/:photoId', async (req, res) => {
  */
 router.get('/users/:userId', async (req, res) => {
   const { userId } = req.params;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { photos } = await act({ act: 'storage', cmd: 'photoRetrieve', userId });
+    res.json({ photos });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -71,7 +81,12 @@ router.get('/users/:userId', async (req, res) => {
  */
 router.post('/', async (req, res) => {
   const { userId, locationId, url, description } = req.body;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { id } = await act({ act: 'storage', cmd: 'photoCreate', userId, locationId, url, description });
+    res.json({ id });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -99,7 +114,12 @@ router.post('/', async (req, res) => {
 router.patch('/id/:photoId', async (req, res) => {
   const { photoId } = req.params;
   const { userId, locationId, url, description } = req.body;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { id } = await act({ act: 'storage', cmd: 'photoPatch', photoId, userId, locationId, url, description });
+    res.json({ id });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 /**
@@ -120,7 +140,12 @@ router.patch('/id/:photoId', async (req, res) => {
  */
 router.delete('/id/:photoId', async (req, res) => {
   const { photoId } = req.params;
-  res.json({ 'status': 'not_implemented_yet' });
+  try {
+    const { id } = await act({ act: 'storage', cmd: 'photoDelete', photoId });
+    res.json({ id });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
  /**

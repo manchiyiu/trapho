@@ -10,32 +10,32 @@ services:
     image: mongo:3.2
     command: "mongod --logpath /dev/null --smallfiles --setParameter failIndexKeyTooLong=false"
     ports:
-     - "27017:27017"
+      - "27017:27017"
     volumes:
-     - mongodata:/data/db
+      - mongodata:/data/db
 
   activity-microservice:
     build:
       context: ./activity-microservice
       dockerfile: Dockerfile-dev
-#    volumes:
-#     - ./activity-microservice:/usr/src/app
+    volumes:
+      - ./activity-microservice:/usr/src/app
 
   auth-microservice:
     build:
       context: ./auth-microservice
       dockerfile: Dockerfile-dev
-#    volumes:
-#     - ./auth-microservice:/usr/src/app
+    volumes:
+      - ./auth-microservice:/usr/src/app
     links:
-     - mongo
+      - mongo
 
   location-microservice:
     build:
       context: ./location-microservice
       dockerfile: Dockerfile-dev
     volumes:
-     - ./location-microservice:/usr/src/app
+      - ./location-microservice:/usr/src/app
 
   storage-microservice:
     build:
