@@ -37,12 +37,12 @@ services:
     volumes:
       - ./location-microservice:/usr/src/app
 
-  storage-microservice:
+  photo-microservice:
     build:
-      context: ./storage-microservice
+      context: ./photo-microservice
       dockerfile: Dockerfile-dev
     volumes:
-      - ./storage-microservice:/usr/src/app
+      - ./photo-microservice:/usr/src/app
 
   timeline-microservice:
     build:
@@ -64,7 +64,7 @@ services:
      - activity-microservice
      - auth-microservice
      - location-microservice
-     - storage-microservice
+     - photo-microservice
      - timeline-microservice
 
   frontend:

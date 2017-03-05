@@ -31,9 +31,9 @@ services:
       context: ./location-microservice
       dockerfile: Dockerfile-prod
 
-  storage-microservice:
+  photo-microservice:
     build:
-      context: ./storage-microservice
+      context: ./photo-microservice
       dockerfile: Dockerfile-prod
 
   timeline-microservice:
@@ -52,7 +52,7 @@ services:
      - activity-microservice
      - auth-microservice
      - location-microservice
-     - storage-microservice
+     - photo-microservice
      - timeline-microservice
 
   frontend:

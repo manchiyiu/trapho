@@ -7,7 +7,7 @@
     "mongoose": "^4.8.5",
     "seneca": "^3.3.0"
   },
-  "name": "storage-microservice",
+  "name": "photo-microservice",
   "version": "1.0.0",
   "description": "A microservice for handling photo storage related logic.",
   "main": "index.js",

@@ -56,7 +56,7 @@ seneca
   .client({ host: 'activity-microservice', pin: 'role:activity' })
   .client({ host: 'auth-microservice', pin: 'role:auth' })
   .client({ host: 'location-microservice', pin: 'role:location' })
-  .client({ host: 'storage-microservice', pin: 'role:storage' })
+  .client({ host: 'photo-microservice', pin: 'role:photo' })
   .client({ host: 'timeline-microservice', pin: 'role:timeline' });
 
 http.createServer(app).listen(3000);
