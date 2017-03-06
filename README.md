@@ -49,12 +49,12 @@ For the microservices, you can start the server by doing the following:
 ```bash
 cd [microservice-folder]
 yarn install
-yarnpkg start
+yarn start
 ```
 
 For frontend, you can start a development server (with live-reload) with:
 ```bash
 cd frontend
 yarn install
-yarnpkg dev
+yarn dev
 ```

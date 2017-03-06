@@ -15,7 +15,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node dist/index.js",
-    "dev": "tsc -w & wait 10; nodemon dist/index.js",
+    "dev": "tsc -w",
     "build": "tsc"
   }
 }

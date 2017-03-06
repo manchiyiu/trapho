@@ -53,13 +53,10 @@ app.use('/trips', trips);
 app.use(errorMiddleware); // keep this as last middleware, which catches all error
 
 seneca
-  .use('mesh', {
-    isbase: true
-  })
-  // .client({ host: '172.18.0.1', port: '3001', pin: 'role:activity' })
-  // .client({ host: '172.18.0.1', port: '3002', pin: 'role:auth' })
-  // .client({ host: '172.18.0.1', port: '3003', pin: 'role:location' })
-  // .client({ host: '172.18.0.1', port: '3004', pin: 'role:photo' })
-  // .client({ host: '172.18.0.1', port: '3005', pin: 'role:timeline' });
+  .client({ host: process.env.BRIDGE_ADDRESS, port: '3001', pin: 'role:activity' })
+  .client({ host: process.env.BRIDGE_ADDRESS, port: '3002', pin: 'role:auth' })
+  .client({ host: process.env.BRIDGE_ADDRESS, port: '3003', pin: 'role:location' })
+  .client({ host: process.env.BRIDGE_ADDRESS, port: '3004', pin: 'role:photo' })
+  .client({ host: process.env.BRIDGE_ADDRESS, port: '3005', pin: 'role:timeline' });
 
 http.createServer(app).listen(3000);

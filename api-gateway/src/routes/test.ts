@@ -14,7 +14,16 @@ const router = express.Router();
  * @apiSuccess {String} status Status, only having an 'ok' value.
  */
 router.get('/', async (req, res) => {
-  res.json({ status: 'ok' });
+  try {
+    await act({ role: 'activity', cmd: 'test' });
+    await act({ role: 'auth', cmd: 'test' })
+    await act({ role: 'location', cmd: 'test' })
+    await act({ role: 'photo', cmd: 'test' })
+    await act({ role: 'timeline', cmd: 'test' })
+    res.json({ status: 'ok' });
+  } catch (e) {
+    res.json({ status: 'error' });
+  }
 });
 
 export default router;
