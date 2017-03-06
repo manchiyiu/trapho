@@ -13,9 +13,14 @@ import './passport';
 
 /* import routes */
 
-import auth from './routes/auth';
 import test from './routes/test';
-import location from './routes/location';
+import auth from './routes/auth';
+
+import locations from './routes/locations';
+import ratings from './routes/ratings';
+import photos from './routes/photos';
+import comments from './routes/comments';
+import trips from './routes/trips';
 
 const app = express();
 
@@ -36,9 +41,14 @@ app.use(
   })
 );
 
-app.use('/auth', auth);
-app.use('/location', location);
 app.use('/test', test);
+app.use('/auth', auth);
+
+app.use('/locations', locations);
+app.use('/ratings', ratings);
+app.use('/photos', photos);
+app.use('/comments', comments);
+app.use('/trips', trips);
 
 app.use(errorMiddleware); // keep this as last middleware, which catches all error
 
@@ -46,7 +56,7 @@ seneca
   .client({ host: 'activity-microservice', pin: 'role:activity' })
   .client({ host: 'auth-microservice', pin: 'role:auth' })
   .client({ host: 'location-microservice', pin: 'role:location' })
-  .client({ host: 'storage-microservice', pin: 'role:storage' })
+  .client({ host: 'photo-microservice', pin: 'role:photo' })
   .client({ host: 'timeline-microservice', pin: 'role:timeline' });
 
 http.createServer(app).listen(3000);

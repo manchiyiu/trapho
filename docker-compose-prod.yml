@@ -1,0 +1,65 @@
+version: '2'
+
+volumes:
+  mongodata:
+    external: true
+
+services:
+
+  mongo:
+    image: mongo:3.2
+    command: "mongod --logpath /dev/null --smallfiles --setParameter failIndexKeyTooLong=false"
+    ports:
+     - "27017:27017"
+    volumes:
+     - mongodata:/data/db
+
+  activity-microservice:
+    build:
+      context: ./activity-microservice
+      dockerfile: Dockerfile-prod
+
+  auth-microservice:
+    build:
+      context: ./auth-microservice
+      dockerfile: Dockerfile-prod
+    links:
+     - mongo
+
+  location-microservice:
+    build:
+      context: ./location-microservice
+      dockerfile: Dockerfile-prod
+
+  photo-microservice:
+    build:
+      context: ./photo-microservice
+      dockerfile: Dockerfile-prod
+
+  timeline-microservice:
+    build:
+      context: ./timeline-microservice
+      dockerfile: Dockerfile-prod
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile-prod
+    ports:
+     - "3000:3000"
+    links:
+     - mongo
+     - activity-microservice
+     - auth-microservice
+     - location-microservice
+     - photo-microservice
+     - timeline-microservice
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile-prod
+    links:
+     - api-gateway
+    ports:
+     - "5000:5000"

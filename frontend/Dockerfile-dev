@@ -1,0 +1,22 @@
+FROM node
+
+# Create app directory
+RUN npm install -g yarn
+
+# Install app dependencies
+RUN yarn global add serve vbuild@6.9.1
+
+RUN mkdir -p /usr/app/src
+
+COPY ./src /usr/src/app/src
+COPY ./package.json /usr/src/app/package.json
+COPY ./vbuild.config.js /usr/src/app/vbuild.config.js
+COPY ./index.html /usr/src/app/index.html
+
+# Bundle app source
+WORKDIR /usr/src/app
+RUN yarn install
+
+EXPOSE 5000
+
+CMD [ "yarnpkg", "dev" ]

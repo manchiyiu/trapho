@@ -1,6 +1,10 @@
 {
   "dependencies": {
+    "@types/lodash": "^4.14.54",
+    "@types/mongoose": "^4.7.7",
     "@types/seneca": "^2.1.5",
+    "lodash": "^4.17.4",
+    "mongoose": "^4.8.5",
     "seneca": "^3.3.0"
   },
   "name": "timeline-microservice",
@@ -11,7 +15,7 @@
   "license": "MIT",
   "scripts": {
     "start": "tsc && node dist/index.js",
-    "dev": "tsc -w",
+    "dev": "tsc -w & nodemon dist/index.js",
     "build": "tsc"
   }
 }

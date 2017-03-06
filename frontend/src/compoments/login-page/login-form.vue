@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     submit: async function () {
-      let { status, error, token } = await login(this.$router, {
+      let { error, token } = await login(this.$router, {
         username: this.username,
         password: this.password
       });

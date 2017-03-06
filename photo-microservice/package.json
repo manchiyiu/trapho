@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "@types/lodash": "^4.14.54",
+    "@types/mongoose": "^4.7.7",
+    "@types/seneca": "^2.1.5",
+    "lodash": "^4.17.4",
+    "mongoose": "^4.8.5",
+    "seneca": "^3.3.0"
+  },
+  "name": "photo-microservice",
+  "version": "1.0.0",
+  "description": "A microservice for handling photo storage related logic.",
+  "main": "index.js",
+  "author": "ymcatar",
+  "license": "MIT",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "tsc -w & nodemon dist/index.js",
+    "build": "tsc"
+  }
+}

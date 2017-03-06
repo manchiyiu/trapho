@@ -10,29 +10,53 @@ services:
     image: mongo:3.2
     command: "mongod --logpath /dev/null --smallfiles --setParameter failIndexKeyTooLong=false"
     ports:
-     - "27017:27017"
+      - "27017:27017"
     volumes:
-     - mongodata:/data/db
+      - mongodata:/data/db
 
   activity-microservice:
-    build: ./activity-microservice
+    build:
+      context: ./activity-microservice
+      dockerfile: Dockerfile-dev
+    volumes:
+      - ./activity-microservice:/usr/src/app
 
   auth-microservice:
-    build: ./auth-microservice
+    build:
+      context: ./auth-microservice
+      dockerfile: Dockerfile-dev
+    volumes:
+      - ./auth-microservice:/usr/src/app
     links:
-     - mongo
+      - mongo
 
   location-microservice:
-    build: ./location-microservice
+    build:
+      context: ./location-microservice
+      dockerfile: Dockerfile-dev
+    volumes:
+      - ./location-microservice:/usr/src/app
 
-  storage-microservice:
-    build: ./storage-microservice
+  photo-microservice:
+    build:
+      context: ./photo-microservice
+      dockerfile: Dockerfile-dev
+    volumes:
+      - ./photo-microservice:/usr/src/app
 
   timeline-microservice:
-    build: ./timeline-microservice
+    build:
+      context: ./timeline-microservice
+      dockerfile: Dockerfile-dev
+    volumes:
+      - ./timeline-microservice:/usr/src/app
 
   api-gateway:
-    build: ./api-gateway
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile-dev
+    volumes:
+     - ./api-gateway:/usr/src/app
     ports:
      - "3000:3000"
     links:
@@ -40,11 +64,15 @@ services:
      - activity-microservice
      - auth-microservice
      - location-microservice
-     - storage-microservice
+     - photo-microservice
      - timeline-microservice
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile-prod
+#   volumes:
+#     - ./frontend:/usr/src/app
     links:
      - api-gateway
     ports:
