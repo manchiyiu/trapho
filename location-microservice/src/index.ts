@@ -12,7 +12,7 @@ import ratingDelete from './actions/rating-delete';
 import ratingPatch from './actions/rating-patch';
 import ratingRetrieve from './actions/rating-retrieve';
 
-mongoose.connect('mongodb://mongo/location');
+mongoose.connect('mongodb://172.18.0.1:27017/location');
 
 mongoose.connection.on('error', () => {
   console.error('MongoDB connection error.');
@@ -27,4 +27,4 @@ seneca
   .add('cmd:ratingDelete', ratingDelete)
   .add('cmd:ratingPatch', ratingPatch)
   .add('cmd:ratingRetrieve', ratingRetrieve)
-  .listen();
+  .listen({ port: '3003' });

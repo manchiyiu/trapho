@@ -10,4 +10,4 @@ seneca()
   .add('cmd:tripDelete', tripDelete)
   .add('cmd:tripPatch', tripPatch)
   .add('cmd:tripRetrieve', tripRetrieve)
-  .listen();
+  .listen({ port: '3001' });

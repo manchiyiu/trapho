@@ -53,10 +53,13 @@ app.use('/trips', trips);
 app.use(errorMiddleware); // keep this as last middleware, which catches all error
 
 seneca
-  .client({ host: 'activity-microservice', pin: 'role:activity' })
-  .client({ host: 'auth-microservice', pin: 'role:auth' })
-  .client({ host: 'location-microservice', pin: 'role:location' })
-  .client({ host: 'photo-microservice', pin: 'role:photo' })
-  .client({ host: 'timeline-microservice', pin: 'role:timeline' });
+  .use('mesh', {
+    isbase: true
+  })
+  // .client({ host: '172.18.0.1', port: '3001', pin: 'role:activity' })
+  // .client({ host: '172.18.0.1', port: '3002', pin: 'role:auth' })
+  // .client({ host: '172.18.0.1', port: '3003', pin: 'role:location' })
+  // .client({ host: '172.18.0.1', port: '3004', pin: 'role:photo' })
+  // .client({ host: '172.18.0.1', port: '3005', pin: 'role:timeline' });
 
 http.createServer(app).listen(3000);

@@ -7,7 +7,7 @@ import photoDelete from './actions/photo-delete';
 import photoPatch from './actions/photo-patch';
 import photoRetrieve from './actions/photo-retrieve';
 
-mongoose.connect('mongodb://mongo/photo');
+mongoose.connect('mongodb://172.18.0.1:27017/photo');
 
 mongoose.connection.on('error', () => {
   console.error('MongoDB connection error.');
@@ -18,4 +18,4 @@ seneca
   .add('cmd:photoDelete', photoDelete)
   .add('cmd:photoPatch', photoPatch)
   .add('cmd:photoRetrieve', photoRetrieve)
-  .listen();
+  .listen({ port: '3004' });

@@ -11,7 +11,7 @@ import likeCreate from './actions/like-create';
 import likeDelete from './actions/like-delete';
 import likeRetrieve from './actions/like-retrieve';
 
-mongoose.connect('mongodb://mongo/timeline');
+mongoose.connect('mongodb://172.18.0.1:27017/timeline');
 
 mongoose.connection.on('error', () => {
   console.error('MongoDB connection error.');
@@ -25,4 +25,4 @@ seneca
   .add('cmd:likeCreate', likeCreate)
   .add('cmd:likeDelete', likeDelete)
   .add('cmd:likeRetrieve', likeRetrieve)
-  .listen();
+  .listen({ port: '3005' });
