@@ -26,5 +26,5 @@ seneca
       .add('cmd:tripCreate', tripCreate)
       .add('cmd:tripDelete', tripDelete)
       .add('cmd:tripPatch', tripPatch)
-      .add('cmd:tripRetrieve', tripRetrieve)
+      .add('cmd:tripRetrieve', tripRetrieve);
   });

@@ -29,8 +29,6 @@ services:
     build:
       context: ./activity-microservice
       dockerfile: Dockerfile-prod
-    volumes:
-      - ./activity-microservice:/usr/src/app
     ports:
       - "3001:3001"
     links:
