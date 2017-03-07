@@ -14,7 +14,7 @@
   "license": "MIT",
   "scripts": {
     "start": "serve --port 5000 dist",
-    "dev": "vbuild --config vbuild.config.js --port 5000 ./src/index.js --dev",
+    "dev": "vbuild --config vbuild.config.js --port 4000 ./src/index.js --dev",
     "build": "vbuild --config vbuild.config.js ./src/index.js"
   }
 }
