@@ -6,6 +6,7 @@ import * as cors from 'cors';
 import * as http from 'http';
 import * as _ from 'lodash';
 import * as expressJwt from 'express-jwt';
+import * as fileUpload from 'express-fileupload';
 
 import { seneca, act, errorMiddleware, SERVER_SECRET } from './utils';
 
@@ -32,14 +33,19 @@ app.use(cors());
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(fileUpload());
+
 app.use(
   expressJwt({ secret: SERVER_SECRET }).unless({
     path: [
       '/auth/login',
-      '/auth/signup'
+      '/auth/signup',
+      /\/static\/.*/
     ]
   })
 );
+
+app.use('/static', express.static('/data/photos'));
 
 app.use('/test', test);
 app.use('/auth', auth);
