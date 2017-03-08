@@ -1,3 +1,3 @@
 import * as senecaClass from 'seneca';
 
-export const seneca = senecaClass();
+export const seneca = senecaClass({ tag: 'auth' });

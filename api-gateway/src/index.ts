@@ -6,6 +6,7 @@ import * as cors from 'cors';
 import * as http from 'http';
 import * as _ from 'lodash';
 import * as expressJwt from 'express-jwt';
+import * as fileUpload from 'express-fileupload';
 
 import { seneca, act, errorMiddleware, SERVER_SECRET } from './utils';
 
@@ -32,14 +33,19 @@ app.use(cors());
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(fileUpload());
+
 app.use(
   expressJwt({ secret: SERVER_SECRET }).unless({
     path: [
       '/auth/login',
-      '/auth/signup'
+      '/auth/signup',
+      /\/static\/.*/
     ]
   })
 );
+
+app.use('/static', express.static('/data/photos'));
 
 app.use('/test', test);
 app.use('/auth', auth);
@@ -53,10 +59,10 @@ app.use('/trips', trips);
 app.use(errorMiddleware); // keep this as last middleware, which catches all error
 
 seneca
-  .client({ host: 'activity-microservice', pin: 'role:activity' })
-  .client({ host: 'auth-microservice', pin: 'role:auth' })
-  .client({ host: 'location-microservice', pin: 'role:location' })
-  .client({ host: 'photo-microservice', pin: 'role:photo' })
-  .client({ host: 'timeline-microservice', pin: 'role:timeline' });
+  .client({ host: process.env.BRIDGE_ADDRESS, port: '3001', pin: 'role:activity' })
+  .client({ host: process.env.BRIDGE_ADDRESS, port: '3002', pin: 'role:auth' })
+  .client({ host: process.env.BRIDGE_ADDRESS, port: '3003', pin: 'role:location' })
+  .client({ host: process.env.BRIDGE_ADDRESS, port: '3004', pin: 'role:photo' })
+  .client({ host: process.env.BRIDGE_ADDRESS, port: '3005', pin: 'role:timeline' });
 
 http.createServer(app).listen(3000);
