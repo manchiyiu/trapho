@@ -6,7 +6,7 @@ import { act } from '../utils';
 const router = express.Router();
 
 /**
- * @api {get} /locations Retrieve locations by query
+ * @api {post} /locations/query Retrieve locations by query
  * @apiName location_retrieve_query
  * @apiPermission User
  * @apiGroup Locations
@@ -23,7 +23,7 @@ const router = express.Router();
  *
  * @apiUse locationsArray
  */
-router.get('/', async (req, res) => {
+router.post('/query', async (req, res) => {
   const { query } = req.body;
   try {
     const { locations } = await act({ role: 'location', cmd: 'locationRetrieve', query });
