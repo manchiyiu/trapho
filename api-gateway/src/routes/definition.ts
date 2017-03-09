@@ -99,8 +99,7 @@
  *       "lat": 23.02323,
  *       "lng": -23.323223
  *      },
- *     "rating": 7.8,
- *     "photoIds": ["{{id-placeholder}}", "{{id-placeholder}}"]
+ *     "rating": 7.8
  *  }
  */
 
@@ -118,8 +117,7 @@
  *          "lat": 23.02323,
  *          "lng": -23.323223
  *        },
- *        "rating": 7.8,
- *        "photoIds": ["{{id-placeholder}}", "{{id-placeholder}}"]
+ *        "rating": 7.8
  *      }]
  *  }
  */
