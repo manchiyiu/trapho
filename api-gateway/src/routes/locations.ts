@@ -76,9 +76,9 @@ router.get('/id/:locationId', async (req, res) => {
  * @apiUse objectId
  */
 router.post('/', async (req, res) => {
-  const { name, description, tags, coordinate, photoIds } = req.body;
+  const { name, description, tags, coordinates } = req.body;
   try {
-    const { id } = await act({ act: 'location', cmd: 'locationCreate', name, description, tags, coordinate, photoIds });
+    const { id } = await act({ act: 'location', cmd: 'locationCreate', name, description, tags, coordinates });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -110,9 +110,9 @@ router.post('/', async (req, res) => {
  *   }
  */
 router.patch('/id/:locationId', async (req, res) => {
-  const { name, description, tags, coordinate, photoIds } = req.body;
+  const { locationId, name, description, tags, coordinates } = req.body;
   try {
-    const { id } = await act({ act: 'location', cmd: 'locationPatch', name, description, tags, coordinate, photoIds });
+    const { id } = await act({ act: 'location', cmd: 'locationPatch', locationId, name, description, tags, coordinates });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });

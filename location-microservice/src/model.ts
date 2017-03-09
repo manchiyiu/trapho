@@ -5,63 +5,39 @@ export default class Location {
 
   id: string = null;
   name: string = null;
-  coordinates: [number, number] = [null, null] //Longitude, Latitude
   description: string = null;
-  rating: number = null;
-  numberRated: number = null;
-  photoRated: {} = {};
+  tags: string[] = null;
+  coordinates: [number, number] = [null, null] //Longitude, Latitude
 
   static schema = new mongoose.Schema({
     name: String,
-    coordinates: {type: [Number], default: [0,0], index: "2dsphere"},
     description: String,
-    rating: Number,
-    numberRated: Number,
-    photoRated: {}
+    tags:[String],
+    coordinates: {type: [Number], default: [0,0], index: "2dsphere"},
   });
   
-
   static model = mongoose.model('Location', Location.schema);
 
-  static async retrieve(query: Object) {
-    let result;
-    try {
-      result = await this.model.findOne(query);
-      if (!result) throw new Error();
-    } catch (e) {
-      return null;
-    }
-    return new Location(result);
-  }
-
   constructor(object: any) {
-    const { name, coordinates, description, rating, numberRated, photoRated, _id: id } = object;
-    this.name = name;
-    this.coordinates = coordinates;
-    this.description = description
-    this.rating = rating;
+    const { name, description, tags, coordinates, photoIds, rating,  _id: id } = object;
     this.id = id;
-    this.numberRated = numberRated;
-    this.photoRated = photoRated;
-    if(typeof this.rating === "undefined"){
-      this.rating = 0;
+    this.name = name;
+    this.description = description;
+    this.tags = tags;
+    this.coordinates = coordinates;
+
+    if(typeof this.tags === "undefined"){
+      this.tags = [];
     }
-    if(typeof this.numberRated === "undefined"){
-      this.numberRated = 0;
-    }
-    if(typeof this.photoRated === "undefined"){
-      this.photoRated = {};
-    }
+
   }
 
   async save() {
     const model = new Location.model({
       name: this.name,
-      coordinates: this.coordinates,
       description: this.description,
-      rating: this.rating,
-      numberRated: this.numberRated,
-      photoRated: this.photoRated
+      tags: this.tags,
+      coordinates: this.coordinates,
     });
     var result;
     await model.save().then(function(product){
@@ -70,20 +46,28 @@ export default class Location {
     return result;
   }
 
-  update(){
+  async update(){
     const modifiedLocation = {
       name: this.name,
-      coordinates: this.coordinates,
       description: this.description,
-      rating: this.rating,
-      numberRated: this.numberRated,
-      photoRated: this.photoRated
+      tags: this.tags,
+      coordinates: this.coordinates,
     };
-    return Location.model.findOneAndUpdate({"_id": this.id}, modifiedLocation, function (err, docs) {
-      if(err){
-        console.log("Err when updating location: ", err);
-      }
-    });
+    let result =  await Location.model.findOneAndUpdate({"_id": this.id}, modifiedLocation, function (err, docs) {});
+    if(typeof result === "undefined"){
+      throw new Error('databaseError');
+    }else{
+      return mongoose.Types.ObjectId(result._id);
+    }
+  }
+
+  static async retrieveById(locationId:string){
+    let result = await Location.model.findById(locationId, function(err, res){});
+    if(typeof result === "undefined"){
+      throw new Error('locationNotExist');
+    }else{
+      return new Location(result);
+    }
   }
 
   static async retrieveMany(conditions:Object, resultLimit:number){
@@ -96,8 +80,7 @@ export default class Location {
       }
       
     }catch(e){
-      console.log("Err:", e);
-      return null;
+      throw e;
     }
     for(var index in searchResult){
       result.push(new Location(searchResult[index]));
@@ -115,13 +98,22 @@ export default class Location {
         searchResult = await Location.model.geoNear(point, {maxDistance: maxDistance, spherical: true, query:conditions}, function(err, res, stats){});
       }
     }catch(e){
-      console.log("Err:", e);
-      return null;
+      throw e;
     }
 
     for(var index in searchResult){
       result.push(new Location(searchResult[index].obj));
     }
     return result;
+  }
+  
+  static async removeById(locationId:string){
+    let result = await this.model.findByIdAndRemove(locationId, function(err, res){});
+    if(typeof result === "undefined"){
+      throw new Error('locationNotExist');
+    }else{
+      return mongoose.Types.ObjectId(result._id);
+    }
+    
   }
 }
