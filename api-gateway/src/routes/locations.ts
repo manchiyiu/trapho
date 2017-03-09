@@ -71,14 +71,13 @@ router.get('/id/:locationId', async (req, res) => {
  * @apiParam {Object} coordinates       Coordinate of the location
  * @apiParam {Number} coordinates.lat   Latitude coordinate of the location
  * @apiParam {Number} coordinates.lng   Longitude coordinate of the location
- * @apiParam {String[]} photoIds        IDs of all the photos taken at the location
  *
  * @apiUse objectId
  */
 router.post('/', async (req, res) => {
-  const { name, description, tags, coordinate, photoIds } = req.body;
+  const { name, description, tags, coordinate } = req.body;
   try {
-    const { id } = await act({ act: 'location', cmd: 'locationCreate', name, description, tags, coordinate, photoIds });
+    const { id } = await act({ act: 'location', cmd: 'locationCreate', name, description, tags, coordinate });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -93,13 +92,13 @@ router.post('/', async (req, res) => {
  *
  * @apiDescription If the param includes name only, then replace the name field in the current record and keep all the other fields.
  *
+ * @apiParam {String} locationId          ID of the location
  * @apiParam {String} [name]              Name of the location
  * @apiParam {String} [description]       Description of the location
  * @apiParam {String[]} [tags]            Tags associated with the location (e.g. 'beach')
  * @apiParam {Object} [coordinates]       Coordinate of the location
  * @apiParam {Number} [coordinates.lat]   Latitude coordinate of the location
  * @apiParam {Number} [coordinates.lng]   Longitude coordinate of the location
- * @apiParam {String[]} [photoIds]        IDs of all the photos taken at the location
  *
  * @apiUse objectId
  *
@@ -110,9 +109,9 @@ router.post('/', async (req, res) => {
  *   }
  */
 router.patch('/id/:locationId', async (req, res) => {
-  const { name, description, tags, coordinate, photoIds } = req.body;
+  const { name, description, tags, coordinate } = req.body;
   try {
-    const { id } = await act({ act: 'location', cmd: 'locationPatch', name, description, tags, coordinate, photoIds });
+    const { id } = await act({ act: 'location', cmd: 'locationPatch', name, description, tags, coordinate });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
