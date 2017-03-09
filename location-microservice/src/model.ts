@@ -53,16 +53,21 @@ export default class Location {
       tags: this.tags,
       coordinates: this.coordinates,
     };
-    let result =  await Location.model.findOneAndUpdate({"_id": this.id}, modifiedLocation, function (err, docs) {});
-    if(!result){
-      throw new Error('databaseError');
-    }else{
-      return mongoose.Types.ObjectId(result._id);
-    }
+    var result;
+    await Location.model.findByIdAndUpdate(this.id, modifiedLocation, function(err, res){
+      if(err){
+        throw new Error('databaseError');
+      }
+    });
   }
 
   static async retrieveById(locationId:string){
-    let result = await Location.model.findById(locationId, function(err, res){});
+    var result;
+    try{
+      result = await Location.model.findById(locationId, function(err, res){});
+    }catch(e){
+      throw new Error('locationNotExist');
+    }
     if(!result){
       throw new Error('locationNotExist');
     }else{
