@@ -15,7 +15,7 @@ export default async (msg, reply) => {
       let objCoordinate = [coordinates.lng, coordinates.lat];
       location.coordinates = objCoordinate;
     }else{
-      reply("invalidCoordinatesError", null);
+      reply(new Error("invalidCoordinatesError"), null);
       return;
     }
   }
@@ -40,7 +40,7 @@ function fieldEditor(key){
     if(typeof msg[key] != "undefined"){
       obj[key] = msg[key];
     }else{
-      throw("invalid"+key.charAt(0).toUpperCase()+key.slice(1)+"Error");
+      throw(new Error("invalid"+key.charAt(0).toUpperCase()+key.slice(1)+"Error"));
     }
   }
   return editor;

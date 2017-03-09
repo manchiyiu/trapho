@@ -54,7 +54,7 @@ export default class Location {
       coordinates: this.coordinates,
     };
     let result =  await Location.model.findOneAndUpdate({"_id": this.id}, modifiedLocation, function (err, docs) {});
-    if(typeof result === "undefined"){
+    if(!result){
       throw new Error('databaseError');
     }else{
       return mongoose.Types.ObjectId(result._id);
@@ -63,7 +63,7 @@ export default class Location {
 
   static async retrieveById(locationId:string){
     let result = await Location.model.findById(locationId, function(err, res){});
-    if(typeof result === "undefined"){
+    if(!result){
       throw new Error('locationNotExist');
     }else{
       return new Location(result);
@@ -108,12 +108,15 @@ export default class Location {
   }
   
   static async removeById(locationId:string){
-    let result = await this.model.findByIdAndRemove(locationId, function(err, res){});
-    if(typeof result === "undefined"){
+    try{
+      let obj = await Location.retrieveById(locationId);
+    }catch(e){
       throw new Error('locationNotExist');
-    }else{
-      return mongoose.Types.ObjectId(result._id);
     }
-    
+    try{
+      let result = await this.model.findByIdAndRemove(locationId, function(err, res){});
+    }catch(e){
+      throw new Error('databaseError');
+    }
   }
 }

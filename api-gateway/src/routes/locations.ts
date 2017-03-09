@@ -26,7 +26,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   const { query } = req.body;
   try {
-    const { locations } = await act({ act: 'location', cmd: 'locationRetrieve', query });
+    const { locations } = await act({ role: 'location', cmd: 'locationRetrieve', query });
     res.json({ locations });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -52,7 +52,7 @@ router.get('/', async (req, res) => {
 router.get('/id/:locationId', async (req, res) => {
   const { locationId } = req.params;
   try {
-    const locations = await act({ act: 'location', cmd: 'locationRetrieve', locationId });
+    const locations = await act({ role: 'location', cmd: 'locationRetrieve', locationId });
     res.json(locations);
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -77,7 +77,7 @@ router.get('/id/:locationId', async (req, res) => {
 router.post('/', async (req, res) => {
   const { name, description, tags, coordinates } = req.body;
   try {
-    const { id } = await act({ act: 'location', cmd: 'locationCreate', name, description, tags, coordinates });
+    const { id } = await act({ role: 'location', cmd: 'locationCreate', name, description, tags, coordinates });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -111,7 +111,7 @@ router.post('/', async (req, res) => {
 router.patch('/id/:locationId', async (req, res) => {
   const { locationId, name, description, tags, coordinates } = req.body;
   try {
-    const { id } = await act({ act: 'location', cmd: 'locationPatch', locationId, name, description, tags, coordinates });
+    const { id } = await act({ role: 'location', cmd: 'locationPatch', locationId, name, description, tags, coordinates });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -137,7 +137,7 @@ router.patch('/id/:locationId', async (req, res) => {
 router.delete('/id/:locationId', async (req, res) => {
   const { locationId } = req.params;
   try {
-    const { id } = await act({ act: 'location', cmd: 'locationDelete', locationId });
+    const { id } = await act({ role: 'location', cmd: 'locationDelete', locationId });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
