@@ -2,8 +2,8 @@ import * as mongoose from 'mongoose';
 
 import { seneca } from './utils';
 
-import test from './actions/test';
 
+import test from './actions/test';
 import locationCreate from './actions/location-create';
 import locationDelete from './actions/location-delete';
 import locationPatch from './actions/location-patch';
@@ -31,8 +31,8 @@ seneca
       .add('cmd:test', test)
       .add('cmd:locationCreate', locationCreate)
       .add('cmd:locationDelete', locationDelete)
-      .add('cmd:locationPatch', locationDelete)
-      .add('cmd:locationRetrieve', locationDelete)
+      .add('cmd:locationPatch', locationPatch)
+      .add('cmd:locationRetrieve', locationRetrieve)
       .add('cmd:ratingCreate', ratingCreate)
       .add('cmd:ratingDelete', ratingDelete)
       .add('cmd:ratingPatch', ratingPatch)
