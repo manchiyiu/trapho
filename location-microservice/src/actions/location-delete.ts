@@ -7,7 +7,7 @@ export default async (msg, reply) => {
     let result = await Location.removeById(locationId);
     reply(null, { id: locationId });
   } catch (e) {
-    reply(new Error('databaseError'), null);
+    reply(e, null);
   }
 
 };

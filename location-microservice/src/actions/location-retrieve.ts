@@ -18,7 +18,7 @@ export default async (msg, reply) => {
       reply(null, { locations: transform(result) }); // just return one object
       return;
     } catch (e) {
-      reply(new Error('databaseError'), null);
+      reply(e, null);
       return;
     }
   }
@@ -61,7 +61,7 @@ export default async (msg, reply) => {
     reply(null, { locations: result.map(transform) });
 
   } catch (e) {
-    reply(new Error('databaseError'), null);
+    reply(e, null);
   }
 
 };

@@ -21,7 +21,7 @@ export default async(msg, reply) => {
       });
     }
   } catch (e) {
-    reply(new Error('databaseError'), null);
+    reply(e, null);
     return;
   }
 

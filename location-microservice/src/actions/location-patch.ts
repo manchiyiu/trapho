@@ -9,7 +9,7 @@ export default async (msg, reply) => {
   try {
     location = await Location.retrieveById(locationId);
   } catch (e) {
-    reply(new Error('databaseError'), null);
+    reply(e, null);
     return;
   }
 
@@ -27,7 +27,7 @@ export default async (msg, reply) => {
       location.coordinates = [coordinates.lng, coordinates.lat];
     }
   } catch (e) {
-    reply(new Error('databaseError'), null);
+    reply(e, null);
     return;
   }
 
@@ -35,7 +35,7 @@ export default async (msg, reply) => {
     let result = await location.update();
     reply(null, {id: locationId});
   } catch (e) {
-    reply(new Error('databaseError'), null);
+    reply(e, null);
   }
 
 };
