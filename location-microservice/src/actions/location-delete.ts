@@ -1,11 +1,13 @@
-import Location from '../model'
+import Location from '../model';
 
 export default async (msg, reply) => {
-  const{locationId} = msg;
-  try{
+
+  const { locationId } = msg;
+  try {
     let result = await Location.removeById(locationId);
-    reply(null, {id:locationId});
-  }catch(e){
-    reply(e, null);
+    reply(null, { id: locationId });
+  } catch (e) {
+    reply(new Error('databaseError'), null);
   }
+
 };

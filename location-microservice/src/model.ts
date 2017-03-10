@@ -3,33 +3,38 @@ import * as _ from 'lodash';
 
 export default class Location {
 
-  id: string = null;
-  name: string = null;
-  description: string = null;
-  tags: string[] = null;
-  coordinates: [number, number] = [null, null] //Longitude, Latitude
+  id : string = null;
+  name : string = null;
+  description : string = null;
+  tags : string[] = null;
+  coordinates: [number, number] = [null, null]; //Longitude, Latitude
 
   static schema = new mongoose.Schema({
     name: String,
     description: String,
-    tags:[String],
-    coordinates: {type: [Number], default: [0,0], index: "2dsphere"},
+    tags: [String],
+    coordinates: {
+      type: [Number],
+      default: [0, 0],
+      index: '2dsphere'
+    }
   });
-  
+
   static model = mongoose.model('Location', Location.schema);
 
-  constructor(object: any) {
-    const { name, description, tags, coordinates, photoIds, rating,  _id: id } = object;
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.tags = tags;
-    this.coordinates = coordinates;
+  constructor(object : any) {
+    const {
+      name,
+      description,
+      tags,
+      coordinates,
+      photoIds,
+      rating,
+      _id: id
+    } = object;
 
-    if(typeof this.tags === "undefined"){
-      this.tags = [];
-    }
-
+    Object.assign(this, { id, name, description, tags, coordinates });
+    this.tags = this.tags || [];
   }
 
   async save() {
@@ -37,90 +42,87 @@ export default class Location {
       name: this.name,
       description: this.description,
       tags: this.tags,
-      coordinates: this.coordinates,
+      coordinates: this.coordinates
     });
-    var result;
-    await model.save().then(function(product){
-      result = mongoose.Types.ObjectId(product._id);
-    });
-    return result;
+    return await model
+      .save()
+      .then(product => mongoose.Types.ObjectId(product._id));
   }
 
-  async update(){
+  async update() {
     const modifiedLocation = {
       name: this.name,
       description: this.description,
       tags: this.tags,
-      coordinates: this.coordinates,
+      coordinates: this.coordinates
     };
-    var result;
-    await Location.model.findByIdAndUpdate(this.id, modifiedLocation, function(err, res){
-      if(err){
-        throw new Error('databaseError');
-      }
-    });
+    return await Location.model
+      .findByIdAndUpdate(this.id, modifiedLocation, (err, res) => {
+        if (err) {
+          throw new Error('databaseError');
+        }
+      });
   }
 
-  static async retrieveById(locationId:string){
-    var result;
-    try{
-      result = await Location.model.findById(locationId, function(err, res){});
-    }catch(e){
+  static async retrieveById(locationId : string) {
+    let result;
+    try {
+      result = await Location.model.findById(locationId);
+    } catch (e) {
       throw new Error('locationNotExist');
     }
-    if(!result){
+    if (!result) {
       throw new Error('locationNotExist');
-    }else{
+    } else {
       return new Location(result);
     }
   }
 
-  static async retrieveMany(conditions:Object, resultLimit:number){
+  static async retrieveMany(conditions : Object, resultLimit : number) {
     let searchResult, result = [];
-    try{
-      if(resultLimit != Infinity){
-        searchResult = await Location.model.find(conditions,function (err, docs) {}).sort({_id:-1}).limit(resultLimit);
-      }else{
-        searchResult = await Location.model.find(conditions,function (err, docs) {});
-      }
-      
-    }catch(e){
-      throw e;
+    if (resultLimit != Infinity) {
+      searchResult = await Location.model
+        .find(conditions)
+        .sort({ _id: -1 })
+        .limit(resultLimit);
+    } else {
+      searchResult = await Location.model.find(conditions);
     }
-    for(var index in searchResult){
-      result.push(new Location(searchResult[index]));
-    }
-    return result;
+    return searchResult.map(result => new Location(result));
   }
 
-  static async retrieveManyByDist(conditions:Object, coordinates:number[], maxDistance:number, resultLimit:number){
-    var searchResult, result = [];
-    let point =  { coordinates: coordinates, type: 'Point' };    
-    try{
-      if(resultLimit != Infinity){
-        searchResult = await Location.model.geoNear(point, {maxDistance: maxDistance, spherical: true, query:conditions, limit:resultLimit}, function(err, res, stats){});
-      }else{
-        searchResult = await Location.model.geoNear(point, {maxDistance: maxDistance, spherical: true, query:conditions}, function(err, res, stats){});
-      }
-    }catch(e){
-      throw e;
-    }
+  static async retrieveManyByDist(conditions : Object, coordinates : number[], maxDistance : number, resultLimit : number) {
+    let searchResult, result = [];
+    let point = { coordinates: coordinates, type: 'Point' };
 
-    for(var index in searchResult){
-      result.push(new Location(searchResult[index].obj));
+    if (resultLimit != Infinity) {
+      searchResult = await Location.model
+        .geoNear(point, {
+          maxDistance: maxDistance,
+          spherical: true,
+          query: conditions,
+          limit: resultLimit
+        });
+    } else {
+      searchResult = await Location.model
+        .geoNear(point, {
+          maxDistance: maxDistance,
+          spherical: true,
+          query: conditions
+        });
     }
-    return result;
+    return searchResult.map(item => new Location(item.obj));
   }
-  
-  static async removeById(locationId:string){
-    try{
+
+  static async removeById(locationId : string) {
+    try {
       let obj = await Location.retrieveById(locationId);
-    }catch(e){
+    } catch (e) {
       throw new Error('locationNotExist');
     }
-    try{
-      let result = await this.model.findByIdAndRemove(locationId, function(err, res){});
-    }catch(e){
+    try {
+      let result = await this.model.findByIdAndRemove(locationId);
+    } catch (e) {
       throw new Error('databaseError');
     }
   }
