@@ -1,12 +1,6 @@
 import * as _ from 'lodash';
 import Location from '../model';
 
-const transform = location => {
-  const [lng, lat] = location.coordinates;
-  location.coordinates = { lng, lat };
-  return location;
-};
-
 export default async (msg, reply) => {
 
   const { locationId, query } = msg;
@@ -15,7 +9,7 @@ export default async (msg, reply) => {
   if (!_.isUndefined(locationId)) {
     try {
       let result = await Location.retrieveById(locationId);
-      reply(null, { locations: transform(result) }); // just return one object
+      reply(null, { locations: result }); // just return one object
       return;
     } catch (e) {
       reply(e, null);
@@ -53,12 +47,12 @@ export default async (msg, reply) => {
         searchQuery, coordinates, query.range.radius, Infinity
       );
 
-      reply(null, { locations: result.map(transform) });
+      reply(null, { locations: result });
       return;
     }
 
     let result = await Location.retrieveMany(searchQuery, Infinity);
-    reply(null, { locations: result.map(transform) });
+    reply(null, { locations: result });
 
   } catch (e) {
     reply(e, null);

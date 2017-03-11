@@ -17,7 +17,7 @@ export default async(msg, reply) => {
         name,
         description,
         tags,
-        coordinates: [coordinates.lng, coordinates.lat]
+        coordinates
       });
     }
   } catch (e) {
