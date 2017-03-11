@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@types/bcryptjs": "^2.4.0",
+    "@types/lodash": "^4.14.53"
+  }
+}

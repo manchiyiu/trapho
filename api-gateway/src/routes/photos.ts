@@ -1,5 +1,10 @@
+import * as Bluebird from 'bluebird';
+
 import * as express from 'express';
 import * as passport from 'passport';
+import * as path from 'path';
+import * as _ from 'lodash';
+import { v1 as uuid } from 'uuid';
 
 import { act } from '../utils';
 
@@ -30,6 +35,32 @@ router.get('/id/:photoId', async (req, res) => {
     res.status(500).json({ error: err.details.message });
   }
 });
+
+/**
+ * @api {get} /photos/id/:photoId Retrieve photos associated with a location
+ * @apiName photos_retrieve_locationId
+ * @apiPermission User
+ * @apiGroup Photos
+ *
+ * @apiParam {String} locationId                   location id
+ *
+ * @apiUse photosArray
+ *
+ * @apiError (Error 500) {String} apiError            Error message ('locationNotExist', 'databaseError', etc.)
+ * @apiErrorExample {json} Error-Response:
+ *   {
+ *     "error": "locationNotExist"
+ *   }
+ */
+router.get('/locations/:locationId', async (req, res) => {
+  const { locationId } = req.params;
+  try {
+    const { photos } = await act({ act: 'storage', cmd: 'photoRetrieve', locationId });
+    res.json({ photos });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
+})
 
 /**
  * @api {get} /photos/users/:userId Retrieve all photos of an user
@@ -156,17 +187,42 @@ router.delete('/id/:photoId', async (req, res) => {
  *
  * @apiDescription Isaac will implement this.
  *
- * @apiParam {Files[]} files                  array representing files to be uploaded
+ * @apiParam {File} file                      the file object
  *
  * @apiSuccess {String} url                   url path of the uploaded file
  * @apiSuccessExample  {json} Success-Response:
  *   {
- *     "url": "http://www.trapho.com/static/sf1412ffsdfasdase1123.jpg"
+ *     "url": "sf1412ffsdfasdase1123.jpg"
  *   }
  *
+ * @apiError (Error 500) {String} apiError            Error message ('noFileUploaded', 'fileFormatInvalid', 'uploadFailed' etc.)
+ * @apiErrorExample {json} Error-Response:
+ *   {
+ *     "error": "noFileUploaded"
+ *
  */
-router.post('/upload', async (req, res) => {
-  /* Isaac will write this */
+router.post('/upload', async (req: any, res) => {
+
+  if (!req.files) {
+    return res.status(500).json({ error: 'noFileUploaded' });
+  }
+
+  const { files: file } = req.files;
+
+  if (path.extname(file.name) !== '.jpg' && path.extname(file.name) !== '.png' && path.extname(file.name) !== '.jpeg') {
+    return res.status(500).json({ error: 'fileFormatInvalid' });
+  }
+
+  const filename = `${uuid()}${path.extname(file.name)}`;
+  const uploadPath = `/data/photos/${filename}`;
+  file.mv(uploadPath, err => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'uploadFailed' });
+    }
+    return res.status(200).json({ url: filename });
+  });
+
 });
 
 export default router;

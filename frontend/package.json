@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@types/query-string": "^3.0.31",
+    "babel-loader": "^6.4.0",
     "express": "^4.14.1",
     "query-string": "^4.3.2",
     "vue": "^2.2.1",
@@ -14,7 +15,7 @@
   "license": "MIT",
   "scripts": {
     "start": "serve --port 5000 dist",
-    "dev": "vbuild --config vbuild.config.js --port 5000 ./src/index.js --dev",
+    "dev": "vbuild --config vbuild.config.js --port 4000 ./src/index.js --dev",
     "build": "vbuild --config vbuild.config.js ./src/index.js"
   }
 }
