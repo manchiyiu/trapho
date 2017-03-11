@@ -2,21 +2,22 @@
 import scrapy
 import json
 
-_url_prefix = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?rankby=prominence"
+_url_prefix = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?rankby=prominence&language=en"
 _category = ["airport", "amusement_park", "aquarium", "art_gallery", "bar", "casino", "city_hall", "department_store", "food", "museum", "night_club", "park", "place_of_worship", "spa", "stadium", "university", "zoo"]
 _google_api_key = "AIzaSyD_nUa5TDEVMWvZK60VsZ8g5YqHHig7twY"
-_center_lat = 22.334317
-_center_lng = 114.166214
-_center_radius = 24000
-
-_locations_parsed = []
 
 class GoogleplaceSpider(scrapy.Spider):
 	name = "GooglePlace"
 	allowed_domains = ["maps.googleapis.com"]
 
+	def __init__(self, lat=22.334317, lng = 114.166214, radius = 24000, domain=None, *args, **kwargs):
+		super(GoogleplaceSpider, self).__init__(*args, **kwargs)
+		self.center_lat = lat
+		self.center_lng = lng
+		self.center_radius = radius
+
 	def start_requests(self):
-		url_combined_prefix = _url_prefix+"&key="+_google_api_key+"&location="+str(_center_lat)+","+str(_center_lng)+"&radius="+str(_center_radius)+"&types="
+		url_combined_prefix = _url_prefix+"&key="+_google_api_key+"&location="+str(self.center_lat)+","+str(self.center_lng)+"&radius="+str(self.center_radius)+"&types="
 		urls = [url_combined_prefix+x for x in _category]
 		for url in urls:
 			yield scrapy.Request(url = url, callback = self.parse)
