@@ -4,16 +4,10 @@
     <div>
     <!-- header -->
     <md-toolbar class="md-transparent">
-      
       <md-image md-src="http://i.imgur.com/DLvfDJ3.png" class="logo"></md-image>
       <h2 class="md-title" style="flex: 1"></h2>
-        <md-button class="md-icon-button md-primary" @click.native="upload">
-          <md-icon>add</md-icon>
-        </md-button>
-
-        <md-button class="md-icon-button" @click.native="toggleRightSidenav">
-        <md-icon>menu</md-icon>
-      </md-button>
+      <md-button class="md-icon-button md-primary" @click.native="upload"><md-icon>add</md-icon></md-button>
+      <md-button class="md-icon-button" @click.native="toggleRightSidenav"><md-icon>menu</md-icon></md-button>
     </md-toolbar>
     <!--Sidebar-->
     <md-sidenav class="md-right" ref="rightSidenav" @open="open('Right')" @close="close('Right')">
@@ -23,12 +17,13 @@
         </div>
       </md-toolbar>
       <md-list>
+        <md-list-item><md-icon>beenhere</md-icon><span>My Wishlist</span></md-list-item>
         <md-list-item><md-icon>flight_takeoff</md-icon><span>Plan My Trip</span></md-list-item>
         <md-list-item><md-icon>edit</md-icon><span>Edit My Profile</span></md-list-item>
+        <md-list-item><md-icon>settings</md-icon><span>Settings</span></md-list-item>
         <md-list-item @click.native="logout"><md-icon>exit_to_app</md-icon><span>Logout</span></md-list-item>
       </md-list>
     </md-sidenav>
-
     <router-view></router-view>
   </div>
 
