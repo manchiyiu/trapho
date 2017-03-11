@@ -1,5 +1,8 @@
 <name>app</name>
 
 <template>
-  <router-view></router-view>
+  <div>
+    Welcome To Trapho
+    <router-view></router-view>
+  </div>
 </template>
