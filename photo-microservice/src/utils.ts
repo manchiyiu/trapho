@@ -23,12 +23,18 @@ export async function isValidUser(userId: String){
 
 export function isValidURL(url: String){
     if (typeof url == 'undefined'){
-        throw new Error('URLNotExist');
+        throw new Error('urlNotExist');
+    }
+    if (typeof url != 'string'){
+        throw new Error('invalidURL');
     }
 }
 
 export function isValidDescription(description: String){
     if (typeof description == 'undefined'){
-        throw new Error('DescriptionNotExist');
+        throw new Error('descriptionNotExist');
+    }
+    if (typeof description != 'string'){
+        throw new Error('invalidDescription');
     }
 }

@@ -38,8 +38,18 @@ export default class Photo {
         return product._id; // _id is String, can use directly for find
     }
 
-    async patch(query: Object){
-
+    async patch(){
+        const newInfo = {
+            userId : this.userId,
+            locationId : this.locationId,
+            url : this.url,
+            description : this.description
+        };
+        try{
+            await Photo.model.findByIdAndUpdate(this.id, newInfo);
+        } catch(e) {
+            throw new Error('databaseError');
+        }
     }
 
     static async remove(photoId: String){
@@ -51,24 +61,39 @@ export default class Photo {
         try{
             res =  await this.model.findById(photoId);
         } catch(e) {
-            throw new Error('photoNotexist');
+            throw new Error('photoNotExist');
         }
         if (res == null){
-                throw new Error('photoNotExist');
-            }
+            throw new Error('photoNotExist');
+        }
         return new Photo(res);
     }
 
     static async retrieveByUserId(userId: String){
         let res;
         try{
-            res =  await this.model.find( {userId} , '-_id -__v');
-            if (res == []){
-                throw new Error('userHasNoPhoto');
-            }
+            res =  await this.model.find( {userId} , '-__v');
+            res.forEach((element, index) => {
+                 res[index] = new Photo(element);
+            });
             return res;
         } catch(e) {
             throw new Error('databaseError');
+        }
+    }
+
+    static async retrieveByLocationId(locationId: String){
+        let res;
+        try{
+            res = await this.model.find( {locationId}, '-__v');
+            //                    .sort( {  } ) 
+
+            res.forEach((element, index) => {
+                 res[index] = new Photo(element);
+            });
+            return res;
+        } catch(e) {
+            throw new Error('databsaeError');
         }
     }
 }
