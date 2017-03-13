@@ -1,4 +1,4 @@
-import Photo from '../model'
+import Photo from '../model';
 import { isValidUser, isValidLocation, isValidURL, isValidDescription } from '../utils';
 
 export default async (msg, reply) => {
@@ -11,15 +11,15 @@ export default async (msg, reply) => {
     isValidURL(url);
     isValidDescription(description);
   } catch(e) {
-    reply(e,null);
+    reply(e, null);
     return;
   }
 
   // create new photo object in database
   const photo = new Photo({userId, locationId, url, description});
-  try{
+  try {
     let res = await photo.save();
-    reply(null, { id : res });
+    reply(null, { id: res });
   } catch(e) {
     reply(new Error('databaseError'), null);
   }

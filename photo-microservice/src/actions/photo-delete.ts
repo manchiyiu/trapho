@@ -14,9 +14,9 @@ export default async (msg, reply) => {
 
   try{
     await Photo.remove(photoId);
-    reply(null, { id : photoId });
+    reply(null, { id: photoId });
   } catch(e) {
     reply(new Error('databaseError'), null);
   }
-  
+
 };

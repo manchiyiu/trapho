@@ -37,7 +37,7 @@ router.get('/id/:photoId', async (req, res) => {
 });
 
 /**
- * @api {get} /photos/id/:photoId Retrieve photos associated with a location
+ * @api {get} /photos/locations/:photoId Retrieve photos associated with a location
  * @apiName photos_retrieve_locationId
  * @apiPermission User
  * @apiGroup Photos
