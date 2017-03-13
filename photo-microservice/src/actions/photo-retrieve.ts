@@ -1,5 +1,6 @@
 import Photo from '../model';
 import * as _ from 'lodash';
+import { isValidUser } from '../utils';
 
 // will retrieve by EITHER userId or photoId
 export default async (msg, reply) => {
@@ -20,9 +21,8 @@ export default async (msg, reply) => {
 
   // retrieve all photos corr. to userId
   if (!_.isUndefined(userId)){
-    // TODO: check userId if valid
-
     try{
+      await isValidUser(userId);
       let res = await Photo.retrieveByUserId(userId);
       reply(null, {photos: res});
     } catch(e){
