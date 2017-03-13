@@ -1,20 +1,24 @@
 import Photo from '../model'
-import { act } from '../utils';
+import { act, isValidLocation } from '../utils';
 
 export default async (msg, reply) => {
-  const { userId, locationId, url, description} = msg;
+  const { userId, locationId, url, description } = msg;
 
   // TODO: check valid userId
 
   // check location valid
-  // try{
-  //   await act({ role:'location', cmd:'locationRetrieve', locationId });
-  // } catch(e) {
-  //   reply(e, null);
+  try{
+        let res = await act({ role: 'location', cmd: 'locationRetrieve'});
+        console.log(res);
+    } catch(e) {
+        reply(e, null);
+        return;
+    }
+
+  // if (!isValidLocation(locationId)){
   //   return;
   // }
 
-  console.log('valid loc');
   // create new photo object in database
   const photo = new Photo({userId, locationId, url, description});
   try{
