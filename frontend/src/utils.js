@@ -2,7 +2,7 @@ import * as Vue from 'vue';
 import * as queryString from 'query-string';
 import * as _ from 'lodash';
 
-const BASE_PATH = 'http://localhost:3000/';
+const BASE_PATH = 'http://104.199.134.31:3000/';
 
 const helper = async (router, path, method, options, func) => {
   let res = await fetch(BASE_PATH + path, _.merge({ method }, options));
