@@ -2,16 +2,21 @@
 
 <template>
   <div>
-    <md-layout md-gutter>
-      <md-layout md-column md-flex="15">
-        <side-menu></side-menu>
-      </md-layout>
-      <md-layout md-column md-flex>
-        <photo-feed-toolbar></photo-feed-toolbar>
-      </md-layout>
-    </md-layout>
+    <side-menu></side-menu>
+    <div class="container">
+      <photo-feed-toolbar></photo-feed-toolbar>
+    </div>
   </div>
 </template>
+
+<style lang="scss">
+.container {
+  min-height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  flex: 1;
+}
+</style>
 
 <script>
 import Vue from 'vue';

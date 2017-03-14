@@ -2,14 +2,25 @@
 
 <template>
   <div>
+    <md-toolbar class="main-toolbar">
+      <div class="logo">
+        <img :src="logopath"></img>
+      </div>
+    </md-toolbar>
     <router-view></router-view>
   </div>
 </template>
 
 <style>
+.main-toolbar {
+  background-color: white !important;
+}
 .logo {
-  width: 120px;
-  padding-left: 5px
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-top: 10px;
 }
 </style>
 
@@ -18,24 +29,6 @@
   import logopath from './static/logo.png';
 
   export default {
-    methods: {
-      toggleRightSidenav() {
-        this.$refs.rightSidenav.toggle();
-      },
-      open(ref) {
-        console.log('Opened: ' + ref);
-      },
-      close(ref) {
-        console.log('Closed: ' + ref);
-      },
-      logout: function () {
-        delete localStorage.token; // remove the token
-        this.$router.push('/');
-      },
-      upload: function () {
-        this.$router.push('/upload');
-      }
-    },
     data: () => ({
       logopath
     })
