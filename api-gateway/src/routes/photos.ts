@@ -29,7 +29,7 @@ const router = express.Router();
 router.get('/id/:photoId', async (req, res) => {
   const { photoId } = req.params;
   try {
-    const photos = await act({ act: 'storage', cmd: 'photoRetrieve', photoId });
+    const photos = await act({ role: 'photo', cmd: 'photoRetrieve', photoId });
     res.json(photos);
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -37,7 +37,7 @@ router.get('/id/:photoId', async (req, res) => {
 });
 
 /**
- * @api {get} /photos/id/:photoId Retrieve photos associated with a location
+ * @api {get} /photos/locations/:photoId Retrieve photos associated with a location
  * @apiName photos_retrieve_locationId
  * @apiPermission User
  * @apiGroup Photos
@@ -55,7 +55,7 @@ router.get('/id/:photoId', async (req, res) => {
 router.get('/locations/:locationId', async (req, res) => {
   const { locationId } = req.params;
   try {
-    const { photos } = await act({ act: 'storage', cmd: 'photoRetrieve', locationId });
+    const { photos } = await act({ role: 'photo', cmd: 'photoRetrieve', locationId });
     res.json({ photos });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -81,7 +81,7 @@ router.get('/locations/:locationId', async (req, res) => {
 router.get('/users/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
-    const { photos } = await act({ act: 'storage', cmd: 'photoRetrieve', userId });
+    const { photos } = await act({ role: 'photo', cmd: 'photoRetrieve', userId });
     res.json({ photos });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -113,7 +113,7 @@ router.get('/users/:userId', async (req, res) => {
 router.post('/', async (req, res) => {
   const { userId, locationId, url, description } = req.body;
   try {
-    const { id } = await act({ act: 'storage', cmd: 'photoCreate', userId, locationId, url, description });
+    const { id } = await act({ role: 'photo', cmd: 'photoCreate', userId, locationId, url, description });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -146,7 +146,7 @@ router.patch('/id/:photoId', async (req, res) => {
   const { photoId } = req.params;
   const { userId, locationId, url, description } = req.body;
   try {
-    const { id } = await act({ act: 'storage', cmd: 'photoPatch', photoId, userId, locationId, url, description });
+    const { id } = await act({ role: 'photo', cmd: 'photoPatch', photoId, userId, locationId, url, description });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -172,7 +172,7 @@ router.patch('/id/:photoId', async (req, res) => {
 router.delete('/id/:photoId', async (req, res) => {
   const { photoId } = req.params;
   try {
-    const { id } = await act({ act: 'storage', cmd: 'photoDelete', photoId });
+    const { id } = await act({ role: 'photo', cmd: 'photoDelete', photoId });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
