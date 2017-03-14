@@ -3,11 +3,11 @@
 <template>
   <div>
     <!-- tabs -->
-    <md-tabs class="md-transparent">
-      <md-tab id="photos" md-icon="photo">
+    <md-tabs md-centered class="md-transparent">
+      <md-tab id="photos" md-icon="photo" md-label="Photo">
         <photo-feed-tab-feed></photo-feed-tab-feed>
       </md-tab>
-      <md-tab id="locations" md-icon="place">
+      <md-tab id="locations" md-icon="place" md-label="Locations">
         <photo-feed-tab-locations></photo-feed-tab-locations>
       </md-tab>
     </md-tabs>
