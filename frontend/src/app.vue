@@ -4,7 +4,7 @@
     <div>
     <!-- header -->
     <md-toolbar class="md-transparent">
-      <md-image md-src="http://i.imgur.com/DLvfDJ3.png" class="logo"></md-image>
+      <img src="http://i.imgur.com/DLvfDJ3.png" class="logo"></img>
       <h2 class="md-title" style="flex: 1"></h2>
       <md-button class="md-icon-button md-primary" @click.native="upload"><md-icon>add</md-icon></md-button>
       <md-button class="md-icon-button" @click.native="toggleRightSidenav"><md-icon>menu</md-icon></md-button>
@@ -31,7 +31,8 @@
 
 <style>
 .logo {
-  height: 48px
+  width: 120px;
+  margin: 10px;
 }
 </style>
 
