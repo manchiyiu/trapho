@@ -5,17 +5,45 @@
     <md-card class="card">
       <md-card-content>
         <form novalidate @submit.stop.prevent="submit">
+          
           <md-input-container class="input-container">
             <md-icon>person</md-icon>
             <label>Username</label>
             <md-input required v-model="username"></md-input>
           </md-input-container>
+         
           <md-input-container class="input-container">
             <md-icon>vpn_key</md-icon>
             <label>Password</label>
             <md-input required v-model="password" type="password"></md-input>
           </md-input-container>
-          <md-button class="md-primary md-raised" :disabled="isFilled" @click.native="submit">Sign Up</md-button>
+
+          <md-input-container class="input-container">
+            <md-icon>phone</md-icon>
+            <label>Mobile</label>
+            <md-input required v-model="password" type="password"></md-input>
+          </md-input-container>
+
+          <md-input-container class="input-container">
+            <md-icon>email</md-icon>
+            <label>Email</label>
+            <md-input required v-model="password" type="password"></md-input>
+          </md-input-container>
+
+          <md-input-container class="input-container">
+            <md-icon>home</md-icon>
+            <label>Address</label>
+            <md-input required v-model="password" type="password"></md-input>
+          </md-input-container>
+
+          <md-input-container class="input-container">
+            <md-icon>Name</md-icon>
+            <label>Nickname</label>
+            <md-input required v-model="password" type="password"></md-input>
+          </md-input-container>
+
+          <md-button class="md-primary md-raised" :disabled="isFilled" @click.native="submit">Submit</md-button>
+          
         </form>
       </md-card-content>
     </md-card>

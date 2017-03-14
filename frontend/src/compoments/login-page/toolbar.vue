@@ -8,5 +8,11 @@
     <md-tab md-label="Sign up" md-icon="supervisor_account">
       <login-page-signup-form></login-page-signup-form>
     </md-tab>
+     <md-tab md-label="More" md-icon="contacts">
+      <login-page2-signup-form></login-page2-signup-form>
+    </md-tab>
+    <md-tab md-label="Wish List" md-icon="contacts">
+      <wish-list></wish-list>
+    </md-tab>
   </md-tabs>
 </template>
