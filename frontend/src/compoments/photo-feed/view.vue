@@ -2,7 +2,6 @@
 
 <template>
   <div>
-    <side-menu></side-menu>
     <div class="container">
       <photo-feed-toolbar></photo-feed-toolbar>
     </div>
