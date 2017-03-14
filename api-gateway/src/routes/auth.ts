@@ -66,4 +66,37 @@ router.post('/signup', async (req, res) => {
   }
 });
 
+
+router.get('/id/:userId', async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const user = await act({ role: 'auth', cmd: 'userRetrieve', userId });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
+});
+
+
+router.patch('/id/:userId', async (req, res) => { 
+  const { userId } = req.params;
+  const { password } = req.body;
+  try {
+    const id = await act({ role: 'auth', cmd: 'userPatch', userId, password });
+    res.json(id);
+  } catch(err) {   
+    res.status(500).json({ error: err.details.message });
+  }
+});
+
+router.delete('/id/:userId', async (req, res) => {
+  const { userId } = req.params;
+  try{
+    const id = await act({ role: 'auth', cmd: 'userDelete', userId });
+    res.json(id);
+  } catch(err) {
+    res.status(500).json({ error: err.details.message });
+  }
+});
+
 export default router;
