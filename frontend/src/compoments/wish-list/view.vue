@@ -2,7 +2,7 @@
 
 <template>
   <div class="main">
-    <md-card class="card wishlist">
+    <md-card class="wishlist">
         
       <md-card-content>
         <form >
