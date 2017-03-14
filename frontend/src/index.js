@@ -4,17 +4,20 @@ import VueRouter from 'vue-router';
 import './theme';
 import './compoments/login-page/module';
 import './compoments/photo-feed/module';
+import './compoments/wish-list/module';
 
 import App from './app.vue';
 
 import LoginPageView from './compoments/login-page/view.vue';
 import PhotoFeedView from './compoments/photo-feed/view.vue';
+import WishListView from './compoments/wish-list/view.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   { path: '/', component: LoginPageView },
-  { path: '/feed', component: PhotoFeedView }
+  { path: '/feed', component: PhotoFeedView },
+  { path: '/wishlist', component: WishListView }
 ];
 
 const router = new VueRouter({ routes });
