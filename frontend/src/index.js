@@ -11,13 +11,15 @@ import App from './app.vue';
 import LoginPageView from './compoments/login-page/view.vue';
 import PhotoFeedView from './compoments/photo-feed/view.vue';
 import WishListView from './compoments/wish-list/view.vue';
+import SettingsView from './compoments/settings/view.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   { path: '/', component: LoginPageView },
   { path: '/feed', component: PhotoFeedView },
-  { path: '/wishlist', component: WishListView }
+  { path: '/wishlist', component: WishListView },
+  { path: '/settings', component: SettingsView }
 ];
 
 const router = new VueRouter({ routes });
