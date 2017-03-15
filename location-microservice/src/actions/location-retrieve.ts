@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import Location from '../model';
+import Location from '../model-location';
 
 export default async (msg, reply) => {
 

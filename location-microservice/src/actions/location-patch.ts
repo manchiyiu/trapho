@@ -1,4 +1,4 @@
-import Location from '../model';
+import Location from '../model-location';
 import { checkName, checkDescription, checkTags, checkCoordinates } from '../utils';
 
 export default async (msg, reply) => {
