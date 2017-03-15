@@ -4,6 +4,7 @@ import VueRouter from 'vue-router';
 import './theme';
 import './compoments/login-page/module';
 import './compoments/photo-feed/module';
+import './compoments/common/module';
 
 import App from './app.vue';
 
