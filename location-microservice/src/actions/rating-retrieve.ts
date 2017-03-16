@@ -23,7 +23,7 @@ export default async (msg, reply) => {
       if( _.isString(locationId) && await Location.retrieveById(locationId)){
         if(count == 0){
           result = await Rating.retrieveAvgRate(locationId);
-          reply(null, { rating:result });
+          reply(null, { avgRating: {locationId : locationId, rating : result }});
           return;         
         }
         query.locationId = locationId;

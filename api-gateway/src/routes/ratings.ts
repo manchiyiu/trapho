@@ -52,8 +52,8 @@ router.get('/users/:userId', async (req, res) => {
 router.get('/locations/:locationId', async (req, res) => {
   const { locationId } = req.params;
   try {
-    const { rating } = await act({ role: 'location', cmd: 'ratingRetrieve', locationId });
-    res.json(rating); // there should be only one result
+    const { avgRating } = await act({ role: 'location', cmd: 'ratingRetrieve', locationId });
+    res.json(avgRating); 
   } catch (err) {
     res.status(500).json({ error: err.details.message });
   }
