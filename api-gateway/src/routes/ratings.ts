@@ -34,8 +34,8 @@ router.get('/users/:userId', async (req, res) => {
 });
 
 /**
- * @api {get} /ratings/users/:userId/locations/:locationId Retrieve average rating locationId
- * @apiName 
+ * @api {get} /ratings/locations/:locationId Retrieve average rating by locationId
+ * @apiName ratings_retrieve_locationId
  * @apiPermission User
  * @apiGroup Locations Ratings
  *
@@ -60,13 +60,14 @@ router.get('/locations/:locationId', async (req, res) => {
 });
 
 /**
- * @api {get} /ratings/users/:userId/locations/:locationId Retrieve ratings by userId and locationId
- * @apiName ratings_retrieve_userid_locationId
+ * @api {get} /ratings/users/:userId/locations/:locationId/photos/:photoId Retrieve ratings by userId, locationId and photoId
+ * @apiName ratings_retrieve_userid_locationId_photoId
  * @apiPermission User
  * @apiGroup Locations Ratings
  *
  * @apiParam {String} userId                   User id
  * @apiParam {String} locationId               Location id
+ * @apiParam {String} photoId                  Photo id
  *
  * @apiUse ratings
  *
@@ -87,14 +88,15 @@ router.get('/users/:userId/locations/:locationId/photos/:photoId', async (req, r
 });
 
 /**
- * @api {patch} /ratings/users/:userId/locations/:locationId Patch ratings by userId and locationId
- * @apiName ratings_patch_userid_locationid
+ * @api {patch} /ratings/users/:userId/locations/:locationId/photos/:photoId Patch ratings by userId, locationId and photoId
+ * @apiName ratings_patch_userid_locationid_photoId
  * @apiPermission User
  * @apiGroup Locations Ratings
  *
  * @apiParam {String} userId                  User id
  * @apiParam {String} locationId              Location id
  * @apiParam {String} rating                  New rating value
+ * @apiParam {String} photoId                 Photo id
  *
  * @apiUse objectId
  *
@@ -116,13 +118,14 @@ router.patch('/users/:userId/locations/:locationId/photos/:photoId', async (req,
 });
 
 /**
- * @api {delete} /ratings/users/:userId/locations/:locationId Delete ratings by userId and locationId
- * @apiName ratings_delete_userid_locationid
+ * @api {delete} /ratings/users/:userId/locations/:locationId/photos/:photoId Delete ratings by userId, locationId and photoId
+ * @apiName ratings_delete_userid_locationid_photoId
  * @apiPermission User
  * @apiGroup Locations Ratings
  *
  * @apiParam {String} userId                  User id
  * @apiParam {String} locationId              Location id
+ * @apiParam {String} photoId                 Photo id
  *
  * @apiUse objectId
  *
@@ -153,6 +156,7 @@ router.delete('/users/:userId/locations/:locationId/photos/:photoId', async (req
  * @apiParam {String} userId                  User id
  * @apiParam {String} locationId              Location id
  * @apiParam {String} rating                  Rating value
+ * @apiParam {String} photoId                 Photo id
  *
  * @apiUse objectId
  *
