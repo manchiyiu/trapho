@@ -2,9 +2,20 @@
 
 <template>
   <div>
-    <photo-feed-toolbar></photo-feed-toolbar>
+    <div class="container">
+      <photo-feed-toolbar></photo-feed-toolbar>
+    </div>
   </div>
 </template>
+
+<style lang="scss">
+.container {
+  min-height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  flex: 1;
+}
+</style>
 
 <script>
 import Vue from 'vue';

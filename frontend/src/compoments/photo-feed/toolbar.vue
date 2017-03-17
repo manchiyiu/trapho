@@ -2,27 +2,25 @@
 
 <template>
   <div>
-    <!-- header -->
-    <md-toolbar class="md-transparent">
-      <div class="md-toolbar-container">
-        <h2 class="md-title" style="flex: 1;">Trapho</h2>
-        <md-button class="md-icon-button" @click.native="logout">
-          <md-tooltip md-direction="bottom">Logout</md-tooltip>
-          <md-icon>exit_to_app</md-icon>
-        </md-button>
-      </div>
-    </md-toolbar>
     <!-- tabs -->
-    <md-tabs class="md-transparent">
-      <md-tab id="photos" md-icon="photo">
+    <md-tabs md-centered class="main-tab md-transparent">
+      <md-tab id="photos" md-label="Photo">
         <photo-feed-tab-feed></photo-feed-tab-feed>
       </md-tab>
-      <md-tab id="locations" md-icon="place">
+      <md-tab id="locations" md-label="Locations">
         <photo-feed-tab-locations></photo-feed-tab-locations>
       </md-tab>
     </md-tabs>
   </div>
 </template>
+
+<style>
+.md-tabs-navigation {
+  background-color: white !important;
+  border-bottom: 1px solid #eee !important;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.04), 0 3px 6px rgba(0,0,0,0.08);
+}
+</style>
 
 <script>
   import Vue from 'vue';
