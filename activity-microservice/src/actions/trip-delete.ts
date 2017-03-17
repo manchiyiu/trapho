@@ -1,3 +1,4 @@
 export default async (msg, reply) => {
-  reply(null, null);
+  const { tripId } = msg;
+  reply(null, { id:tripId });
 };

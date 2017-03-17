@@ -1,3 +1,4 @@
 export default async (msg, reply) => {
-  reply(null, null);
+  // Return mock data
+  reply(null, { id: "58c3e0cd041678000f384400"});
 };

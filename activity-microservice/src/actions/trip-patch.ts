@@ -1,3 +1,5 @@
 export default async (msg, reply) => {
-  reply(null, null);
+  const { tripId } = msg;
+  // Return mock data
+  reply(null, { id: tripId });
 };
