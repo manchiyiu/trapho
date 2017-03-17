@@ -50,8 +50,8 @@ router.get('/users/:userId', async (req, res) => {
 router.get('/id/:tripId', async (req, res) => {
   const { tripId } = req.params;
   try {
-    const { trips } = await act({ role: 'activity', cmd: 'tripRetrieve', tripId });
-    res.json(trips[0]); // there should be only one result
+    const { trip } = await act({ role: 'activity', cmd: 'tripRetrieve', tripId });
+    res.json(trip); // there should be only one result
   } catch (err) {
     res.status(500).json({ error: err.details.message });
   }
