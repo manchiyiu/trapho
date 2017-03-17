@@ -10,12 +10,14 @@ import App from './app.vue';
 
 import LoginPageView from './compoments/login-page/view.vue';
 import PhotoFeedView from './compoments/photo-feed/view.vue';
+import UploadView from './compoments/upload/view.vue';
 
 Vue.use(VueRouter);
 
 const routes = [
   { path: '/', component: LoginPageView },
-  { path: '/feed', component: PhotoFeedView }
+  { path: '/feed', component: PhotoFeedView },
+  { path: '/upload', component: UploadView }
 ];
 
 const router = new VueRouter({ routes });
