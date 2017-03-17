@@ -1,3 +1,4 @@
 export default async (msg, reply) => {
-  reply(null, null);
+  const { commentId } = msg;
+  reply(null, { id: commentId });
 };
