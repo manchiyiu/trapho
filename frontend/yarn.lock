@@ -898,6 +898,10 @@ domain-browser@^1.1.1:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/domain-browser/-/domain-browser-1.1.7.tgz#867aa4b093faa05f1de08c06f4d7b21fdf8698bc"
 
+dropzone@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/dropzone/-/dropzone-4.3.0.tgz#48b0b8f2ad092872e4b535b672a7c3f1a1d67c91"
+
 ecc-jsbn@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.1.tgz#0fc73a9ed5f0d53c38193398523ef7e543777505"
@@ -3124,9 +3128,9 @@ vue-router@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarn.com/vue-router/-/vue-router-2.2.1.tgz#b027f9fac2cf13462725e843d6dc631b6aa077f6"
 
-vue-style-loader@^2.0.0:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/vue-style-loader/-/vue-style-loader-2.0.3.tgz#b464ffb6279702d4137a80ac81b5c12ac440f0a0"
+vue-style-loader@^2.0.0, vue-style-loader@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/vue-style-loader/-/vue-style-loader-2.0.4.tgz#4fc19e18bf162225338aac3b17d0fd0e1cfb7439"
   dependencies:
     hash-sum "^1.0.2"
     loader-utils "^1.0.2"
@@ -3141,6 +3145,10 @@ vue-template-compiler@2.2.1:
 vue-template-es2015-compiler@^1.2.2:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.5.1.tgz#0c36cc57aa3a9ec13e846342cb14a72fcac8bd93"
+
+vue-waterfall@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/vue-waterfall/-/vue-waterfall-1.0.5.tgz#d5d889ec13068295c9f35525021808b03bb9d712"
 
 vue@^2.1.10, vue@^2.2.1:
   version "2.2.1"

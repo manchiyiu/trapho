@@ -4,6 +4,10 @@ import * as _ from 'lodash';
 
 const BASE_PATH = 'http://104.199.134.31:3000/';
 
+export const UPLOAD_PATH = `${BASE_PATH}photos/upload`;
+
+export const getPhotoUrl = url => `${BASE_PATH}static/${url}`;
+
 const helper = async (router, path, method, options, func) => {
   let res = await fetch(BASE_PATH + path, _.merge({ method }, options));
   if (res.status === 403) {

@@ -1,0 +1,132 @@
+<name>photo-feed-tab-upload</name>
+
+<template>
+  <div>
+    <!-- select file -->
+    <div>
+      <div class="photo-upload-header">Select file</div>
+      <div id="upload-dropzone" class="dropzone"></div>
+    </div>
+    <!-- description -->
+    <div v-if="uploadedFiles.length > 0">
+      <md-divider></md-divider>
+      <div class="photo-upload-header">Description (click image to add caption)</div>
+      <waterfall
+        :line-gap="300"
+        :watch="uploadedFiles">
+        <waterfall-slot
+          v-for="(file, index) in uploadedFiles"
+          class="upload-photo-preview"
+          move-class="item-move"
+          :width="file.width"
+          :height="file.height"
+          :order="index"
+          :key="index">
+          <md-card md-with-hover class="upload-photo-preview" @click.native="openDescriptionModal(index)">
+            <md-image :md-src="getPhotoUrl(file.url)"></md-image>
+            <md-tooltip v-if="file.description" md-direction="top">
+              {{file.description}}
+            </md-tooltip>
+          </md-card>
+        </waterfall-slot>
+      </waterfall>
+    </div>
+    <!-- description dialog -->
+    <md-dialog ref="dialog">
+      <md-dialog-title>Add photo description</md-dialog-title>
+      <md-dialog-content>
+        <md-input-container>
+          <label>Caption</label>
+          <md-textarea v-model="dialogDescription"></md-textarea>
+        </md-input-container>
+      </md-dialog-content>
+      <md-dialog-actions>
+        <md-button class="md-primary" @click.native="closeDescriptionModal">Add</md-button>
+      </md-dialog-actions>
+    </md-dialog>
+  </div>
+</template>
+
+<style>
+.photo-upload-header {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-weight: bolder;
+  color: #888;
+}
+.item-move {
+  transition: all .5s cubic-bezier(.55,0,.1,1);
+  -webkit-transition: all .5s cubic-bezier(.55,0,.1,1);
+}
+.upload-photo-preview {
+  margin: 10px;
+}
+#upload-dropzone {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #eee;
+  margin-bottom: 20px;
+}
+.dz-default {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: lighter;
+  font-size: 22px;
+  color: #aaa;
+}
+</style>
+
+<script>
+import Vue from 'vue';
+import Dropzone from 'dropzone';
+import Waterfall from 'vue-waterfall/lib/waterfall';
+import WaterfallSlot from 'vue-waterfall/lib/waterfall-slot';
+
+import { UPLOAD_PATH, getPhotoUrl } from '../../../utils.js';
+
+export default {
+  props: [
+    'active',
+    'toggleUpload'
+  ],
+  components: {
+    Waterfall,
+    WaterfallSlot
+  },
+  data: () => ({
+    uploadedFiles: [],
+    dialogCurrentIndex: null,
+    dialogDescription: ''
+  }),
+  mounted: function() {
+    const dropzone = new Dropzone('#upload-dropzone', {
+      url: UPLOAD_PATH,
+      acceptedFiles: 'image/*',
+      paramName: 'files',
+      headers: {
+        'Authorization': `Bearer ${localStorage.token}`
+      }
+    });
+    dropzone.on('success', (file, res, test) => {
+      const { width, height } = file;
+      res.width = width;
+      res.height = height;
+      this.uploadedFiles.push(res);
+    });
+  },
+  methods: {
+    getPhotoUrl,
+    openDescriptionModal: function(index) {
+      this.dialogDescription = this.uploadedFiles[index].description;
+      this.dialogCurrentIndex = index;
+      this.$refs.dialog.open();
+    },
+    closeDescriptionModal: function() {
+      Vue.set(this.uploadedFiles[this.dialogCurrentIndex], 'description', this.dialogDescription);
+      this.dialogCurrentIndex = null;
+      this.$refs.dialog.close();
+    }
+  }
+};
+</script>
