@@ -7,5 +7,14 @@
   </div>
 </template>
 
-<style>
-</style>
+<script>
+import Vue from 'vue';
+
+export default {
+  mounted: function() {
+    if (localStorage.token) { /* if the user has logged in */
+      this.$store.commit('userLogin', { token: localStorage.token });
+    }
+  }
+};
+</script>

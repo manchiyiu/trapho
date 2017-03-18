@@ -4,20 +4,20 @@
   <div>
     <div>
       <md-toolbar class="main-toolbar">
-        <md-button class="md-icon-button" @click.native="toggleSidenav">
+        <md-button class="md-icon-button" v-if="userHasLogin" @click.native="toggleSidenav">
           <md-icon class="menu-icon">menu</md-icon>
         </md-button>
         <div class="logo">
           <img :src="logopath" class="logo-img"></img>
         </div>
         <md-layout md-align="end">
-          <md-button id="fab-file-upload" class="md-fab md-mini" @click.native="toggleUpload">
+          <md-button id="fab-file-upload" v-if="userHasLogin" class="md-fab md-mini" @click.native="toggleUpload">
             <md-icon>file_upload</md-icon>
           </md-button>
         </md-layout>
       </md-toolbar>
     </div>
-    <md-sidenav class="md-left" ref="sidenav">
+    <md-sidenav v-if="userHasLogin" class="md-left" ref="sidenav">
       <md-toolbar class="md-large">
         <div class="md-toolbar-container">
         </div>
@@ -47,7 +47,8 @@
 <script>
   import Vue from 'vue';
   import * as _ from 'lodash';
-  import store from '../../vuex/store.js';
+  import { mapGetters } from 'vuex';
+
   import logopath from '../../static/logo.png';
 
   export default {
@@ -55,10 +56,11 @@
       logopath,
       uploadActive: false
     }),
-    mounted: function() {
-      console.log(this.isLogin);
+    computed: {
+      ...mapGetters([
+        'userHasLogin'
+      ])
     },
-    store,
     methods: {
       toggleSidenav: function() {
         this.$refs.sidenav.toggle();
