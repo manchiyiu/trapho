@@ -12,7 +12,7 @@
         <md-card-header>
           <div class="md-title">Photo 1</div>
         </md-card-header>
-      </md-card>      
+      </md-card>
       <!--Card 2-->
       <md-card class="md-with-hover sidebarPhoto">
         <md-card-media @click.native="loadImage">
@@ -56,7 +56,7 @@
             </form>
           </md-layout>
         </md-layout>
-        </md-layout>  
+        </md-layout>
     </md-layout>
   </md-layout>
 </template>
@@ -85,13 +85,13 @@ export default {
       this.selected = options[Math.floor(Math.random() * 2)];
     },
     selectImage() {
-      this.selected = this.src
+      this.selected = this.src;
     }
   },
   beforeMount: function() {
-    // if (localStorage.token) { /* if the user has logged in */
-    //   this.$router.push('feed');
-    // }
+    if (localStorage.token) { /* if the user has logged in */
+      this.$router.push('feed');
+    }
   }
 };
 </script>

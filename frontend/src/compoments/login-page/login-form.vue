@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     submit: async function () {
-      let { error, token, user: { id } } = await login(this.$router, {
+      let { error, token, user } = await login(this.$router, {
         username: this.username,
         password: this.password,
       });
@@ -73,7 +73,7 @@ export default {
         this.$refs.snackbar.open();
         return;
       }
-      this.$store.commit('userLogin', { username: this.username, userId: id, token });
+      this.$store.commit('userLogin', { username: this.username, userId: user.id, token });
       this.$router.push('feed');
     }
   }
