@@ -11,7 +11,7 @@
           <img :src="logopath" class="logo-img"></img>
         </div>
         <md-layout md-align="end">
-          <md-button class="md-fab md-mini" @click.native="toggleSidenab">
+          <md-button id="fab-file-upload" class="md-fab md-mini" @click.native="toggleUpload">
             <md-icon>file_upload</md-icon>
           </md-button>
         </md-layout>
@@ -28,7 +28,7 @@
         <md-list-item @click.native="logout"><md-icon>exit_to_app</md-icon><span>Logout</span></md-list-item>
       </md-list>
     </md-sidenav>
-    <common-modal-upload :active="uploadActive"></common-modal-upload>
+    <common-modal-upload :active="uploadActive" :toggleUpload="toggleUpload"></common-modal-upload>
   </div>
 </template>
 
@@ -46,6 +46,7 @@
 
 <script>
   import Vue from 'vue';
+  import * as _ from 'lodash';
   import logopath from '../../static/logo.png';
 
   export default {
@@ -57,8 +58,8 @@
       toggleSidenav: function() {
         this.$refs.sidenav.toggle();
       },
-      toggleUpload: function() {
-        this.uploadActive = !this.uploadActive;
+      toggleUpload: function(value) {
+        this.uploadActive = _.isBoolean(value) ? value : true;
       },
       logout: function() {
         delete localStorage.token; // remove the token
