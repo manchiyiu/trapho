@@ -44,18 +44,22 @@
 import Vue from 'vue';
 import { login } from '../../utils';
 
+import store from '../../vuex/store.js';
+import { userLogin } from '../../vuex/modules/user.js';
+
 export default {
   data: () => ({
     username: '',
     password: '',
     errorMessage: ''
   }),
+  store,
   computed: {
-    isFilled: function () { return this.username.length <= 0 || this.password.length <= 0; }
+    isFilled: function () { return this.username.length <= 0 || this.password.length <= 0; },
   },
   methods: {
     submit: async function () {
-      let { error, token } = await login(this.$router, {
+      let { error, token, user: { id } } = await login(this.$router, {
         username: this.username,
         password: this.password
       });
@@ -72,6 +76,7 @@ export default {
         }
         this.$refs.snackbar.open();
       } else {
+        this.$store.commit('userLogin', { username: this.username, userId: id });
         this.$router.push('feed');
       }
     }

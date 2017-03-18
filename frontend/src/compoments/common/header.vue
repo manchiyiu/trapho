@@ -47,6 +47,7 @@
 <script>
   import Vue from 'vue';
   import * as _ from 'lodash';
+  import store from '../../vuex/store.js';
   import logopath from '../../static/logo.png';
 
   export default {
@@ -54,6 +55,10 @@
       logopath,
       uploadActive: false
     }),
+    mounted: function() {
+      console.log(this.isLogin);
+    },
+    store,
     methods: {
       toggleSidenav: function() {
         this.$refs.sidenav.toggle();
@@ -63,6 +68,7 @@
       },
       logout: function() {
         delete localStorage.token; // remove the token
+        this.$store.commit('userLogout');
         this.$router.push('/');
         this.$refs.sidenav.close();
       },

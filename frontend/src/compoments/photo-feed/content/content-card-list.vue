@@ -30,14 +30,7 @@
 import Vue from 'vue';
 import * as _ from 'lodash';
 
-import Waterfall from 'vue-waterfall/lib/waterfall';
-import WaterfallSlot from 'vue-waterfall/lib/waterfall-slot';
-
 export default {
-  components: {
-    Waterfall,
-    WaterfallSlot
-  },
   data: () => ({
     grow: [3, 2],
     photos: {
