@@ -10,6 +10,11 @@
         <div class="logo">
           <img :src="logopath" class="logo-img"></img>
         </div>
+        <md-layout md-align="end">
+          <md-button class="md-fab md-mini" @click.native="toggleSidenab">
+            <md-icon>file_upload</md-icon>
+          </md-button>
+        </md-layout>
       </md-toolbar>
     </div>
     <md-sidenav class="md-left" ref="sidenav">
@@ -23,6 +28,7 @@
         <md-list-item @click.native="logout"><md-icon>exit_to_app</md-icon><span>Logout</span></md-list-item>
       </md-list>
     </md-sidenav>
+    <common-modal-upload :active="uploadActive"></common-modal-upload>
   </div>
 </template>
 
@@ -44,17 +50,21 @@
 
   export default {
     data: () => ({
-      logopath
+      logopath,
+      uploadActive: false
     }),
     methods: {
       toggleSidenav: function() {
         this.$refs.sidenav.toggle();
       },
+      toggleUpload: function() {
+        this.uploadActive = !this.uploadActive;
+      },
       logout: function() {
         delete localStorage.token; // remove the token
         this.$router.push('/');
         this.$refs.sidenav.close();
-      }
+      },
     }
   };
 </script>

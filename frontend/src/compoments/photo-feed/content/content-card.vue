@@ -70,10 +70,11 @@
 
 <style>
 .md-card .md-card-media img {
-  width: 500px;
+  max-width: 500px;
 }
 .md-card {
-  margin-bottom: 15px;
+  max-width: 500px;
+  margin: 15px;
   overflow: hidden;
 }
 .likes {
