@@ -1,53 +1,68 @@
 <name>photo-feed-tab-upload</name>
 
 <template>
-  <div>
-    <!-- select file -->
-    <div>
-      <div class="photo-upload-header">Select file</div>
-      <div id="upload-dropzone" class="dropzone"></div>
+  <div class="tab-upload-contaier">
+    <div class="tab-upload-main">
+      <!-- select file -->
+      <div>
+        <div class="photo-upload-header">Select file</div>
+        <div id="upload-dropzone" class="dropzone"></div>
+      </div>
+      <!-- info -->
+      <div v-if="uploadedFiles.length > 0">
+        <!-- description -->
+        <md-divider></md-divider>
+        <div class="photo-upload-header">Description (click image to add caption)</div>
+        <waterfall
+          :line-gap="300"
+          :watch="uploadedFiles">
+          <waterfall-slot
+            v-for="(file, index) in uploadedFiles"
+            class="upload-photo-preview"
+            move-class="item-move"
+            :width="file.width"
+            :height="file.height + 100"
+            :order="index"
+            :key="index">
+            <md-card md-with-hover class="upload-photo-preview" @click.native="openDescriptionModal(index)">
+              <md-image :md-src="getPhotoUrl(file.url)"></md-image>
+              <md-tooltip v-if="file.description" md-direction="top">
+                {{file.description}}
+              </md-tooltip>
+            </md-card>
+          </waterfall-slot>
+        </waterfall>
+      </div>
+      <md-button class="md-raised md-primary submit-button">Submit</md-button>
+      <!-- description dialog -->
+      <md-dialog ref="dialog">
+        <md-dialog-title>Add photo description</md-dialog-title>
+        <md-dialog-content>
+          <md-input-container>
+            <label>Caption</label>
+            <md-textarea v-model="dialogDescription"></md-textarea>
+          </md-input-container>
+        </md-dialog-content>
+        <md-dialog-actions>
+          <md-button class="md-primary" @click.native="closeDescriptionModal">Add</md-button>
+        </md-dialog-actions>
+      </md-dialog>
     </div>
-    <!-- description -->
-    <div v-if="uploadedFiles.length > 0">
-      <md-divider></md-divider>
-      <div class="photo-upload-header">Description (click image to add caption)</div>
-      <waterfall
-        :line-gap="300"
-        :watch="uploadedFiles">
-        <waterfall-slot
-          v-for="(file, index) in uploadedFiles"
-          class="upload-photo-preview"
-          move-class="item-move"
-          :width="file.width"
-          :height="file.height"
-          :order="index"
-          :key="index">
-          <md-card md-with-hover class="upload-photo-preview" @click.native="openDescriptionModal(index)">
-            <md-image :md-src="getPhotoUrl(file.url)"></md-image>
-            <md-tooltip v-if="file.description" md-direction="top">
-              {{file.description}}
-            </md-tooltip>
-          </md-card>
-        </waterfall-slot>
-      </waterfall>
-    </div>
-    <!-- description dialog -->
-    <md-dialog ref="dialog">
-      <md-dialog-title>Add photo description</md-dialog-title>
-      <md-dialog-content>
-        <md-input-container>
-          <label>Caption</label>
-          <md-textarea v-model="dialogDescription"></md-textarea>
-        </md-input-container>
-      </md-dialog-content>
-      <md-dialog-actions>
-        <md-button class="md-primary" @click.native="closeDescriptionModal">Add</md-button>
-      </md-dialog-actions>
-    </md-dialog>
   </div>
 </template>
 
 <style>
+.tab-upload-contaier {
+  display: flex;
+  justify-content: center;
+}
+.submit-button {
+  margin-top: 10px;
+}
+.tab-upload-main {
+  max-width: 800px;
+  width: 100%;
+}
 .photo-upload-header {
   margin-top: 20px;
   margin-bottom: 10px;
