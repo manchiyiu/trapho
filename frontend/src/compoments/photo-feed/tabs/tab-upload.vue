@@ -32,8 +32,16 @@
             </md-card>
           </waterfall-slot>
         </waterfall>
+        <!-- location -->
+        <md-divider></md-divider>
+        <div class="photo-upload-header">Location</div>
+        <md-card>
+          <md-card-content style="padding: 0px;">
+            <common-map :onChange="onMapChange"></common-map>
+          </md-card-content>
+        </md-card>
       </div>
-      <md-button class="md-raised md-primary submit-button">Submit</md-button>
+      <md-button class="md-raised md-primary submit-button" :disabled="!isCompleted" @click.native="submit">Submit</md-button>
       <!-- description dialog -->
       <md-dialog ref="dialog">
         <md-dialog-title>Add photo description</md-dialog-title>
@@ -112,8 +120,14 @@ export default {
   data: () => ({
     uploadedFiles: [],
     dialogCurrentIndex: null,
-    dialogDescription: ''
+    dialogDescription: '',
+    selectedLocation: null
   }),
+  computed: {
+    isCompleted: function() {
+      return this.uploadedFiles.length > 0 && !!this.selectedLocation;
+    }
+  },
   mounted: function() {
     const dropzone = new Dropzone('#upload-dropzone', {
       url: UPLOAD_PATH,
@@ -141,6 +155,12 @@ export default {
       Vue.set(this.uploadedFiles[this.dialogCurrentIndex], 'description', this.dialogDescription);
       this.dialogCurrentIndex = null;
       this.$refs.dialog.close();
+    },
+    onMapChange: function(location) {
+      this.selectedLocation = location;
+    },
+    submit: function() {
+      alert('TODO: submit logic');
     }
   }
 };
