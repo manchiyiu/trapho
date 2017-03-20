@@ -11,6 +11,7 @@ export const getPhotoUrl = url => `${BASE_PATH}static/${url}`;
 const helper = async (router, path, method, options, func) => {
   let res = await fetch(BASE_PATH + path, _.merge({ method }, options));
   if (res.status === 403) {
+    delete localStorage.token;
     router.push('/');
   }
   let result = await res.json();
