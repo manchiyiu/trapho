@@ -68,7 +68,9 @@ export default {
   },
   watch: {
     selectedLocation: function() {
-      this.onChange(this.selectedLocation);
+      if (this.selectedLocation != null) {
+        this.onChange(this.selectedLocation);
+      }
     }
   }
 };
