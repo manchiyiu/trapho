@@ -112,6 +112,8 @@ import WaterfallSlot from 'vue-waterfall/lib/waterfall-slot';
 
 import { UPLOAD_PATH, getPhotoUrl, post } from '../../../utils.js';
 
+Dropzone.autoDiscover = false;
+
 export default {
   props: [
     'active',
