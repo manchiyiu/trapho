@@ -55,6 +55,10 @@
           <md-button class="md-primary" @click.native="closeDescriptionModal">Add</md-button>
         </md-dialog-actions>
       </md-dialog>
+      <!-- snackbar -->
+      <md-snackbar ref="snackbar" :md-duration="duration">
+        <span>Upload successful.</span>
+      </md-snackbar>
     </div>
   </div>
 </template>
@@ -121,7 +125,8 @@ export default {
     uploadedFiles: [],
     dialogCurrentIndex: null,
     dialogDescription: '',
-    selectedLocation: null
+    selectedLocation: null,
+    dropzone: null
   }),
   computed: {
     isCompleted: function() {
@@ -129,7 +134,7 @@ export default {
     }
   },
   mounted: function() {
-    const dropzone = new Dropzone('#upload-dropzone', {
+    this.dropzone = new Dropzone('#upload-dropzone', {
       url: UPLOAD_PATH,
       acceptedFiles: 'image/*',
       paramName: 'files',
@@ -137,15 +142,21 @@ export default {
         'Authorization': `Bearer ${localStorage.token}`
       }
     });
-    dropzone.on('success', (file, res, test) => {
+    this.dropzone.on('success', (file, res, test) => {
       const { width, height } = file;
       res.width = width;
       res.height = height;
       this.uploadedFiles.push(res);
     });
+    this.clear();
   },
   methods: {
     getPhotoUrl,
+    clear: function() {
+      this.selectedLocation = null;
+      this.uploadedFiles = [];
+      this.dropzone.removeAllFiles();
+    },
     openDescriptionModal: function(index) {
       this.dialogDescription = this.uploadedFiles[index].description;
       this.dialogCurrentIndex = index;
@@ -162,12 +173,14 @@ export default {
     submit: async function() {
       const locationId = this.selectedLocation.id;
       const payloads = this.uploadedFiles.map(({ url, height, width, description }) => ({
-        url, height, width, description, locationId, userId: '01'
+        url, description, locationId, userId: '01'
       }));
       try {
         await Promise.all(payloads.map(
           payload => post(this.$router, 'photos', payload)
         ));
+        this.$refs.snackbar.open();
+        this.clear();
       } catch (e) {
         console.error(e);
       }
