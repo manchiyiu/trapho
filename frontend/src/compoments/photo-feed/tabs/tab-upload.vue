@@ -106,7 +106,7 @@ import Dropzone from 'dropzone';
 import Waterfall from 'vue-waterfall/lib/waterfall';
 import WaterfallSlot from 'vue-waterfall/lib/waterfall-slot';
 
-import { UPLOAD_PATH, getPhotoUrl } from '../../../utils.js';
+import { UPLOAD_PATH, getPhotoUrl, post } from '../../../utils.js';
 
 export default {
   props: [
@@ -159,8 +159,18 @@ export default {
     onMapChange: function(location) {
       this.selectedLocation = location;
     },
-    submit: function() {
-      alert('TODO: submit logic');
+    submit: async function() {
+      const locationId = this.selectedLocation.id;
+      const payloads = this.uploadedFiles.map(({ url, height, width, description }) => ({
+        url, height, width, description, locationId, userId: '01'
+      }));
+      try {
+        await Promise.all(payloads.map(
+          payload => post(this.$router, 'photos', payload)
+        ));
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
 };
