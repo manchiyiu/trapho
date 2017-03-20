@@ -66,7 +66,28 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-
+/**
+ * @api {get} /auth/id/:userId Get User
+ * @apiName user_get
+ * @apiPermission None
+ * @apiGroup Authentication
+ *
+ * @apiParam {String} userId Id of the user
+ *
+ * @apiSuccess {String} id User ID
+ * @apiSuccess {String} username Username
+ * @apiSuccessExample {json} Success-Response:
+ *    {
+ *      "id": "{{id-placeholder}}",
+ *      "username": "isaac"
+ *    }
+ *
+ * @apiError (Error 500) {String} error Possible value: 'userNotExist', etc.
+ * @apiErrorExample {json} Error-Response:
+ *    {
+ *      "error": "userNotExist"
+ *    }
+ */
 router.get('/id/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
@@ -77,18 +98,50 @@ router.get('/id/:userId', async (req, res) => {
   }
 });
 
-
-router.patch('/id/:userId', async (req, res) => { 
+/**
+ * @api {patch} /auth/id/:userId Patch User
+ * @apiName user_patch
+ * @apiPermission None
+ * @apiGroup Authentication
+ *
+ * @apiParam {String} userId Id of the user
+ * @apiParam {String} [password] New password
+ *
+ * @apiUse objectId
+ *
+ * @apiError (Error 500) {String} error Possible value: 'userNotExist', etc.
+ * @apiErrorExample {json} Error-Response:
+ *    {
+ *      "error": "userNotExist"
+ *    }
+ */
+router.patch('/id/:userId', async (req, res) => {
   const { userId } = req.params;
   const { password } = req.body;
   try {
     const id = await act({ role: 'auth', cmd: 'userPatch', userId, password });
     res.json(id);
-  } catch(err) {   
+  } catch(err) {
     res.status(500).json({ error: err.details.message });
   }
 });
 
+/**
+ * @api {delete} /auth/id/:userId Delete User
+ * @apiName user_delete
+ * @apiPermission None
+ * @apiGroup Authentication
+ *
+ * @apiParam {String} userId Id of the user
+ *
+ * @apiUse objectId
+ *
+ * @apiError (Error 500) {String} error Possible value: 'userNotExist', etc.
+ * @apiErrorExample {json} Error-Response:
+ *    {
+ *      "error": "userNotExist"
+ *    }
+ */
 router.delete('/id/:userId', async (req, res) => {
   const { userId } = req.params;
   try{

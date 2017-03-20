@@ -4,12 +4,12 @@ import * as bcrypt from 'bcryptjs';
 export default async (msg, reply) => {
   const { userId, password } = msg;
   let hashedPassword;
-  try{
+  try {
     hashedPassword = await bcrypt.hash(password, 10);
   } catch(e) {
     reply(new Error('passwordInvalid'));
   }
-  
+
   try{
     const user: User = await User.retrieveById(userId);
     user.password = hashedPassword;
