@@ -6,6 +6,9 @@ import { seneca } from './utils';
 import test from './actions/test';
 import userLogin from './actions/user-login';
 import userCreate from './actions/user-create';
+import userRetrieve from './actions/user-retrieve';
+import userPatch from './actions/user-patch';
+import userDelete from './actions/user-delete';
 
 mongoose.connect('mongodb://mongo:27017/user');
 
@@ -23,5 +26,8 @@ seneca
     seneca
       .add('cmd:test', test)
       .add('cmd:userLogin', userLogin)
-      .add('cmd:userCreate', userCreate);
+      .add('cmd:userCreate', userCreate)
+      .add('cmd:userRetrieve', userRetrieve)
+      .add('cmd:userPatch', userPatch)
+      .add('cmd:userDelete', userDelete);
   });
