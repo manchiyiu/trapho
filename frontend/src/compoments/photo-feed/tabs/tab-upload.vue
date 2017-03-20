@@ -56,7 +56,7 @@
         </md-dialog-actions>
       </md-dialog>
       <!-- snackbar -->
-      <md-snackbar ref="snackbar" :md-duration="duration">
+      <md-snackbar ref="snackbar" :md-duration="2000">
         <span>Upload successful.</span>
       </md-snackbar>
     </div>
