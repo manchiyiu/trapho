@@ -4,6 +4,9 @@ import VueRouter from 'vue-router';
 import './theme';
 import './compoments/login-page/module';
 import './compoments/photo-feed/module';
+import './compoments/common/module';
+
+import store from './vuex/store';
 
 import App from './app.vue';
 
@@ -21,6 +24,7 @@ const router = new VueRouter({ routes });
 
 new Vue({
   router,
+  store,
   el: '#app',
   render: h => h(App)
 });

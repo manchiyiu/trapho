@@ -25,7 +25,7 @@ const router = express.Router();
 router.get('/photos/:photoId', async (req, res) => {
   const { photoId } = req.params;
   try {
-    const { comments } = await act({ act: 'timeline', cmd: 'commentRetrive', photoId });
+    const { comments } = await act({ role: 'timeline', cmd: 'commentRetrieve', photoId });
     res.json({ comments });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -51,7 +51,7 @@ router.get('/photos/:photoId', async (req, res) => {
 router.get('/users/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
-    const { comments } = await act({ act: 'timeline', cmd: 'commentRetrive', userId });
+    const { comments } = await act({ role: 'timeline', cmd: 'commentRetrieve', userId });
     res.json({ comments });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -77,7 +77,7 @@ router.get('/users/:userId', async (req, res) => {
 router.get('/id/:commentId', async (req, res) => {
   const { commentId } = req.params;
   try {
-    const comments = await act({ act: 'timeline', cmd: 'commentRetrive', commentId });
+    const comments = await act({ role: 'timeline', cmd: 'commentRetrieve', commentId });
     res.json(comments);
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -101,7 +101,7 @@ router.get('/id/:commentId', async (req, res) => {
 router.post('/', async (req, res) => {
   const { userId, photoId, timestamp, content } = req.body;
   try {
-    const { id } = await act({ act: 'timeline', cmd: 'commentCreate', userId, photoId, timestamp, content });
+    const { id } = await act({ role: 'timeline', cmd: 'commentCreate', userId, photoId, timestamp, content });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -132,7 +132,7 @@ router.patch('/id/:commentId', async (req, res) => {
   const { commentId } = req.params;
   const { userId, photoId, timestamp, content } = req.body;
   try {
-    const { id } = await act({ act: 'timeline', cmd: 'commentPatch', commentId, userId, photoId, timestamp, content });
+    const { id } = await act({ role: 'timeline', cmd: 'commentPatch', commentId, userId, photoId, timestamp, content });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -158,7 +158,7 @@ router.patch('/id/:commentId', async (req, res) => {
 router.delete('/id/:commentId', async (req, res) => {
   const { commentId } = req.params;
   try {
-    const { id } = await act({ act: 'timeline', cmd: 'commentDelete', commentId });
+    const { id } = await act({ role: 'timeline', cmd: 'commentDelete', commentId });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
