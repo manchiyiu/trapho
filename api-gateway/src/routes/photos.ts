@@ -5,10 +5,15 @@ import * as passport from 'passport';
 import * as path from 'path';
 import * as _ from 'lodash';
 import { v1 as uuid } from 'uuid';
+import * as Vision from '@google-cloud/vision';
 
 import { act } from '../utils';
 
 const router = express.Router();
+const vision = Vision({
+  projectId: process.env.GOOGLE_PROJECTID,
+  keyFilename: 'key.json'
+});
 
 /**
  * @api {get} /photos/id/:photoId Retrieve photo by photoId
@@ -180,7 +185,7 @@ router.delete('/id/:photoId', async (req, res) => {
 });
 
  /**
- * @api {delete} /photos/upload Upload a photo to disk storage
+ * @api {post} /photos/upload Upload a photo to disk storage
  * @apiName photos_upload
  * @apiPermission User
  * @apiGroup Photos
@@ -190,9 +195,13 @@ router.delete('/id/:photoId', async (req, res) => {
  * @apiParam {File} file                      the file object
  *
  * @apiSuccess {String} url                   url path of the uploaded file
+ * @apiSuccess {String} tags                  tags provided by the Google Vision API
+ * @apiSuccess {String} landmarks             landmarks detected by Google Vision API
  * @apiSuccessExample  {json} Success-Response:
  *   {
- *     "url": "sf1412ffsdfasdase1123.jpg"
+ *     "url": "sf1412ffsdfasdase1123.jpg",
+ *     "tags": ["text", "fun", "funny", "warren"],
+ *     "landmarks": ["Eiffel Tower"]
  *   }
  *
  * @apiError (Error 500) {String} apiError            Error message ('noFileUploaded', 'fileFormatInvalid', 'uploadFailed' etc.)
@@ -215,14 +224,31 @@ router.post('/upload', async (req: any, res) => {
 
   const filename = `${uuid()}${path.extname(file.name)}`;
   const uploadPath = `/data/photos/${filename}`;
-  file.mv(uploadPath, err => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'uploadFailed' });
-    }
-    return res.status(200).json({ url: filename });
+
+  const move = uploadPath => new Promise((resolve, reject) => {
+    file.mv(uploadPath, err => {
+      if (err) { reject(err); }
+      resolve();
+    });
   });
 
+  try {
+    await move(uploadPath);
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ error: 'uploadFailed' });
+  }
+
+  let tags, landmarks;
+  try {
+    [tags] = await vision.detectLabels(uploadPath);
+    [landmarks] = await vision.detectLandmarks(uploadPath);
+  } catch (e) {
+    console.error(e);
+    return res.status(200).json({ url: filename });
+  }
+
+  return res.status(200).json({ url: filename, tags, landmarks });
 });
 
 export default router;

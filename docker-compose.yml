@@ -26,6 +26,7 @@ services:
     network_mode: "bridge"
     environment:
       BRIDGE_ADDRESS: $BRIDGE_ADDRESS
+      GOOGLE_PROJECTID: $GOOGLE_PROJECTID
     volumes:
       - photo-storage:/data/photos
 
