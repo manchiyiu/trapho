@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+from scrapy.exceptions import DropItem
 
 class GoogleplacespiderPipeline(object):
 	def __init__(self):

@@ -13,6 +13,7 @@ BOT_NAME = 'GooglePlaceSpider'
 
 SPIDER_MODULES = ['GooglePlaceSpider.spiders']
 NEWSPIDER_MODULE = 'GooglePlaceSpider.spiders'
+LOG_LEVEL = 'INFO'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
