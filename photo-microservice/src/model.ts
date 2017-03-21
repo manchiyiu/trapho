@@ -85,4 +85,15 @@ export default class Photo {
       throw new Error('databsaeError');
     }
   }
+
+  static async retrieveAll(){
+    let res;
+    try{
+      res = await this.model.find();
+      res = res.map(item => new Photo(item));
+      return res;
+    } catch(e) {
+      throw new Error('databaseError');
+    }
+  }
 }

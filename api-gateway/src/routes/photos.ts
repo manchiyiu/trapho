@@ -251,4 +251,30 @@ router.post('/upload', async (req: any, res) => {
   return res.status(200).json({ url: filename, tags, landmarks });
 });
 
+
+/**
+ * @api {get} /photos/
+ * @apiName photos_retrieve_all
+ * @apiPermission User
+ * @apiGroup Photos
+ *
+ * @apiUse photosArray
+ *
+ * @apiError (Error 500) {String} apiError            Error message ('userNotExist', 'databaseError', etc.)
+ * @apiErrorExample {json} Error-Response:
+ *   {
+ *     "error": "databaseError"
+ *   }
+ */
+router.get('/', async (req: any, res) => {
+  try {
+    const { photos } = await act({ role: 'photo', cmd: 'photoRetrieveAll'});
+    res.json({ photos });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
+});
+
+
+
 export default router;
