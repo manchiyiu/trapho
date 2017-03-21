@@ -50,5 +50,13 @@ export default class Comment {
       await Comment.model.findByIdAndRemove(commentId);
   }
 
-  
+  static async retrieveByPhotoId(photoId){
+
+  }
+
+  static async retrieveByUserId(userId){
+      
+  }
+
+
 }
