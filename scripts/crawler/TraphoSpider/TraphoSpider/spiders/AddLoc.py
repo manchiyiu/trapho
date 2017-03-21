@@ -4,12 +4,12 @@ import json
 import logging
 
 
-_url = "http://localhost:3000/locations"
+_url = "http://104.199.134.31:3000/locations"
 logging.getLogger('scrapy').setLevel(logging.WARNING)
 
 class AddlocSpider(scrapy.Spider):
 	name = "AddLoc"
-	allowed_domains = ["localhost:3000"]
+	allowed_domains = ["104.199.134.31:3000"]
 	def __init__(self, token = "", json_path = "", domain=None, *args, **kwargs):
 		if len(token) == 0:
 			raise scrapy.exceptions.CloseSpider('unspecified_token')

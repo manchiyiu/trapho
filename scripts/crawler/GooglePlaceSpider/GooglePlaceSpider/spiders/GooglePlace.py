@@ -3,22 +3,28 @@ import scrapy
 import json
 
 _url_prefix = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?rankby=prominence&language=en"
+_supp_url_prefix = "https://maps.googleapis.com/maps/api/place/textsearch/json?language=en"
 _category = ["airport", "amusement_park", "aquarium", "art_gallery", "bar", "casino", "city_hall", "department_store", "food", "museum", "night_club", "park", "place_of_worship", "spa", "stadium", "university", "zoo"]
+_supp_category = ["point_of_interest", "natural_feature"]
 _google_api_key = "AIzaSyD_nUa5TDEVMWvZK60VsZ8g5YqHHig7twY"
 
 class GoogleplaceSpider(scrapy.Spider):
 	name = "GooglePlace"
 	allowed_domains = ["maps.googleapis.com"]
 
-	def __init__(self, lat=22.334317, lng = 114.166214, radius = 24000, domain=None, *args, **kwargs):
+	def __init__(self, lat=22.334317, lng = 114.166214, radius = 24000, keyword = "Hong Kong", *args, **kwargs):
 		super(GoogleplaceSpider, self).__init__(*args, **kwargs)
 		self.center_lat = lat
 		self.center_lng = lng
 		self.center_radius = radius
+		self.keyword = keyword
 
 	def start_requests(self):
 		url_combined_prefix = _url_prefix+"&key="+_google_api_key+"&location="+str(self.center_lat)+","+str(self.center_lng)+"&radius="+str(self.center_radius)+"&types="
+		supp_url_combined_prefix = _supp_url_prefix+"&key="+_google_api_key+"&location="+str(self.center_lat)+","+str(self.center_lng)+"&radius="+str(self.center_radius)+"&query="
 		urls = [url_combined_prefix+x for x in _category]
+		supp_urls = [supp_url_combined_prefix+x.replace("_", "+")+"+"+self.keyword.replace(" ", "+") for x in _supp_category]
+		urls.extend(supp_urls)
 		for url in urls:
 			yield scrapy.Request(url = url, callback = self.parse)
 
@@ -31,6 +37,7 @@ class GoogleplaceSpider(scrapy.Spider):
 
 		locations_google = json_response["results"]
 		for location_google in locations_google:
+			tmp_id = location_google["place_id"]
 			tmp_coor = location_google["geometry"]["location"]
 			tmp_name = location_google["name"]
 			tmp_photo = []
@@ -38,8 +45,10 @@ class GoogleplaceSpider(scrapy.Spider):
 				tmp_photo = location_google["photos"]
 			tmp_tags = location_google["types"]
 			tmp_tags = [x.replace("_", " ") for x in tmp_tags]
-			tmp_desc = location_google["vicinity"]
-			yield Position_Storage(tmp_name, tmp_coor, tmp_photo, tmp_tags, tmp_desc).to_dict()
+			tmp_desc = ""
+			if "vicinity" in location_google:
+				tmp_desc = location_google["vicinity"]
+			yield Position_Storage(tmp_id, tmp_name, tmp_coor, tmp_photo, tmp_tags, tmp_desc).to_dict()
 
 		if(len(next_page_token) > 0):
 			next_url = _url_prefix+"&key="+_google_api_key+"&pagetoken="+next_page_token
@@ -47,7 +56,8 @@ class GoogleplaceSpider(scrapy.Spider):
 
 
 class Position_Storage:
-	def __init__(self, name, coordinates, photos, tags, description):
+	def __init__(self, place_id, name, coordinates, photos, tags, description):
+		self.id = place_id
 		self.name = name
 		self.coordinates = coordinates
 		self.photos = photos
@@ -56,6 +66,7 @@ class Position_Storage:
 
 	def to_dict(self):
 		json_dict = {
+			"google_place_id":self.id,
 			"name":self.name,
 			"coordinates":self.coordinates,
 			"photos":self.photos,
