@@ -227,7 +227,7 @@ router.post('/upload', async (req: any, res) => {
 
 
 /**
- * @api {get} /photos/all
+ * @api {get} /photos/
  * @apiName photos_retrieve_all
  * @apiPermission User
  * @apiGroup Photos
@@ -240,7 +240,7 @@ router.post('/upload', async (req: any, res) => {
  *     "error": "databaseError"
  *   }
  */
-router.get('/all', async (req: any, res) => {
+router.get('/', async (req: any, res) => {
   try {
     const { photos } = await act({ role: 'photo', cmd: 'photoRetrieveAll'});
     res.json({ photos });
