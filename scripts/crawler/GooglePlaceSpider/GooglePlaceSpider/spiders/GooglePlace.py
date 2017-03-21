@@ -30,7 +30,7 @@ class GoogleplaceSpider(scrapy.Spider):
 		self.center_radius = radius
 		self.location = location
 		self.keywords = keywords.split(",")
-		self.keywords = [x.strip() for x in self.keywords]
+		self.keywords = [x.strip() for x in self.keywords if len(x.strip()) > 0]
 
 	def start_requests(self):
 		# Search by category
