@@ -1,4 +1,4 @@
-import Location from '../model';
+import Location from '../model-location';
 import { checkName, checkDescription, checkTags, checkCoordinates } from '../utils';
 
 export default async(msg, reply) => {
@@ -17,7 +17,7 @@ export default async(msg, reply) => {
         name,
         description,
         tags,
-        coordinates: [coordinates.lng, coordinates.lat]
+        coordinates
       });
     }
   } catch (e) {

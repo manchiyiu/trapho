@@ -26,7 +26,7 @@ const router = express.Router();
 router.get('/users/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
-    const { ratings } = await act({ act: 'locations', cmd: 'ratingRetrieve', userId });
+    const { ratings } = await act({ role: 'location', cmd: 'ratingRetrieve', userId });
     res.json({ ratings });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -34,13 +34,40 @@ router.get('/users/:userId', async (req, res) => {
 });
 
 /**
- * @api {get} /ratings/users/:userId/locations/:locationId Retrieve ratings by userId and locationId
- * @apiName ratings_retrieve_userid_locationId
+ * @api {get} /ratings/locations/:locationId Retrieve average rating by locationId
+ * @apiName ratings_retrieve_locationId
+ * @apiPermission User
+ * @apiGroup Locations Ratings
+ *
+ * @apiParam {String} locationId               Location id
+ *
+ * @apiUse ratings
+ *
+ * @apiError (Error 500) {String} error Possible value: 'locationNotExist', etc.
+ * @apiErrorExample {json} Error-Response:
+ *    {
+ *      "error": "ratingNotExist"
+ *    }
+ */
+router.get('/locations/:locationId', async (req, res) => {
+  const { locationId } = req.params;
+  try {
+    const { avgRating } = await act({ role: 'location', cmd: 'ratingRetrieve', locationId });
+    res.json(avgRating); 
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
+});
+
+/**
+ * @api {get} /ratings/users/:userId/locations/:locationId/photos/:photoId Retrieve ratings by userId, locationId and photoId
+ * @apiName ratings_retrieve_userid_locationId_photoId
  * @apiPermission User
  * @apiGroup Locations Ratings
  *
  * @apiParam {String} userId                   User id
  * @apiParam {String} locationId               Location id
+ * @apiParam {String} photoId                  Photo id
  *
  * @apiUse ratings
  *
@@ -50,10 +77,10 @@ router.get('/users/:userId', async (req, res) => {
  *      "error": "ratingNotExist"
  *    }
  */
-router.get('/users/:userId/locations/:locationId', async (req, res) => {
-  const { userId, locationId } = req.params;
+router.get('/users/:userId/locations/:locationId/photos/:photoId', async (req, res) => {
+  const { userId, locationId, photoId } = req.params;
   try {
-    const { ratings } = await act({ act: 'locations', cmd: 'ratingRetrieve', userId, locationId });
+    const { ratings } = await act({ role: 'location', cmd: 'ratingRetrieve', userId, locationId, photoId });
     res.json(ratings[0]); // there should be only one result
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -61,14 +88,15 @@ router.get('/users/:userId/locations/:locationId', async (req, res) => {
 });
 
 /**
- * @api {patch} /ratings/users/:userId/locations/:locationId Patch ratings by userId and locationId
- * @apiName ratings_patch_userid_locationid
+ * @api {patch} /ratings/users/:userId/locations/:locationId/photos/:photoId Patch ratings by userId, locationId and photoId
+ * @apiName ratings_patch_userid_locationid_photoId
  * @apiPermission User
  * @apiGroup Locations Ratings
  *
  * @apiParam {String} userId                  User id
  * @apiParam {String} locationId              Location id
  * @apiParam {String} rating                  New rating value
+ * @apiParam {String} photoId                 Photo id
  *
  * @apiUse objectId
  *
@@ -78,11 +106,11 @@ router.get('/users/:userId/locations/:locationId', async (req, res) => {
  *      "error": "ratingNotExist"
  *    }
  */
-router.patch('/users/:userId/locations/:locationId', async (req, res) => {
-  const { userId, locationId } = req.params;
+router.patch('/users/:userId/locations/:locationId/photos/:photoId', async (req, res) => {
+  const { userId, locationId, photoId } = req.params;
   const { rating } = req.body;
   try {
-    const { id } = await act({ act: 'locations', cmd: 'ratingPatch', userId, locationId });
+    const { id } = await act({ role: 'location', cmd: 'ratingPatch', userId, locationId, photoId, rating });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -90,13 +118,14 @@ router.patch('/users/:userId/locations/:locationId', async (req, res) => {
 });
 
 /**
- * @api {delete} /ratings/users/:userId/locations/:locationId Delete ratings by userId and locationId
- * @apiName ratings_delete_userid_locationid
+ * @api {delete} /ratings/users/:userId/locations/:locationId/photos/:photoId Delete ratings by userId, locationId and photoId
+ * @apiName ratings_delete_userid_locationid_photoId
  * @apiPermission User
  * @apiGroup Locations Ratings
  *
  * @apiParam {String} userId                  User id
  * @apiParam {String} locationId              Location id
+ * @apiParam {String} photoId                 Photo id
  *
  * @apiUse objectId
  *
@@ -106,10 +135,10 @@ router.patch('/users/:userId/locations/:locationId', async (req, res) => {
  *      "error": "ratingNotExist"
  *    }
  */
-router.delete('/users/:userId/locations/:locationId', async (req, res) => {
-  const { userId, locationId } = req.params;
+router.delete('/users/:userId/locations/:locationId/photos/:photoId', async (req, res) => {
+  const { userId, locationId, photoId } = req.params;
   try {
-    const { id } = await act({ act: 'locations', cmd: 'ratingDelete', userId, locationId });
+    const { id } = await act({ role: 'location', cmd: 'ratingDelete', userId, locationId, photoId });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -127,6 +156,7 @@ router.delete('/users/:userId/locations/:locationId', async (req, res) => {
  * @apiParam {String} userId                  User id
  * @apiParam {String} locationId              Location id
  * @apiParam {String} rating                  Rating value
+ * @apiParam {String} photoId                 Photo id
  *
  * @apiUse objectId
  *
@@ -137,9 +167,9 @@ router.delete('/users/:userId/locations/:locationId', async (req, res) => {
  *    }
  */
 router.post('/', async (req, res) => {
-  const { userId, locationId, rating } = req.params;
+  const { userId, locationId, rating, photoId } = req.body;
   try {
-    const { id } = await act({ act: 'locations', cmd: 'ratingCreate', userId, locationId, rating });
+    const { id } = await act({ role: 'location', cmd: 'ratingCreate', userId, locationId, rating, photoId });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });

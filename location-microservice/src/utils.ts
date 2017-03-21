@@ -1,6 +1,9 @@
 import * as senecaClass from 'seneca';
+import * as Bluebird from 'bluebird';
+import * as _ from 'lodash';
 
 export const seneca = senecaClass();
+export const act : any = Bluebird.promisify(seneca.act, {context: seneca});
 
 export function checkName(name : string, optional : boolean) {
   if (typeof name == 'undefined') {
@@ -56,6 +59,40 @@ export function checkCoordinates(coordinates : {}, optional : boolean) {
     if (coordinates['lng'] < -180 || coordinates['lng'] > 180 || coordinates['lat'] < -90 || coordinates['lat'] > 90) {
       throw new Error('invalidCoordinatesError');
     }
+  }
+  return true;
+}
+
+export async function checkUser(userId : String, optional : boolean) {
+  let res;
+
+  if(!_.isString(userId)){
+    if(!optional){
+      throw new Error("userNotExist");
+    }
+    return false;
+  }
+  try{
+    res = await act({ role: 'auth', cmd: 'userRetrieve', userId});
+  }catch(e){
+    throw new Error("userNotExist");
+  }
+  
+  return true;
+}
+
+export async function checkPhoto(photoId: String, optional){
+  let res;
+  if(!_.isString(photoId)){
+    if(!optional){
+      throw new Error("photoNotExist");
+    }
+    return false;
+  }
+  try{
+    res = await act({ role:'photo', cmd: 'photoRetrieve', photoId });
+  }catch(e){
+    throw new Error("photoNotExist");
   }
   return true;
 }
