@@ -27,13 +27,11 @@ export async function checkUser(userId : String, optional : boolean) {
     return false;
   }
   try{
-    //res = await act({ role: 'auth', cmd: 'userRetrieve', userId});
+    res = await act({ role: 'auth', cmd: 'userRetrieve', userId});
   }catch(e){
-    throw new Error("communicationError");
-  }
-  /*if(!res.user){
     throw new Error("userNotExist");
-  }*/
+  }
+
   return true;
 }
 
