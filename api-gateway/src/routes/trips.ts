@@ -24,7 +24,7 @@ const router = express.Router();
 router.get('/users/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
-    const { trips } = await act({ act: 'activity', cmd: 'tripRetrieve', userId });
+    const { trips } = await act({ role: 'activity', cmd: 'tripRetrieve', userId });
     res.json({ trips });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -50,8 +50,8 @@ router.get('/users/:userId', async (req, res) => {
 router.get('/id/:tripId', async (req, res) => {
   const { tripId } = req.params;
   try {
-    const { trips } = await act({ act: 'activity', cmd: 'tripRetrieve', tripId });
-    res.json(trips[0]); // there should be only one result
+    const { trip } = await act({ role: 'activity', cmd: 'tripRetrieve', tripId });
+    res.json(trip); // there should be only one result
   } catch (err) {
     res.status(500).json({ error: err.details.message });
   }
@@ -82,7 +82,7 @@ router.get('/id/:tripId', async (req, res) => {
 router.post('/', async (req, res) => {
   const { name, userId, timestamp, locations } = req.body;
   try {
-    const { id } = await act({ act: 'activity', cmd: 'tripCreate', name, userId, timestamp, locations });
+    const { id } = await act({ role: 'activity', cmd: 'tripCreate', name, userId, timestamp, locations });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -117,7 +117,7 @@ router.patch('/id/:tripId', async (req, res) => {
   const { tripId } = req.params;
   const { name, userId, timestamp, locations } = req.body;
   try {
-    const { id } = await act({ act: 'activity', cmd: 'tripPatch', tripId, name, userId, timestamp, locations });
+    const { id } = await act({ role: 'activity', cmd: 'tripPatch', tripId, name, userId, timestamp, locations });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -143,7 +143,7 @@ router.patch('/id/:tripId', async (req, res) => {
 router.delete('/id/:tripId', async (req, res) => {
   const { tripId } = req.params;
   try {
-    const { id } = await act({ act: 'activity', cmd: 'tripDelete', tripId });
+    const { id } = await act({ role: 'activity', cmd: 'tripDelete', tripId });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });

@@ -5,13 +5,13 @@ Vue.use(VueMaterial);
 
 Vue.material.registerTheme('default', {
   primary: {
-    color: 'grey',
+    color: 'green',
+    hue: 'A700'
+  },
+  accent: {
+    color: 'green',
     hue: 'A200'
   },
-  accent: 'red',
   warn: 'red',
-  background: {
-    color: 'grey',
-    hue: 50
-  }
+  background: 'white'
 })

@@ -7,7 +7,7 @@ export default class Location {
   name : string = null;
   description : string = null;
   tags : string[] = null;
-  coordinates: [number, number] = [null, null]; //Longitude, Latitude
+  coordinates: any = null;
 
   static schema = new mongoose.Schema({
     name: String,
@@ -15,7 +15,7 @@ export default class Location {
     tags: [String],
     coordinates: {
       type: [Number],
-      default: [0, 0],
+      default: [0, 0], //Longitude, Latitude
       index: '2dsphere'
     }
   });
@@ -33,7 +33,16 @@ export default class Location {
       _id: id
     } = object;
 
-    Object.assign(this, { id, name, description, tags, coordinates });
+    let parsedCoordinates;
+    if (_.isArray(coordinates)) {
+      parsedCoordinates = {
+        "lng" : coordinates[0],
+        "lat" : coordinates[1]
+      }
+    } else {
+      parsedCoordinates = coordinates;
+    }
+    Object.assign(this, { id, name, description, tags, coordinates:parsedCoordinates });
     this.tags = this.tags || [];
   }
 
@@ -42,7 +51,7 @@ export default class Location {
       name: this.name,
       description: this.description,
       tags: this.tags,
-      coordinates: this.coordinates
+      coordinates: [this.coordinates.lng, this.coordinates.lat]
     });
     return await model
       .save()
@@ -54,7 +63,7 @@ export default class Location {
       name: this.name,
       description: this.description,
       tags: this.tags,
-      coordinates: this.coordinates
+      coordinates: [this.coordinates.lng, this.coordinates.lat]
     };
     return await Location.model
       .findByIdAndUpdate(this.id, modifiedLocation, (err, res) => {

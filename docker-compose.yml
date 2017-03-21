@@ -76,7 +76,6 @@ services:
     network_mode: "bridge"
     environment:
       BRIDGE_ADDRESS: $BRIDGE_ADDRESS
-
   timeline-microservice:
     build:
       context: ./timeline-microservice
