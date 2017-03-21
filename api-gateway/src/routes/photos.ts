@@ -208,7 +208,7 @@ router.delete('/id/:photoId', async (req, res) => {
  * @apiErrorExample {json} Error-Response:
  *   {
  *     "error": "noFileUploaded"
- *
+ *   }
  */
 router.post('/upload', async (req: any, res) => {
 
@@ -253,7 +253,7 @@ router.post('/upload', async (req: any, res) => {
 
 
 /**
- * @api {get} /photos/
+ * @api {get} /photos Retrieve all photos
  * @apiName photos_retrieve_all
  * @apiPermission User
  * @apiGroup Photos
