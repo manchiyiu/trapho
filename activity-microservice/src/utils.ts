@@ -86,9 +86,27 @@ export async function checkLocations(locations : [any], optional: boolean){
         }
         return false;
     }
+    var locations_casted:any = [];
+
     for(var i = 0; i<locations.length; i++){
-        console.log("Checking:", locations[i].id);
+        // Check if each location is in correct structure
+
         await checkLocation(locations[i], false);
+         locations_casted.push({
+            "startTime": new Date(locations[i].startTime),
+            "endTime": new Date(locations[i].endTime)
+        });
+    }
+    // Check if any location overlaps with another in [startTime, endTime] time interval
+    locations_casted.sort(function(a, b){
+        if(a.startTime < b.startTime) return -1;
+        else if(a.startTime > b.startTime) return 1;
+        else return 0;
+    });
+    for(var i = 1; i<locations_casted.length; i++){
+        if(locations_casted[i - 1].endTime >= locations_casted[i].startTime){
+            throw new Error("startEndTimeError");
+        }
     }
     return true;
 }
