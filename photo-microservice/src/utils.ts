@@ -14,8 +14,11 @@ export async function isValidLocation(locationId : String) {
 }
 
 export async function isValidUser(userId : String) {
-  // try{     await act({ role: 'auth', cmd: 'userRetrieve', userId}); } catch(e)
-  // {     throw e; }
+  try{     
+    await act({ role: 'auth', cmd: 'userRetrieve', userId }); 
+  } catch(e) {     
+    throw e; 
+  }
 }
 
 export function isValidURL(url: String) {

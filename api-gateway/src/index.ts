@@ -22,6 +22,7 @@ import ratings from './routes/ratings';
 import photos from './routes/photos';
 import comments from './routes/comments';
 import trips from './routes/trips';
+import likes from './routes/likes'
 
 const app = express();
 
@@ -55,6 +56,7 @@ app.use('/ratings', ratings);
 app.use('/photos', photos);
 app.use('/comments', comments);
 app.use('/trips', trips);
+app.use('/likes', likes);
 
 app.use(errorMiddleware); // keep this as last middleware, which catches all error
 
