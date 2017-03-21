@@ -6,6 +6,8 @@ import './compoments/login-page/module';
 import './compoments/photo-feed/module';
 import './compoments/common/module';
 
+import store from './vuex/store';
+
 import App from './app.vue';
 
 import LoginPageView from './compoments/login-page/view.vue';
@@ -22,6 +24,7 @@ const router = new VueRouter({ routes });
 
 new Vue({
   router,
+  store,
   el: '#app',
   render: h => h(App)
 });

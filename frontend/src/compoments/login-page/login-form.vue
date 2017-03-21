@@ -51,13 +51,13 @@ export default {
     errorMessage: ''
   }),
   computed: {
-    isFilled: function () { return this.username.length <= 0 || this.password.length <= 0; }
+    isFilled: function () { return this.username.length <= 0 || this.password.length <= 0; },
   },
   methods: {
     submit: async function () {
-      let { error, token } = await login(this.$router, {
+      let { error, token, user } = await login(this.$router, {
         username: this.username,
-        password: this.password
+        password: this.password,
       });
       if (error) {
         switch (error) {
@@ -71,9 +71,10 @@ export default {
             this.errorMessage = error;
         }
         this.$refs.snackbar.open();
-      } else {
-        this.$router.push('feed');
+        return;
       }
+      this.$store.commit('userLogin', { username: this.username, userId: user.id, token });
+      this.$router.push('feed');
     }
   }
 }

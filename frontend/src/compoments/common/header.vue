@@ -1,24 +1,37 @@
 <name>main-header</name>
 
 <template>
-  <md-toolbar class="main-toolbar">
-    <md-button class="md-icon-button">
-      <md-icon class="menu-icon">menu</md-icon>
-    </md-button>
-    <div class="logo">
-      <img :src="logopath" class="logo-img"></img>
+  <div>
+    <div>
+      <md-toolbar class="main-toolbar">
+        <md-button class="md-icon-button" v-if="userHasLogin" @click.native="toggleSidenav">
+          <md-icon class="menu-icon">menu</md-icon>
+        </md-button>
+        <div class="logo">
+          <img :src="logopath" class="logo-img"></img>
+        </div>
+      </md-toolbar>
     </div>
-    </md-layout>
-  </md-toolbar>
+    <md-sidenav v-if="userHasLogin" class="md-left" ref="sidenav">
+      <md-toolbar class="md-large">
+        <div class="md-toolbar-container">
+        </div>
+      </md-toolbar>
+      <md-list>
+        <md-list-item><md-icon>flight_takeoff</md-icon><span>Plan My Trip</span></md-list-item>
+        <md-list-item><md-icon>edit</md-icon><span>Edit My Profile</span></md-list-item>
+        <md-list-item @click.native="logout"><md-icon>exit_to_app</md-icon><span>Logout</span></md-list-item>
+      </md-list>
+    </md-sidenav>
+  </div>
 </template>
 
 <style>
 .main-toolbar {
   background-color: white !important;
-  z-index: 99 !important;
 }
 .logo-img {
-  margin: 20px 20px 20px 0px;
+  margin: 0px 10px 0px 5px;
 }
 .menu-icon {
   color: black;
@@ -27,11 +40,30 @@
 
 <script>
   import Vue from 'vue';
+  import * as _ from 'lodash';
+  import { mapGetters } from 'vuex';
+
   import logopath from '../../static/logo.png';
 
   export default {
     data: () => ({
       logopath
-    })
+    }),
+    computed: {
+      ...mapGetters([
+        'userHasLogin'
+      ])
+    },
+    methods: {
+      toggleSidenav: function() {
+        this.$refs.sidenav.toggle();
+      },
+      logout: function() {
+        delete localStorage.token; // remove the token
+        this.$store.commit('userLogout');
+        this.$router.push('/');
+        this.$refs.sidenav.close();
+      },
+    }
   };
 </script>
