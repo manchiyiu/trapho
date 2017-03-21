@@ -68,8 +68,7 @@ export default {
             this.errorMessage = error;
         }
         this.$refs.snackbar.open();
-      } else {
-        window._token = token;
+        return;
       }
     }
   }

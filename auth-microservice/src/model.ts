@@ -40,4 +40,30 @@ export default class User {
     return model.save();
   }
 
+  async patch(){
+    const newInfo = {
+      username: this.username,
+      password: this.password
+    }
+    try {
+      await User.model.findByIdAndUpdate(this.id, newInfo);
+    } catch (e) {
+      throw new Error('databaseError');
+    }
+  }
+
+  static async retrieveById(userId: String){
+    let result;
+    try{
+      result = await User.model.findById(userId);
+    } catch(e) {
+      throw new Error(e);
+    }
+    return new User(result);
+  }
+
+  static async remove(userId: String){
+    await User.model.findByIdAndRemove(userId);
+  }
+
 }
