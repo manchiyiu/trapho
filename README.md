@@ -1,17 +1,16 @@
 # csci3100-project
 
+## Information for TA
+
+* We have defined some basic interface in each microservice, namely what types of message it will receive. Some of the microservices (e.g. location-microservice, auth-microservice, photo-microservice) has already been implemented even.
+
+* We have also define all API endpoints for our backend server, which are available at `csci3100-project/api-gateway/src/routes/*.ts`. We have also documented the input and output of each API endpoints, the API documentation is available here: http://ymcatar.github.io/csci3100-project.
+
+* A backend server (with partial functionality) has been deployed at http://104.199.134.31:3000/.
+
 ## Basic architecture
 
-Frontend
-
-* frontend
-
-Backend
-
-* api-gateway
-* microservices
-  * activity-microservice
-  * ...
+![](https://i.imgur.com/5S8SrXl.png)
 
 ## Instruction
 
