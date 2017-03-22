@@ -51,12 +51,39 @@ export default class Comment {
   }
 
   static async retrieveByPhotoId(photoId){
-
+    let res;
+    try {
+      res = await this.model.find({ photoId });
+      res = res.map(item => new Comment(item));
+      return res;
+    } catch (e) {
+      throw new Error('databaseError');
+    }
   }
 
   static async retrieveByUserId(userId){
-      
+    let res;
+    try {
+      res = await this.model.find({ userId });
+      res = res.map(item => new Comment(item));
+      return res;
+    } catch (e) {
+      throw new Error('databaseError');
+    }
   }
 
+  async patch(){
+    const newInfo = {
+      userId: this.userId,
+      photoId: this.photoId,
+      timestamp: this.timestamp,
+      content: this.content
+    };
+    try {
+      await Comment.model.findByIdAndUpdate(this.id, newInfo);
+    } catch (e) {
+      throw new Error('databaseError');
+    }
+  }
 
 }
