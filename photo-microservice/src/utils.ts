@@ -32,3 +32,37 @@ export function isValidDescription(description : String) {
     throw new Error('invalidDescription');
   }
 }
+
+export async function retrieveUser(userId : String) {
+  try{     
+    return await act({ role: 'auth', cmd: 'userRetrieve', userId }); 
+  } catch(e) {     
+    throw e; 
+  }
+}
+
+export async function retrieveLocation(locationId : String) {
+  try {
+    return await act({role: 'location', cmd: 'locationRetrieve', locationId});
+  } catch (e) {
+    throw new Error('locationNotExist');
+  }
+}
+
+export async function retrieveLikes(photoId : String) {
+  try {
+    const { likes } = await act({ role: 'timeline', cmd: 'likeRetrieve', photoId });
+    return likes.length;
+  } catch (e) {
+    throw new Error('locationNotExist');
+  }
+}
+
+export async function retrieveComments(photoId : String) {
+  try {
+    const { comments } = await act({ role: 'timeline', cmd: 'commentRetrieve', photoId });
+    return comments;
+  } catch (e) {
+    throw new Error('commentsNotExist');
+  }
+}
