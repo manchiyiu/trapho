@@ -3,7 +3,7 @@
 <template>
   <div>
     <common-header></common-header>
-    <router-view></router-view>
+    <router-view style="height: calc(100vh - 64px);"></router-view>
   </div>
 </template>
 
