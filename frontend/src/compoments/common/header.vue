@@ -18,9 +18,22 @@
         </div>
       </md-toolbar>
       <md-list>
-        <md-list-item><md-icon>flight_takeoff</md-icon><span>Plan My Trip</span></md-list-item>
-        <md-list-item><md-icon>edit</md-icon><span>Edit My Profile</span></md-list-item>
-        <md-list-item @click.native="logout"><md-icon>exit_to_app</md-icon><span>Logout</span></md-list-item>
+        <md-list-item @click.native="goToPhotoFeed">
+          <md-icon>photo_library</md-icon>
+          <span>Photo Feed</span>
+        </md-list-item>
+        <md-list-item @click.native="goToPlan">
+          <md-icon>flight_takeoff</md-icon>
+          <span>Plan My Trip</span>
+        </md-list-item>
+        <md-list-item>
+          <md-icon>edit</md-icon>
+          <span>Edit My Profile</span>
+        </md-list-item>
+        <md-list-item @click.native="logout">
+          <md-icon>exit_to_app</md-icon>
+          <span>Logout</span>
+        </md-list-item>
       </md-list>
     </md-sidenav>
   </div>
@@ -58,7 +71,16 @@
       toggleSidenav: function() {
         this.$refs.sidenav.toggle();
       },
-      logout: function() {
+      // menu item functions
+      goToPhotoFeed: function () {
+        this.$router.push('/feed');
+        this.$refs.sidenav.close();
+      },
+      goToPlan: function () {
+        this.$router.push('/plan-select');
+        this.$refs.sidenav.close();
+      },
+      logout: function () {
         delete localStorage.token; // remove the token
         this.$store.commit('userLogout');
         this.$router.push('/');

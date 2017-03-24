@@ -2,8 +2,12 @@
 
 <template>
   <div>
-    <gmap-map :center="center" :zoom="10" style="height: 500px">
-      <gmap-cluster :gridSize="20">
+    <gmap-map
+      :center="center"
+      :options="{styles: mapTheme}"
+      :zoom="10"
+      style="height: 500px">
+      <gmap-cluster :gridSize="100">
         <gmap-marker
           v-for="(location, index) in locations"
           :key="index"
@@ -36,6 +40,7 @@
 import Vue from 'vue';
 import * as VueGoogleMaps from 'vue2-google-maps';
 
+import mapTheme from '../common/config/map-theme.js';
 import { post } from '../../utils.js';
 
 Vue.use(VueGoogleMaps, {
@@ -49,6 +54,7 @@ Vue.use(VueGoogleMaps, {
 export default {
   props: ['onChange'],
   data: () => ({
+    mapTheme,
     center: {
       lat: 22.4213,
       lng: 114.2071

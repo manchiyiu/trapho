@@ -6,9 +6,9 @@
       <md-tab id="photos" md-label="Photo">
         <photo-feed-tab-feed></photo-feed-tab-feed>
       </md-tab>
-      <md-tab id="locations" md-label="Locations">
+      <!--<md-tab id="locations" md-label="Locations">
         <photo-feed-tab-locations></photo-feed-tab-locations>
-      </md-tab>
+      </md-tab>-->
       <md-tab id="upload" md-label="Upload">
         <photo-feed-tab-upload></photo-feed-tab-upload>
       </md-tab>

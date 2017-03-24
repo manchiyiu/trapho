@@ -3,12 +3,7 @@
 <template>
   <div class="tab-locations-container">
     <div class="tab-locations-main">
-      <md-card>
-        <md-card-content style="padding: 0px;">
-          <common-map :onChange="onMapChange"></common-map>
-        </md-card-content>
-      </md-card>
-      {{selectedLocation}}
+      <common-map :onChange="onMapChange"></common-map>
     </div>
   </div>
 </template>
@@ -19,8 +14,8 @@
   justify-content: center;
 }
 .tab-locations-main {
-  max-width: 500px;
-  width: 100%
+  width: 100vw;
+  margin: -15px;
 }
 </style>
 

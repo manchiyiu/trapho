@@ -23,7 +23,7 @@ import Vue from 'vue';
 export default {
   methods: {
     goToPlan: function() {
-      this.$router.push('plan');
+      this.$router.push('plan-select');
     }
   }
 };
