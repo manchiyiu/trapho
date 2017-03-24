@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <div>
+    <md-whiteframe md-elevation="2">
       <md-toolbar class="main-toolbar">
         <md-button class="md-icon-button" v-if="userHasLogin" @click.native="toggleSidenav">
           <md-icon class="menu-icon">menu</md-icon>
@@ -11,7 +11,7 @@
           <img :src="logopath" class="logo-img"></img>
         </div>
       </md-toolbar>
-    </div>
+    </md-whiteframe>
     <md-sidenav v-if="userHasLogin" class="md-left" ref="sidenav">
       <md-toolbar class="md-large">
         <div class="md-toolbar-container">
