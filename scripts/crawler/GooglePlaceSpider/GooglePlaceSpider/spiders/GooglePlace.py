@@ -71,7 +71,7 @@ class GoogleplaceSpider(scrapy.Spider):
 				tmp_photo = location_google["photos"]
 			tmp_tags = location_google["types"]
 			tmp_tags = [x.replace("_", " ") for x in tmp_tags]
-			tmp_desc = ""
+			tmp_desc = tmp_name
 			if "vicinity" in location_google:
 				tmp_desc = location_google["vicinity"]
 			yield Position_Storage(tmp_id, tmp_name, tmp_coor, tmp_photo, tmp_tags, tmp_desc).to_dict()
