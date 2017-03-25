@@ -277,13 +277,13 @@ router.get('/', async (req: any, res) => {
 
 
 /**
- * @api {get} /stream/batchSize/:batchSize/batchNo/:batchNo Retrieve photo stream
+ * @api {get} /stream Retrieve photo stream
  * @apiName photos_stream_retrieve
  * @apiPermission User
  * @apiGroup Photos
  *
- * @apiParam {Number} batchSize                   no. of photos per batch
- * @apiParam {Number} batchNo                     batch number
+ * @apiParam {Number} count                   no. of photos per batch
+ * @apiParam {Number} skip                     batch number
  *
  * @apiUse photos
  *
@@ -293,10 +293,10 @@ router.get('/', async (req: any, res) => {
  *     "error": "databaseError"
  *   }
  */
-router.get('/stream/batchSize/:batchSize/batchNo/:batchNo', async (req: any, res) => {
+router.get('/stream', async (req: any, res) => {
   try {
-    const { batchSize, batchNo } = req.params;
-    const { photos } = await act({ role: 'photo', cmd: 'photoStreamRetrieve', batchSize, batchNo });
+    const { count, skip } = req.query;
+    const { photos } = await act({ role: 'photo', cmd: 'photoStreamRetrieve', count, skip });
     res.json({ photos });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
