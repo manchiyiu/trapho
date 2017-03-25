@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+x# -*- coding: utf-8 -*-
 
 # Define here the models for your scraped items
 #
@@ -11,4 +11,4 @@ import scrapy
 class GoogleplacespiderItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    pass
+	pass
