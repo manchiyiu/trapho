@@ -34,7 +34,7 @@ const vision = Vision({
 router.get('/id/:photoId', async (req, res) => {
   const { photoId } = req.params;
   try {
-    const photos = await act({ role: 'photo', cmd: 'photoRetrieve', photoId });
+    const {photos} = await act({ role: 'photo', cmd: 'photoRetrieve', photoId });
     res.json(photos);
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -295,7 +295,7 @@ router.get('/', async (req: any, res) => {
  */
 router.get('/stream/batchSize/:batchSize/batchNo/:batchNo', async (req: any, res) => {
   try {
-    const { batchSize, batchNo } = req.param;
+    const { batchSize, batchNo } = req.params;
     const { photos } = await act({ role: 'photo', cmd: 'photoStreamRetrieve', batchSize, batchNo });
     res.json({ photos });
   } catch (err) {

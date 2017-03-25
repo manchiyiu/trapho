@@ -43,7 +43,8 @@ export async function retrieveUser(userId : String) {
 
 export async function retrieveLocation(locationId : String) {
   try {
-    return await act({role: 'location', cmd: 'locationRetrieve', locationId});
+    const {locations} = await act({ role: 'location', cmd: 'locationRetrieve', locationId });
+    return locations;
   } catch (e) {
     throw new Error('locationNotExist');
   }
@@ -54,7 +55,7 @@ export async function retrieveLikes(photoId : String) {
     const { likes } = await act({ role: 'timeline', cmd: 'likeRetrieve', photoId });
     return likes.length;
   } catch (e) {
-    throw new Error('locationNotExist');
+    throw new Error('likesNotExist');
   }
 }
 
