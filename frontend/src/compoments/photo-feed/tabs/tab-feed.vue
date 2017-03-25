@@ -2,7 +2,7 @@
 
 <template>
   <md-layout md-align="center" md-gutter="64">
-    <photo-feed-content-card-list></photo-feed-content-card-list>
+    <photo-feed-content-card-list :photos="photos"></photo-feed-content-card-list>
   </md-layout>
 </template>
 
@@ -16,19 +16,19 @@
 </style>
 
 <script>
+import Vue from 'vue';
+import _ from 'lodash';
+
+import { get } from '../../../utils.js';
+
 export default {
   data: () => ({
-    prompt: {
-      title: 'Leave your comment',
-      ok: 'Submit',
-      cancel: 'Cancel',
-      id: 'comment',
-      name: 'comment',
-      placeholder: 'Type your comment here...',
-      maxlength: 50,
-      value: ''
-    }
+    photos: {}
   }),
+  beforeMount: async function () {
+    let { photos } = await get(this.$router, 'photos/stream');
+    this.photos = _.keyBy(photos, 'id');
+  },
   methods: {
     openDialog(ref) {
       this.$refs[ref].open();

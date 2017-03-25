@@ -9,7 +9,7 @@
         <md-avatar class="md-avatar-icon">
           <md-icon>photo</md-icon>
         </md-avatar>
-        <div class="md-title">{{userName}}</div>
+        <div class="md-title">{{username}}</div>
         <div class="md-subhead"><md-icon>location_on</md-icon>{{locationName}}</div>
       </md-card-header-text>
       <span class="likes">
@@ -37,14 +37,14 @@
     </md-card-content>
 
     <md-card-media>
-      <md-image :md-src="photoUrl"></md-image>
+      <md-image :md-src="actualPhotoUrl"></md-image>
     </md-card-media>
 
     <md-card-content>
       <p class="md-subheading">Comments</p>
       <md-divider style="margin-bottom: 10px;"></md-divider>
       <div v-for="comment in comments">
-        <div><b>{{comment.userName + ' '}}</b>{{comment.body}}</div>
+        <div><b>{{comment.userName + ' '}}</b>{{comment.content}}</div>
       </div>
     </md-card-content>
 
@@ -86,10 +86,13 @@
 </style>
 
 <script>
+import Vue from 'vue';
+import { getPhotoUrl } from '../../../utils.js';
+
 export default {
   props: [
     'photoId',
-    'userName',
+    'username',
     'locationName',
     'likesCount',
     'photoUrl',
@@ -108,6 +111,11 @@ export default {
     },
     onClose(type) {
       console.log('Closed', type);
+    }
+  },
+  computed: {
+    actualPhotoUrl: function () {
+      return getPhotoUrl(this.photoUrl);
     }
   }
 };
