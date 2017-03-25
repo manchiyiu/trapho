@@ -8,7 +8,8 @@ import photoCreate from './actions/photo-create';
 import photoDelete from './actions/photo-delete';
 import photoPatch from './actions/photo-patch';
 import photoRetrieve from './actions/photo-retrieve';
-import photoRetrieveAll from'./actions/photo-retrieveAll'
+import photoRetrieveAll from'./actions/photo-retrieveAll';
+import photoStreamRetrieve from'./actions/photo-stream-retrieve';
 
 mongoose.connect('mongodb://mongo:27017/photo');
 
@@ -30,4 +31,5 @@ seneca
       .add('cmd:photoPatch', photoPatch)
       .add('cmd:photoRetrieve', photoRetrieve)
       .add('cmd:photoRetrieveAll', photoRetrieveAll)
+      .add('cmd:photoStreamRetrieve', photoStreamRetrieve)
   });

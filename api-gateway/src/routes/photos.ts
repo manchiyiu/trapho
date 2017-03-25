@@ -34,7 +34,7 @@ const vision = Vision({
 router.get('/id/:photoId', async (req, res) => {
   const { photoId } = req.params;
   try {
-    const photos = await act({ role: 'photo', cmd: 'photoRetrieve', photoId });
+    const {photos} = await act({ role: 'photo', cmd: 'photoRetrieve', photoId });
     res.json(photos);
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -276,5 +276,31 @@ router.get('/', async (req: any, res) => {
 });
 
 
+/**
+ * @api {get} /stream Retrieve photo stream
+ * @apiName photos_stream_retrieve
+ * @apiPermission User
+ * @apiGroup Photos
+ *
+ * @apiParam {Number} count                   no. of photos per batch
+ * @apiParam {Number} skip                     batch number
+ *
+ * @apiUse photos
+ *
+ * @apiError (Error 500) {String} apiError            Error message ('databaseError')
+ * @apiErrorExample {json} Error-Response:
+ *   {
+ *     "error": "databaseError"
+ *   }
+ */
+router.get('/stream', async (req: any, res) => {
+  try {
+    const { count, skip } = req.query;
+    const { photos } = await act({ role: 'photo', cmd: 'photoStreamRetrieve', count, skip });
+    res.json({ photos });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
+});
 
 export default router;
