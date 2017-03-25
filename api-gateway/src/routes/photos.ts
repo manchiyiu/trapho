@@ -101,7 +101,6 @@ router.get('/users/:userId', async (req, res) => {
  *
  * @apiDescription This part does not contain photo upload logic, they will be handled seperately.
  *
- * @apiParam {String} userId                  user id of the uploader
  * @apiParam {String} locationId              location id where the photo is taken
  * @apiParam {String} url                     url path of the photo
  * @apiParam {String} description             description of the photo added by the user
@@ -116,7 +115,8 @@ router.get('/users/:userId', async (req, res) => {
  *
  */
 router.post('/', async (req, res) => {
-  const { userId, locationId, url, description } = req.body;
+  const { locationId, url, description } = req.body;
+  const userId = req.user.id;
   try {
     const { id } = await act({ role: 'photo', cmd: 'photoCreate', userId, locationId, url, description });
     res.json({ id });

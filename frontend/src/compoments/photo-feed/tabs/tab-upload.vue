@@ -175,7 +175,7 @@ export default {
     submit: async function() {
       const locationId = this.selectedLocation.id;
       const payloads = this.uploadedFiles.map(({ url, height, width, description }) => ({
-        url, description, locationId, userId: '01'
+        url, description, locationId
       }));
       try {
         await Promise.all(payloads.map(

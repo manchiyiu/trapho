@@ -16,6 +16,8 @@ passport.use(new LocalStrategy(
 ));
 
 export const generateTokenMiddleware = function (req, res, next) {
-  req.token = jwt.sign({ id: req.user._id }, SERVER_SECRET, { expiresIn: '2h' });
+  req.token = jwt.sign({
+    id: req.user.id
+  }, SERVER_SECRET, { expiresIn: '2h' });
   next();
 };
