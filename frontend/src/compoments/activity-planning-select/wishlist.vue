@@ -34,6 +34,18 @@
 import Vue from 'vue';
 
 export default {
-  props: ['locations', 'selected', 'toggleSelected']
+  props: ['locations'],
+  computed: {
+    selected: function () {
+      return this.$store.state.ActivityPlanning.selected;
+    }
+  },
+  methods: {
+    toggleSelected: function (locationId) {
+      const selected = _.clone(this.selected);
+      Vue.set(selected, locationId, !selected[locationId]);
+      this.$store.commit('activityPlanningSetSelected', { selected });
+    }
+  }
 };
 </script>

@@ -20,10 +20,7 @@
     <md-whiteframe class="activity-planning-view-card" md-elevation="10">
       <md-subheader><b><u>Step 1</u></b></md-subheader>
       <md-subheader>Select locations that you can to go to from your wishlist:</md-subheader>
-      <activity-planning-wishlist
-        :selected="selected"
-        :toggleSelected="toggleSelected"
-        :locations="locations">
+      <activity-planning-wishlist :locations="locations">
       </activity-planning-wishlist>
     </md-whiteframe>
     <md-button class="md-fab plan-next-fab">
@@ -62,7 +59,6 @@ export default {
       lat: 22.4213,
       lng: 114.2071
     },
-    selected: {},
     locations: [
       {
         "id": "58ccf9e3d914f3000f76f50c",
@@ -98,8 +94,11 @@ export default {
     ]
   }),
   computed: {
-    selectedLocations: function() {
+    selectedLocations: function () {
       return this.locations.filter(item => this.selected[item.id]);
+    },
+    selected: function () {
+      return this.$store.state.ActivityPlanning.selected;
     }
   },
   methods: {
