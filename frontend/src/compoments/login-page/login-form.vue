@@ -73,7 +73,7 @@ export default {
         this.$refs.snackbar.open();
         return;
       }
-      this.$store.commit('userLogin', { username: this.username, userId: user.id, token });
+      this.$store.commit('userLogin', { username: this.username, id: user.id, token });
       this.$router.push('feed');
     }
   }

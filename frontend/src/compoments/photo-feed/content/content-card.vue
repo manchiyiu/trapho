@@ -87,7 +87,7 @@
 
 <script>
 import Vue from 'vue';
-import { getPhotoUrl } from '../../../utils.js';
+import { getPhotoUrl, get } from '../../../utils.js';
 
 export default {
   props: [
@@ -112,6 +112,12 @@ export default {
     onClose(type) {
       console.log('Closed', type);
     }
+  },
+  data: () => ({
+    liked: false
+  }),
+  beforeMount: async function () {
+    await get(this.$router, `/likes/users/${this.userId}/photos/${this.photoId}`);
   },
   computed: {
     actualPhotoUrl: function () {
