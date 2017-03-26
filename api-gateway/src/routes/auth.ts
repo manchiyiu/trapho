@@ -7,6 +7,19 @@ import { generateTokenMiddleware } from '../passport';
 const router = express.Router();
 
 /**
+ * @api {post} /auth/me Get UserId by Token
+ * @apiName user_me
+ * @apiPermission None
+ * @apiGroup Authentication
+ *
+ * @apiSuccess {String} user.id User ID
+ */
+router.post('/me', async (req, res) => {
+  const userId = req.user.id;
+  res.json({ id: userId });
+});
+
+/**
  * @api {post} /auth/login Login User
  * @apiName user_login
  * @apiPermission None

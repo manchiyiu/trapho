@@ -103,7 +103,8 @@ router.get('/users/:userId/photos/:photoId', async (req, res) => {
  *   }
  */
 router.post('/', async (req, res) => {
-  const { userId, photoId } = req.body;
+  const { photoId } = req.body;
+  const userId = req.user.id;
   try {
     const { id } = await act({ role: 'timeline', cmd: 'likeCreate', userId, photoId });
     res.json({ id });
@@ -130,7 +131,8 @@ router.post('/', async (req, res) => {
  *   }
  */
 router.delete('/', async (req, res) => {
-  const { userId, photoId } = req.body;
+  const { photoId } = req.body;
+  const userId = req.user.id;
   try {
     const { id } = await act({ role: 'timeline', cmd: 'likeDelete', userId, photoId });
     res.json({ id });
