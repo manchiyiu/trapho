@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { isValidPhoto, isValidUser } from '../utils';
 export default async (msg, reply) => {
   const {userId, photoId} = msg;
-  // define choice 
+  // define choice
   // 0: error, no retrieve
   // 1: retrieve list of likes by userId
   // 2: retrieve list of likes by photoId
@@ -28,15 +28,35 @@ export default async (msg, reply) => {
 
   let res;
   switch(choice){
-    case 1: res = await Like.retrieveByUserId(userId); 
-            reply(null, { likes: res });
-            break;
-    case 2: res = await Like.retrieveByPhotoId(photoId);
-            reply(null, { likes: res });
-            break;
-    case 3: res = await Like.retrieveUniquelyByQuery({userId, photoId});
-            reply(null, { likes: res });
-            break;
+    case 1: {
+      try {
+        res = await Like.retrieveByUserId(userId);
+        reply(null, { likes: res });
+      } catch (e) {
+        reply(e, null);
+      }
+      break;
+    }
+
+    case 2: {
+      try {
+        res = await Like.retrieveByPhotoId(photoId);
+        reply(null, { likes: res });
+      } catch (e) {
+        reply(e, null);
+      }
+      break;
+    }
+
+    case 3: {
+      try {
+        res = await Like.retrieveUniquelyByQuery({ userId, photoId });
+        reply(null, { likes: res });
+      } catch (e) {
+        reply(e, null);
+      }
+    }
+
     default: reply(null, null);
   }
 };
