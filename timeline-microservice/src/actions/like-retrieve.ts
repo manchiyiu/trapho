@@ -55,6 +55,7 @@ export default async (msg, reply) => {
       } catch (e) {
         reply(e, null);
       }
+      break;
     }
 
     default: reply(null, null);
