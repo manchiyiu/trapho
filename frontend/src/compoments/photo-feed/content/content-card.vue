@@ -60,7 +60,9 @@
         @close="onClose"
         ref="comment_box">
       </md-dialog-prompt>
-      <md-button class="md-icon-button"><md-icon>favorite</md-icon></md-button>
+      <md-button class="md-icon-button" @click.native="onLike">
+        <md-icon :class="{'liked': this.liked}">favorite</md-icon>
+      </md-button>
       <md-button class="md-icon-button"><md-icon>share</md-icon></md-button>
     </md-card-actions>
 
@@ -83,11 +85,14 @@
   font-weight: bolder;
   margin-right: 5px;
 }
+.liked {
+  color: #f44336 !important;
+}
 </style>
 
 <script>
 import Vue from 'vue';
-import { getPhotoUrl, get } from '../../../utils.js';
+import { getPhotoUrl, get, post, del } from '../../../utils.js';
 
 export default {
   props: [
@@ -111,17 +116,47 @@ export default {
     },
     onClose(type) {
       console.log('Closed', type);
+    },
+    onLike: async function () {
+      if (this.liked) {
+        // unlike
+        try {
+          var result = await del(this.$router, `likes`, { photoId: this.photoId });
+        } catch (e) {
+          // ???
+        }
+        this.liked = false;
+      } else {
+        // like
+        try {
+          var result = await post(this.$router, `likes`, { photoId: this.photoId });
+        } catch (e) {
+          if (result.error !== 'likeExist') { throw e; }
+        }
+        this.liked = true;
+      }
     }
   },
   data: () => ({
     liked: false
   }),
   beforeMount: async function () {
-    await get(this.$router, `/likes/users/${this.userId}/photos/${this.photoId}`);
+    try {
+      var result = await get(this.$router, `likes/users/${this.userId}/photos/${this.photoId}`);
+      this.liked = true;
+    } catch (e) {
+      // if (result.error === 'likeNotExist') {
+      //   this.liked = true;
+      // }
+      this.liked = false;
+    }
   },
   computed: {
     actualPhotoUrl: function () {
       return getPhotoUrl(this.photoUrl);
+    },
+    userId: function () {
+      return this.$store.state.User.info.id;
     }
   }
 };
