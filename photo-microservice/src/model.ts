@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import * as _ from 'lodash';
 
 export default class Photo {
 
@@ -7,23 +8,30 @@ export default class Photo {
   locationId : String = null;
   url : String = null;
   description : String = null;
+  timestamp: String = null;
 
   static schema = new mongoose.Schema({
     userId: String,
     locationId: String,
     url: String,
-    description: String
+    description: String,
+    timestamp: { type: Date, default: Date.now }
   });
 
   static model = mongoose.model('Photo', Photo.schema);
 
   constructor(object : any) {
-    const {userId, locationId, url, description, _id: id} = object;
+    const {userId, locationId, url, description, _id: id, timestamp} = object;
     this.userId = userId;
     this.locationId = locationId;
     this.url = url;
     this.description = description;
     this.id = id;
+    if(_.isUndefined(timestamp)){
+      this.timestamp = null;
+    }else{
+      this.timestamp = timestamp;
+    }
   }
 
   async save() {
@@ -84,5 +92,29 @@ export default class Photo {
     } catch (e) {
       throw new Error('databsaeError');
     }
+  }
+
+  static async retrieveAll(){
+    let res;
+    try{
+      res = await this.model.find();
+      res = res.map(item => new Photo(item));
+      return res;
+    } catch(e) {
+      throw new Error('databaseError');
+    }
+  }
+    static async retrieveMany(conditions : Object, batchLimit : number, batchNo : number) {
+    let searchResult, result = [];
+    if (batchLimit != Infinity) {
+      searchResult = await Photo.model
+        .find(conditions)
+        .sort({ timestamp: -1 })
+        .limit(batchLimit)
+        .skip(batchNo*batchLimit);
+    } else {
+      searchResult = await Photo.model.find(conditions);
+    }
+    return searchResult.map(result => new Photo(result));
   }
 }

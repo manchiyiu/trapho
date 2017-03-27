@@ -25,7 +25,7 @@ const router = express.Router();
 router.get('/photos/:photoId', async (req, res) => {
   const { photoId } = req.params;
   try {
-    const { likes } = await act({ act: 'timeline', cmd: 'likeRetrieve', photoId });
+    const { likes } = await act({ role: 'timeline', cmd: 'likeRetrieve', photoId });
     res.json({ likes });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -51,7 +51,7 @@ router.get('/photos/:photoId', async (req, res) => {
 router.get('/users/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
-    const { likes } = await act({ act: 'timeline', cmd: 'likeRetrieve', userId });
+    const { likes } = await act({ role: 'timeline', cmd: 'likeRetrieve', userId });
     res.json({ likes });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -78,7 +78,7 @@ router.get('/users/:userId', async (req, res) => {
 router.get('/users/:userId/photos/:photoId', async (req, res) => {
   const { userId, photoId } = req.params;
   try {
-    const { likes } = await act({ act: 'timeline', cmd: 'likeRetrieve', userId, photoId });
+    const { likes } = await act({ role: 'timeline', cmd: 'likeRetrieve', userId, photoId });
     res.json(likes[0]); // there should be only one result
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -103,9 +103,10 @@ router.get('/users/:userId/photos/:photoId', async (req, res) => {
  *   }
  */
 router.post('/', async (req, res) => {
-  const { userId, photoId } = req.body;
+  const { photoId } = req.body;
+  const userId = req.user.id;
   try {
-    const { id } = await act({ act: 'timeline', cmd: 'likeCreate', userId, photoId });
+    const { id } = await act({ role: 'timeline', cmd: 'likeCreate', userId, photoId });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -130,9 +131,10 @@ router.post('/', async (req, res) => {
  *   }
  */
 router.delete('/', async (req, res) => {
-  const { userId, photoId } = req.body;
+  const { photoId } = req.body;
+  const userId = req.user.id;
   try {
-    const { id } = await act({ act: 'timeline', cmd: 'likeDelete', userId, photoId });
+    const { id } = await act({ role: 'timeline', cmd: 'likeDelete', userId, photoId });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });

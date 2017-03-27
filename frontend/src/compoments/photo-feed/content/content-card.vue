@@ -9,7 +9,7 @@
         <md-avatar class="md-avatar-icon">
           <md-icon>photo</md-icon>
         </md-avatar>
-        <div class="md-title">{{userName}}</div>
+        <div class="md-title">{{username}}</div>
         <div class="md-subhead"><md-icon>location_on</md-icon>{{locationName}}</div>
       </md-card-header-text>
       <span class="likes">
@@ -37,14 +37,14 @@
     </md-card-content>
 
     <md-card-media>
-      <md-image :md-src="photoUrl"></md-image>
+      <md-image :md-src="actualPhotoUrl"></md-image>
     </md-card-media>
 
     <md-card-content>
       <p class="md-subheading">Comments</p>
       <md-divider style="margin-bottom: 10px;"></md-divider>
       <div v-for="comment in comments">
-        <div><b>{{comment.userName + ' '}}</b>{{comment.body}}</div>
+        <div><b>{{comment.userName + ' '}}</b>{{comment.content}}</div>
       </div>
     </md-card-content>
 
@@ -60,7 +60,9 @@
         @close="onClose"
         ref="comment_box">
       </md-dialog-prompt>
-      <md-button class="md-icon-button"><md-icon>favorite</md-icon></md-button>
+      <md-button class="md-icon-button" @click.native="onLike">
+        <md-icon :class="{'liked': this.liked}">favorite</md-icon>
+      </md-button>
       <md-button class="md-icon-button"><md-icon>share</md-icon></md-button>
     </md-card-actions>
 
@@ -83,13 +85,19 @@
   font-weight: bolder;
   margin-right: 5px;
 }
+.liked {
+  color: #f44336 !important;
+}
 </style>
 
 <script>
+import Vue from 'vue';
+import { getPhotoUrl, get, post, del } from '../../../utils.js';
+
 export default {
   props: [
     'photoId',
-    'userName',
+    'username',
     'locationName',
     'likesCount',
     'photoUrl',
@@ -108,6 +116,47 @@ export default {
     },
     onClose(type) {
       console.log('Closed', type);
+    },
+    onLike: async function () {
+      if (this.liked) {
+        // unlike
+        try {
+          var result = await del(this.$router, `likes`, { photoId: this.photoId });
+        } catch (e) {
+          // ???
+        }
+        this.liked = false;
+      } else {
+        // like
+        try {
+          var result = await post(this.$router, `likes`, { photoId: this.photoId });
+        } catch (e) {
+          if (result.error !== 'likeExist') { throw e; }
+        }
+        this.liked = true;
+      }
+    }
+  },
+  data: () => ({
+    liked: false
+  }),
+  beforeMount: async function () {
+    try {
+      var result = await get(this.$router, `likes/users/${this.userId}/photos/${this.photoId}`);
+      this.liked = true;
+    } catch (e) {
+      // if (result.error === 'likeNotExist') {
+      //   this.liked = true;
+      // }
+      this.liked = false;
+    }
+  },
+  computed: {
+    actualPhotoUrl: function () {
+      return getPhotoUrl(this.photoUrl);
+    },
+    userId: function () {
+      return this.$store.state.User.info.id;
     }
   }
 };

@@ -5,10 +5,15 @@ import * as passport from 'passport';
 import * as path from 'path';
 import * as _ from 'lodash';
 import { v1 as uuid } from 'uuid';
+import * as Vision from '@google-cloud/vision';
 
 import { act } from '../utils';
 
 const router = express.Router();
+const vision = Vision({
+  projectId: process.env.GOOGLE_PROJECTID,
+  keyFilename: 'key.json'
+});
 
 /**
  * @api {get} /photos/id/:photoId Retrieve photo by photoId
@@ -29,7 +34,7 @@ const router = express.Router();
 router.get('/id/:photoId', async (req, res) => {
   const { photoId } = req.params;
   try {
-    const photos = await act({ role: 'photo', cmd: 'photoRetrieve', photoId });
+    const {photos} = await act({ role: 'photo', cmd: 'photoRetrieve', photoId });
     res.json(photos);
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -96,7 +101,6 @@ router.get('/users/:userId', async (req, res) => {
  *
  * @apiDescription This part does not contain photo upload logic, they will be handled seperately.
  *
- * @apiParam {String} userId                  user id of the uploader
  * @apiParam {String} locationId              location id where the photo is taken
  * @apiParam {String} url                     url path of the photo
  * @apiParam {String} description             description of the photo added by the user
@@ -111,7 +115,8 @@ router.get('/users/:userId', async (req, res) => {
  *
  */
 router.post('/', async (req, res) => {
-  const { userId, locationId, url, description } = req.body;
+  const { locationId, url, description } = req.body;
+  const userId = req.user.id;
   try {
     const { id } = await act({ role: 'photo', cmd: 'photoCreate', userId, locationId, url, description });
     res.json({ id });
@@ -180,7 +185,7 @@ router.delete('/id/:photoId', async (req, res) => {
 });
 
  /**
- * @api {delete} /photos/upload Upload a photo to disk storage
+ * @api {post} /photos/upload Upload a photo to disk storage
  * @apiName photos_upload
  * @apiPermission User
  * @apiGroup Photos
@@ -190,16 +195,20 @@ router.delete('/id/:photoId', async (req, res) => {
  * @apiParam {File} file                      the file object
  *
  * @apiSuccess {String} url                   url path of the uploaded file
+ * @apiSuccess {String} tags                  tags provided by the Google Vision API
+ * @apiSuccess {String} landmarks             landmarks detected by Google Vision API
  * @apiSuccessExample  {json} Success-Response:
  *   {
- *     "url": "sf1412ffsdfasdase1123.jpg"
+ *     "url": "sf1412ffsdfasdase1123.jpg",
+ *     "tags": ["text", "fun", "funny", "warren"],
+ *     "landmarks": ["Eiffel Tower"]
  *   }
  *
  * @apiError (Error 500) {String} apiError            Error message ('noFileUploaded', 'fileFormatInvalid', 'uploadFailed' etc.)
  * @apiErrorExample {json} Error-Response:
  *   {
  *     "error": "noFileUploaded"
- *
+ *   }
  */
 router.post('/upload', async (req: any, res) => {
 
@@ -215,14 +224,83 @@ router.post('/upload', async (req: any, res) => {
 
   const filename = `${uuid()}${path.extname(file.name)}`;
   const uploadPath = `/data/photos/${filename}`;
-  file.mv(uploadPath, err => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'uploadFailed' });
-    }
-    return res.status(200).json({ url: filename });
+
+  const move = uploadPath => new Promise((resolve, reject) => {
+    file.mv(uploadPath, err => {
+      if (err) { reject(err); }
+      resolve();
+    });
   });
 
+  try {
+    await move(uploadPath);
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ error: 'uploadFailed' });
+  }
+
+  let tags, landmarks;
+  try {
+    [tags] = await vision.detectLabels(uploadPath);
+    [landmarks] = await vision.detectLandmarks(uploadPath);
+  } catch (e) {
+    console.error(e);
+    return res.status(200).json({ url: filename });
+  }
+
+  return res.status(200).json({ url: filename, tags, landmarks });
+});
+
+
+/**
+ * @api {get} /photos Retrieve all photos
+ * @apiName photos_retrieve_all
+ * @apiPermission User
+ * @apiGroup Photos
+ *
+ * @apiUse photosArray
+ *
+ * @apiError (Error 500) {String} apiError            Error message ('userNotExist', 'databaseError', etc.)
+ * @apiErrorExample {json} Error-Response:
+ *   {
+ *     "error": "databaseError"
+ *   }
+ */
+router.get('/', async (req: any, res) => {
+  try {
+    const { photos } = await act({ role: 'photo', cmd: 'photoRetrieveAll'});
+    res.json({ photos });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
+});
+
+
+/**
+ * @api {get} /stream Retrieve photo stream
+ * @apiName photos_stream_retrieve
+ * @apiPermission User
+ * @apiGroup Photos
+ *
+ * @apiParam {Number} count                   no. of photos per batch
+ * @apiParam {Number} skip                     batch number
+ *
+ * @apiUse photos
+ *
+ * @apiError (Error 500) {String} apiError            Error message ('databaseError')
+ * @apiErrorExample {json} Error-Response:
+ *   {
+ *     "error": "databaseError"
+ *   }
+ */
+router.get('/stream', async (req: any, res) => {
+  try {
+    const { count, skip } = req.query;
+    const { photos } = await act({ role: 'photo', cmd: 'photoStreamRetrieve', count, skip });
+    res.json({ photos });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
 });
 
 export default router;

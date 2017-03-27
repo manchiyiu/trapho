@@ -3,17 +3,19 @@
 <template>
   <div>
     <common-header></common-header>
-    <router-view></router-view>
+    <router-view style="height: calc(100vh - 64px);"></router-view>
   </div>
 </template>
 
 <script>
 import Vue from 'vue';
+import { post } from './utils.js';
 
 export default {
-  mounted: function() {
+  mounted: async function() {
     if (localStorage.token) { /* if the user has logged in */
-      this.$store.commit('userLogin', { token: localStorage.token });
+      const { id } = await post(this.$router, 'auth/me');
+      this.$store.commit('userLogin', { id, token: localStorage.token });
     }
   }
 };

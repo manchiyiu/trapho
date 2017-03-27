@@ -10,7 +10,7 @@ export default async (msg, reply) => {
   if (!_.isUndefined(photoId)){
     try {
       let res = await Photo.retrieveById(photoId);
-      reply(null, res);
+      reply(null, {photos: res});
     } catch(e) {
       reply(new Error('photoNotExist'), null);
     }

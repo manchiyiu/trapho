@@ -34,6 +34,14 @@ export const post = async (router, path, payload) => await helper(router, path, 
   body: JSON.stringify(payload)
 });
 
+export const del = async (router, path, payload) => await helper(router, path, 'DELETE', {
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.token}`
+  },
+  body: JSON.stringify(payload)
+});
+
 export const login = async (router, { username, password }) => await helper(router, 'auth/login', 'POST', {
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded'
