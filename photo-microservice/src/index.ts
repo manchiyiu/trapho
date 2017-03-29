@@ -10,6 +10,7 @@ import photoPatch from './actions/photo-patch';
 import photoRetrieve from './actions/photo-retrieve';
 import photoRetrieveAll from'./actions/photo-retrieveAll';
 import photoStreamRetrieve from'./actions/photo-stream-retrieve';
+import photoCreateTest from './actions/photo-create-test';
 
 mongoose.connect('mongodb://mongo:27017/photo');
 
@@ -27,6 +28,7 @@ seneca
     seneca
       .add('cmd:test', test)
       .add('cmd:photoCreate', photoCreate)
+      .add('cmd:photoCreateTest', photoCreateTest)
       .add('cmd:photoDelete', photoDelete)
       .add('cmd:photoPatch', photoPatch)
       .add('cmd:photoRetrieve', photoRetrieve)
