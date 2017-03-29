@@ -62,6 +62,19 @@ export default class User {
     return new User(result);
   }
 
+static async retrieveMany(conditions : Object, resultLimit : number) {
+    let searchResult, result = [];
+    if (resultLimit != Infinity) {
+      searchResult = await User.model
+        .find(conditions)
+        .sort({ _id: -1 })
+        .limit(resultLimit);
+    } else {
+      searchResult = await User.model.find(conditions);
+    }
+    return searchResult.map(result => new User(result));
+  }
+
   static async remove(userId: String){
     await User.model.findByIdAndRemove(userId);
   }

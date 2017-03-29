@@ -41,12 +41,39 @@ export async function retrieveUser(userId : String) {
   }
 }
 
+export async function retrieveUsersByNames(usernames : String[]){
+  try{
+    let query:any = {};
+    query.username = {};
+    query.username.$in = usernames;
+    return await act({ role: 'auth', cmd: 'userRetrieve', query });
+  } catch(e){
+    console.log("communicationError");
+  }
+}
+
 export async function retrieveLocation(locationId : String) {
   try {
     const {locations} = await act({ role: 'location', cmd: 'locationRetrieve', locationId });
     return locations;
   } catch (e) {
     throw new Error('locationNotExist');
+  }
+}
+
+export async function retrieveLocationsByNames(locationNames: String[]){
+  try{
+    let index;
+    let result:any[] = [];
+    for(index = 0; index < locationNames.length; index++){
+      const {locations} = await act({ role: 'location', cmd: 'locationRetrieve', query: {name: locationNames[index]} });
+      locations.forEach(location => {
+        result.push(location);
+      });
+    }
+    return result;
+  } catch (e) {
+    return [];
   }
 }
 
