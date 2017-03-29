@@ -61,7 +61,7 @@ export async function retrieveLocation(locationId : String) {
   }
 }
 
-export async function retrieveLocationsByNames(locationNames: String[]){
+export async function retrieveLocations(locationNames: String[], tags: String[]){
   try{
     let index;
     let result:any[] = [];
@@ -71,6 +71,10 @@ export async function retrieveLocationsByNames(locationNames: String[]){
         result.push(location);
       });
     }
+    const {locations} = await act({ role: 'location', cmd: 'locationRetrieve', query: {tags} });
+    locations.forEach(location => {
+      result.push(location);
+    });
     return result;
   } catch (e) {
     return [];

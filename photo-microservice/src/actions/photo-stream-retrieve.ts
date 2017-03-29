@@ -1,11 +1,11 @@
 import Photo from '../model';
-import {retrieveUser, retrieveUsersByNames, retrieveLocation, retrieveLocationsByNames, retrieveLikes, retrieveComments} from '../utils';
+import {retrieveUser, retrieveUsersByNames, retrieveLocation, retrieveLocations, retrieveLikes, retrieveComments} from '../utils';
 import * as _ from 'lodash';
 
 export default async(msg, reply) => {
   let batchSize : number;
   let batchNo: number;
-  const { username, locationName, timestamp } = msg;
+  const { username, locationName, timestamp, tags } = msg;
   const delim = ',';
   let query:any = {};
 
@@ -33,7 +33,7 @@ export default async(msg, reply) => {
     let users : any = {};
     let locations : any = {};
     let index;
-
+    let locationNames = [], tags_search = [];
     if (_.isString(username) && username.trim().length > 0){
       // Split search string to keywords
       let usernames_raw = username.trim().split(delim);
@@ -56,18 +56,29 @@ export default async(msg, reply) => {
       }
     }
 
+    if(_.isString(tags) && tags.trim().length > 0){
+      let tags_raw = tags.trim().split(delim);
+      for(index = 0; index < tags_raw.length; index++){
+        if(tags_raw[index].trim().length > 0){
+          tags_search.push(tags_raw[index]);
+        }
+      }
+    }
+
     if(_.isString(locationName) && locationName.trim().length > 0){
       // Split search string to keywords
       let locationNames_raw = locationName.trim().split(delim);
-      let locationNames = [];
       // Trim each keyword
       for(index = 0; index < locationNames_raw.length; index++){
         if(locationNames_raw[index].trim().length > 0){
           locationNames.push(locationNames_raw[index].trim());
         }
       }
+    }
+
+    if(locationNames.length > 0 || tags_search.length > 0){
       // Retrieve locations
-      let locations_search = await retrieveLocationsByNames(locationNames);
+      let locations_search = await retrieveLocations(locationNames, tags_search);
       query.locationId = {};
       query.locationId.$in = [];
       // Put locationIds into one array in query object
@@ -76,6 +87,7 @@ export default async(msg, reply) => {
         locations[locations_search[index].id] = locations_search[index];
       }
     }
+    
     if(_.isString(timestamp)){
       let stTime = new Date(timestamp);
       let endTime = new Date(timestamp);
