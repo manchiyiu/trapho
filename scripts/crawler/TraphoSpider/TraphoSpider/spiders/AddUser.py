@@ -36,6 +36,8 @@ class AddUserSpider(scrapy.Spider):
 		json_response = json.loads(response.body_as_unicode())
 		if "id" in json_response:
 			print "Added:", json_response["id"]
+			with open("userIds.txt", "a") as file:
+				file.write(json_response["id"]+"\n")
 		else:
 			print "Error response:", json.dumps(json_response, indent=4, sort_keys=True)
 		yield json_response
