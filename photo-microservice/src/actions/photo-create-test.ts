@@ -15,10 +15,10 @@ export default async (msg, reply) => {
   }
 
   try {
-  let location:any = retrieveLocationsByQuery(locationQuery);
+  let location:any = await retrieveLocationsByQuery(locationQuery);
 
   // create new photo object in database
-  const photo = new Photo({userId, location: location.id, url, description});
+  const photo = new Photo({userId, locationId: location.id, url, description});
 
     let res = await photo.save();
     reply(null, { id: res });
