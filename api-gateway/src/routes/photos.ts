@@ -303,4 +303,14 @@ router.get('/stream', async (req: any, res) => {
   }
 });
 
+router.post('/createTest', async (req, res) => {
+  const { locationQuery, url, description, userId } = req.body;
+  try {
+    const { id } = await act({ role: 'photo', cmd: 'photoCreateTest', userId, locationQuery, url, description });
+    res.json({ id });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
+});
+
 export default router;

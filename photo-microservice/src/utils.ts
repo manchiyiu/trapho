@@ -50,6 +50,17 @@ export async function retrieveLocation(locationId : String) {
   }
 }
 
+export async function retrieveLocationsByQuery(query : any) {
+  let location;
+  try {
+    const {locations} = await act({ role: 'location', cmd: 'locationRetrieve', query });
+    location = locations[0];
+  } catch (e) {
+    return location;
+  }
+  return location;
+}
+
 export async function retrieveLikes(photoId : String) {
   try {
     const { likes } = await act({ role: 'timeline', cmd: 'likeRetrieve', photoId });
