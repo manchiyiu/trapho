@@ -3,7 +3,7 @@
 <template>
   <div>
     <photo-feed-toolbar></photo-feed-toolbar>
-    <md-button class="md-fab plan-fab" @click.native="goToPlan">
+    <md-button class="md-fab plan-fab" @click.native="gotoPlan">
       <md-icon>edit</md-icon>
     </md-button>
   </div>
@@ -22,7 +22,7 @@ import Vue from 'vue';
 
 export default {
   methods: {
-    goToPlan: function() {
+    gotoPlan: function() {
       this.$router.push('plan-select');
     }
   }
