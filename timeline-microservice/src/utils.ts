@@ -20,3 +20,19 @@ export async function isValidPhoto(photoId: String){
     throw e;
   }
 }
+
+export async function isValidTime(timestamp: String){
+  if(!_.isString(timestamp)){
+    throw new Error("timestampError");
+  }
+  let castedTimestamp = new Date(timestamp);
+  if(castedTimestamp.getTime() <= 0){
+    throw new Error("timestampError");
+  }
+}
+
+export async function isValidContent(content: String){
+  if (!_.isString(content)) {
+    throw new Error('contentError');
+  }
+}

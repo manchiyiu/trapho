@@ -1,4 +1,4 @@
-import Like from '../model';
+import Like from '../model-like';
 import { isValidUser, isValidPhoto } from '../utils';
 
 export default async (msg, reply) => {

@@ -32,12 +32,14 @@ export default class User {
     this.id = id;
   }
 
-  save() {
+  async save() {
     const model = new User.model({
       username: this.username,
       password: this.password
     });
-    return model.save();
+    return await model
+      .save()
+      .then(product => mongoose.Types.ObjectId(product._id));
   }
 
   async patch(){
