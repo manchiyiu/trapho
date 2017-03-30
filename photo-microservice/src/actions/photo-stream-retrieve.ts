@@ -101,32 +101,31 @@ export default async(msg, reply) => {
       query.timestamp.$lte = endTime;
     }
     let photos : [any] = await Photo.retrieveMany(query, batchSize, batchNo);
+    let result = await Promise.all(photos.map(
+      async photo => {
+        let casted_photo: any = {};
+        casted_photo.id = photo.id;
+        casted_photo.timestamp = photo.timestamp;
+        casted_photo.url = photo.url;
+        casted_photo.description = photo.description;
 
-    for (index = 0; index < photos.length; index++) {
-      let photo = photos[index];
-      let casted_photo: any = {};
-      
-      casted_photo.id = photo.id;
-      casted_photo.timestamp = photo.timestamp;
-      casted_photo.url = photo.url;
-      casted_photo.description = photo.description;
+        if(_.isUndefined(users[photo.userId])){
+          users[photo.userId] = retrieveUser(photo.userId);
+        }
+        
+        if (_.isUndefined(locations[photo.locationId])) {
+          locations[photo.locationId] = retrieveLocation(photo.locationId);
+        }
 
-      if (_.isUndefined(users[photo.userId])) {
-        users[photo.userId] = await retrieveUser(photo.userId);
+        casted_photo.likesCount = await retrieveLikes(photo.id);
+        casted_photo.comments = await retrieveComments(photo.id);
+        casted_photo.username = (await users[photo.userId]).username;
+        casted_photo.locationName = (await locations[photo.locationId]).name;
+        return casted_photo;
       }
-      casted_photo.username = users[photo.userId].username;
-
-      if (_.isUndefined(locations[photo.locationId])) {
-        locations[photo.locationId] = await retrieveLocation(photo.locationId);
-      }
-
-      casted_photo.locationName = locations[photo.locationId].name;
-      casted_photo.likesCount = await retrieveLikes(photo.id);
-      casted_photo.comments = await retrieveComments(photo.id);
-
-      photos[index] = casted_photo;
-    };
-    reply(null, {photos});
+    ));
+   
+    reply(null, {photos: result});
   } catch (e) {
     reply(e, null);
   }
