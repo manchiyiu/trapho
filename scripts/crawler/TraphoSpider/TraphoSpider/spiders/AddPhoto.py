@@ -72,12 +72,10 @@ class AddPhotoSpider(scrapy.Spider):
 
 			request_body = {
 				"locationQuery": {
-					"query":{
-						"range":{
-							"lat": lat,
-							"lng": lng,
-							"radius": 1
-						}
+					"range":{
+						"lat": float(lat),
+						"lng": float(lng),
+						"radius": 1
 					}
 					
 				},
