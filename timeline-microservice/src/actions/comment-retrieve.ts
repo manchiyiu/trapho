@@ -1,17 +1,40 @@
+import Comment from '../model-comment';
+import * as _ from 'lodash';
+import { isValidUser, isValidPhoto } from '../utils';
 export default async (msg, reply) => {
-  let mockComments = [
-                    {
-                        "id": "58b5062cc9d49c000f114abc",
-                        "userId": "58b5062cc9d49c000f114b3a",
-                        "timestamp": "2017-03-02T16:39:27+00:00",
-                        "content": "wow. first!"
-                    },
-                    {
-                        "id": "58b5062cc9d49c000f114def",
-                        "userId": "58b5062cc9d49c000f114b3a",
-                        "timestamp": "2017-03-02T16:40:27+00:00",
-                        "content": "wow. second!"
-                    }
-                  ];
-  reply(null, { comments: mockComments });
+  const { userId, photoId, commentId } = msg;
+
+  if (!_.isUndefined(commentId)){
+    try{
+      let res = await Comment.retrieveById(commentId);
+      reply(null, res);
+    } catch(e){
+      reply(e, null);
+    }
+    return ;
+  }
+
+  if (!_.isUndefined(userId)){
+    try{
+      await isValidUser(userId);
+      let res = await Comment.retrieveByUserId(userId);
+      reply(null, { comments: res });
+    } catch(e){
+      reply(e, null);
+    }
+    return;
+  }
+
+  if (!_.isUndefined(photoId)){
+    try{
+      await isValidUser(photoId);
+      let res = await Comment.retrieveByPhotoId(photoId);
+      reply(null, { comments: res });
+    } catch(e){
+      reply(e, null);
+    }
+    return;
+  }
+
+  reply(new Error('badRequest'), null);
 };
