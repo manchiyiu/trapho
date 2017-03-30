@@ -98,7 +98,7 @@ export async function retrieveLikes(photoId : String) {
     const { likes } = await act({ role: 'timeline', cmd: 'likeRetrieve', photoId });
     return likes.length;
   } catch (e) {
-    throw new Error('likesNotExist');
+    return [];
   }
 }
 
@@ -107,6 +107,6 @@ export async function retrieveComments(photoId : String) {
     const { comments } = await act({ role: 'timeline', cmd: 'commentRetrieve', photoId });
     return comments;
   } catch (e) {
-    throw new Error('commentsNotExist');
+    return [];
   }
 }
