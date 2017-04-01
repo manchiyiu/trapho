@@ -2,8 +2,9 @@
 
 <template>
 
-  <lazy-component>
-    <md-card>
+  <lazy-component style="width: 100%">
+
+    <md-card md-with-hover>
 
       <md-card-header>
         <md-card-header-text>
@@ -78,14 +79,12 @@
 
 <style>
 .md-card .md-card-media img {
-  max-width: 90vw;
-  width: 800px;
+  width: 100%;
 }
 .md-card {
-  max-width: 90vw;
-  width: 800px;
-  margin: 15px;
+  width: 100%;
   overflow: hidden;
+  margin-bottom: 20px;
 }
 .likes {
   display: flex;

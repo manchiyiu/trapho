@@ -23,12 +23,13 @@
 
 <style scoped>
 .content-card-list {
-  width: 100vw;
+  width: 100%;
   display: flex;
   justify-content: center;
 }
 .content-card-main {
   margin-bottom: 300px;
+  width: 100%;
 }
 </style>
 

@@ -22,7 +22,7 @@ import ActivityPlanningSelect from './compoments/activity-planning-select/view.v
 
 Vue.use(VueLazyload, {
   lazyComponent: true,
-  preLoad: 5
+  preLoad: 2
 });
 Vue.use(VueRouter);
 Vue.use(InfiniteScroll);
