@@ -17,11 +17,6 @@
             <md-icon>location_on</md-icon>{{locationName}}
           </div>
         </md-card-header-text>
-        <span class="likes">
-          {{likesCount}}&nbsp;
-          <span v-if="likesCount <= 1">like</span>
-          <span v-if="likesCount > 1">likes</span>
-        </span>
         <md-menu md-size="4" md-direction="bottom left">
           <md-button class="md-icon-button" md-menu-trigger><md-icon>more_vert</md-icon></md-button>
           <md-menu-content>
@@ -45,17 +40,24 @@
         <progressive-img :src="actualPhotoUrl"></progressive-img>
       </md-card-media>
 
-      <md-card-content v-if="comments.length > 0">
-        <p class="md-subheading">Comments</p>
+      <md-card-content>
+        <p class="md-subheading">
+          Comments
+          <a @click="openDialog('comment_box')" href="javascript: void(0);">(+)</a>
+        </p>
         <md-divider style="margin-bottom: 10px;"></md-divider>
-        <div v-for="comment in comments">
-          <div><b>{{comment.userName + ' '}}</b>{{comment.content}}</div>
+        <div style="padding-left: 15px">
+          <div><i>Be the first to leave a comment!</i></div>
+          <div v-for="comment in comments">
+            <div><b>{{comment.userName + ' '}}</b>{{comment.content}}</div>
+          </div>
         </div>
       </md-card-content>
 
-      <md-card-actions>
-        <md-button class="md-icon-button" @click.native="openDialog('comment_box')">
-          <md-icon>mode_comment</md-icon>
+      <div>
+        <md-button class="content-card-button" @click.native="onLike">
+          <md-icon :class="{'liked': this.liked}">favorite</md-icon>
+          <b :class="{'liked': this.liked}">{{likesCount + extraCount}}</b>
         </md-button>
         <md-dialog-prompt
           :value="commentValue"
@@ -66,10 +68,7 @@
           @close="onClose"
           ref="comment_box">
         </md-dialog-prompt>
-        <md-button class="md-icon-button" @click.native="onLike">
-          <md-icon :class="{'liked': this.liked}">favorite</md-icon>
-        </md-button>
-      </md-card-actions>
+      </div>
 
     </md-card>
 
@@ -97,6 +96,9 @@
 .liked {
   color: #f44336 !important;
 }
+.content-card-button {
+  margin: 2px;
+}
 </style>
 
 <script>
@@ -120,21 +122,18 @@ export default {
     closeDialog(ref) {
       this.$refs[ref].close();
     },
-    onOpen() {
-      console.log('Opened');
-    },
-    onClose(type) {
-      console.log('Closed', type);
-    },
     onLike: async function () {
       if (this.liked) {
         // unlike
         try {
-          var result = await del(this.$router, `likes`, { photoId: this.photoId });
-        } catch (e) {
-          // ???
-        }
+          await del(this.$router, `likes`, { photoId: this.photoId });
+        } catch (e) {}
         this.liked = false;
+        if (this.extraCount == 1) {
+          this.extraCount = 0;
+        } else {
+          this.extraCount = -1;
+        }
       } else {
         // like
         try {
@@ -143,26 +142,29 @@ export default {
           if (result.error !== 'likeExist') { throw e; }
         }
         this.liked = true;
+        if (this.extraCount == -1) {
+          this.extraCount = 0;
+        } else {
+          this.extraCount = 1;
+        }
       }
     }
   },
   data: () => ({
     liked: false,
+    extraCount: 0,
     commentValue: ''
   }),
   beforeMount: async function () {
-    // try {
-    //   var result = await get(
-    //     this.$router,
-    //     `likes/users/${this.userId}/photos/${this.photoId}`
-    //   );
-    //   this.liked = true;
-    // } catch (e) {
-    //   // if (result.error === 'likeNotExist') {
-    //   //   this.liked = true;
-    //   // }
-    //   this.liked = false;
-    // }
+    try {
+      var { liked } = await get(
+        this.$router,
+        `likes/users/${this.userId}/photos/${this.photoId}`
+      );
+      this.liked = liked;
+    } catch (e) {
+      this.liked = false;
+    }
   },
   computed: {
     actualPhotoUrl: function () {
