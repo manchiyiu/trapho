@@ -79,8 +79,11 @@ router.get('/users/:userId/photos/:photoId', async (req, res) => {
   const { userId, photoId } = req.params;
   try {
     const { likes } = await act({ role: 'timeline', cmd: 'likeRetrieve', userId, photoId });
-    res.json(likes[0]); // there should be only one result
+    return res.json({ liked: true }); // there should be only one result
   } catch (err) {
+    if (err.details.message === 'likeNotExist') {
+      return res.json({ liked: false });
+    }
     res.status(500).json({ error: err.details.message });
   }
 });
