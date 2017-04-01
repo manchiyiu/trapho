@@ -13,7 +13,7 @@
         <photo-feed-tab-upload></photo-feed-tab-upload>
       </md-tab>
       <md-tab id="vr" md-label="VR">
-        <photo-feed-tab-vr></photo-feed-tab-vr>
+        <!--<photo-feed-tab-vr></photo-feed-tab-vr>-->
       </md-tab>
     </md-tabs>
   </div>
