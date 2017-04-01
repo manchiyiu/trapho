@@ -88,6 +88,17 @@ export default {
     currentIndex: 0,
     vrExpanded: false
   }),
+  watch: {
+    active: function () {
+      if (this.active) {
+        // reload
+        this.loadPosts(0);
+      } else {
+        // clear all photos
+        this.photos = {};
+      }
+    }
+  },
   computed: {
     photos: {
       get: function () {
