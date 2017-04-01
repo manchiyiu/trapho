@@ -18,11 +18,20 @@ import { get } from '../../../utils.js';
 export default {
   props: ['active'],
   data: () => ({
-    photos: {},
     currrentIndex: 0
   }),
   beforeMount: async function () {
     this.loadPosts(0);
+  },
+  computed: {
+    photos: {
+      get: function () {
+        return this.$store.state.Photos;
+      },
+      set: function (photos) {
+        return this.$store.state.commit('photosUpdate', { photos });
+      }
+    }
   },
   methods: {
     async loadPosts(skip, count = 5) {

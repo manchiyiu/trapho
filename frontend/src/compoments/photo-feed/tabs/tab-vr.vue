@@ -2,14 +2,18 @@
 
 <template>
   <div class="tab-vr-main">
-    <md-card v-if="active">
-      <a-scene embedded class="tab-vr-scene">
-        <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
-        <a-box position="-1 0.5 -3" rotation="0 45 0" width="1" height="1" depth="1" color="#4CC3D9"></a-box>
-        <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-        <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
-        <a-sky color="#ECECEC"></a-sky>
+    <md-card>
+      <a-scene id="aframe-scene" embedded class="tab-vr-scene">
+        <a-sky :src="currentPhoto"></a-sky>
       </a-scene>
+      <md-card-actions>
+        <md-button @click.native="onLastPhoto" :disabled="currentIndex <= 0">
+          <md-icon>keyboard_arrow_left</md-icon>
+        </md-button>
+        <md-button @click.native="onNextPhoto" :disabled="currentIndex == totalCount">
+          <md-icon>keyboard_arrow_right</md-icon>
+        </md-button>
+      </md-card-actions>
     </md-card>
   </div>
 </template>
@@ -17,6 +21,8 @@
 <style>
 .tab-vr-main {
   display: flex;
+  margin-left: -50px;
+  margin-right: -50px;
   justify-content: center;
 }
 .tab-vr-scene {
@@ -29,7 +35,31 @@ a-scene { display: block; width: 50%; }
 <script>
 import Vue from 'vue';
 
+import { getPhotoUrl } from '../../../utils.js';
+
 export default {
-  props: ['active']
+  props: ['active'],
+  computed: {
+    photos: function () {
+      return this.$store.state.Photos;
+    },
+    totalCount: function () {
+      return Object.keys(this.photos).length - 1;
+    },
+    currentPhoto: function () {
+      return getPhotoUrl(_.get(this.photos, `${this.currentIndex}.url`, ''));
+    }
+  },
+  methods: {
+    onLastPhoto: function () {
+      this.currentIndex--;
+    },
+    onNextPhoto: function () {
+      this.currentIndex++;
+    }
+  },
+  data: () => ({
+    currentIndex: 0
+  })
 };
 </script>
