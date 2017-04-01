@@ -1,0 +1,56 @@
+<name>search-bar</name>
+
+<template>
+  <div>
+    <md-card>
+      <md-card-header class="search-bar">
+        <md-card-expand>
+        <md-card-actions>
+          <div class="md-title">Filter</div>
+          <span style="flex: 1"></span>
+          <md-button class="md-icon-button" md-expand-trigger>
+            <md-icon>keyboard_arrow_down</md-icon>
+          </md-button>
+        </md-card-actions>
+
+        <md-card-content>
+          <form novalidate @submit.stop.prevent="submit">
+
+            <md-input-container>
+              <md-icon>person</md-icon>
+              <label>Username</label>
+              <md-input v-model="username"></md-input>
+            </md-input-container>
+
+            <md-input-container>
+              <md-icon>location_on</md-icon>
+              <label>Location</label>
+              <md-input v-model="location"></md-input>
+            </md-input-container>
+
+            <md-input-container>
+              <md-icon>date_range</md-icon>
+              <label>Date</label>
+              <md-input v-model="date"></md-input>
+            </md-input-container>
+
+            <md-card-actions>
+              <md-button class="md-raised md-primary" :disabled="isFilled" @click.native="submit">Submit</md-button>
+            </md-card-actions>
+          </form>
+        </md-card-content>
+      </md-card-expand>
+      </md-card-header>
+    </md-card>
+  </div>
+</template>
+
+<style>
+.search-bar {
+  margin-bottom: 0px;
+}
+</style>
+
+<script>
+  import Vue from 'vue';
+</script>

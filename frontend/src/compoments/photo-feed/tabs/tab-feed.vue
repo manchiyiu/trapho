@@ -5,6 +5,7 @@
     v-infinite-scroll="loadMore"
     md-align="center"
     md-gutter="64">
+    <search-bar></search-bar>
     <photo-feed-content-card-list :photos="photos"></photo-feed-content-card-list>
   </md-layout>
 </template>
