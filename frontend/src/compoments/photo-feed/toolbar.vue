@@ -2,18 +2,18 @@
 
 <template>
   <div>
-    <md-tabs md-centered class="main-tab md-transparent">
+    <md-tabs md-centered class="main-tab md-transparent" @change="onChange">
       <md-tab id="photos" md-label="Photo">
-        <photo-feed-tab-feed></photo-feed-tab-feed>
+        <photo-feed-tab-feed :active="this.currentTab === 0"></photo-feed-tab-feed>
       </md-tab>
-      <!--<md-tab id="locations" md-label="Locations">
-        <photo-feed-tab-locations></photo-feed-tab-locations>
-      </md-tab>-->
+      <md-tab id="locations" md-label="Locations">
+        <photo-feed-tab-locations :active="this.currentTab === 1"></photo-feed-tab-locations>
+      </md-tab>
       <md-tab id="upload" md-label="Upload">
-        <photo-feed-tab-upload></photo-feed-tab-upload>
+        <photo-feed-tab-upload :active="this.currentTab === 2"></photo-feed-tab-upload>
       </md-tab>
       <md-tab id="vr" md-label="VR">
-        <!--<photo-feed-tab-vr></photo-feed-tab-vr>-->
+        <photo-feed-tab-vr :active="this.currentTab === 3"></photo-feed-tab-vr>
       </md-tab>
     </md-tabs>
   </div>
@@ -35,7 +35,13 @@
       logout: function () {
         delete localStorage.token; // remove the token
         this.$router.push('/');
+      },
+      onChange: function (index) {
+        this.currentTab = index;
       }
-    }
+    },
+    data: () => ({
+      currentTab: 0
+    })
   };
 </script>

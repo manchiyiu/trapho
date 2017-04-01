@@ -3,7 +3,7 @@
 <template>
   <div class="tab-locations-container">
     <div class="tab-locations-main">
-      <common-map :onChange="onMapChange"></common-map>
+      <common-map :onChange="onMapChange" :active="active"></common-map>
     </div>
   </div>
 </template>
@@ -23,6 +23,7 @@
 import Vue from 'vue';
 
 export default {
+  props: ['active'],
   data: () => ({
     selectedLocation: null
   }),

@@ -17,6 +17,7 @@
             <md-icon>location_on</md-icon>{{locationName}}
           </div>
         </md-card-header-text>
+        <!--
         <md-menu md-size="4" md-direction="bottom left">
           <md-button class="md-icon-button" md-menu-trigger><md-icon>more_vert</md-icon></md-button>
           <md-menu-content>
@@ -29,7 +30,7 @@
               <md-icon>delete</md-icon>
             </md-menu-item>
           </md-menu-content>
-        </md-menu>
+        </md-menu>-->
       </md-card-header>
 
       <md-card-content>
@@ -60,12 +61,11 @@
           <b :class="{'liked': this.liked}">{{likesCount + extraCount}}</b>
         </md-button>
         <md-dialog-prompt
-          :value="commentValue"
+          v-model="commentValue"
           md-title="Leave your comment"
           md-ok-text="Submit"
           md-cancel-text="Cancel"
-          @open="onOpen"
-          @close="onClose"
+          @close="onCommentClose"
           ref="comment_box">
         </md-dialog-prompt>
       </div>
@@ -116,18 +116,35 @@ export default {
     'comments'
   ],
   methods: {
-    openDialog(ref) {
+    openDialog: function (ref) {
       this.$refs[ref].open();
     },
-    closeDialog(ref) {
+    closeDialog: function (ref) {
       this.$refs[ref].close();
+    },
+    onCommentClose: async function (state) {
+      if (state === 'ok') {
+        // submit comments
+        try {
+          await post(this.$router, `comments`, {
+            photoId: this.photoId,
+            timestamp: new Date().getTime(),
+            content: this.commentValue
+          });
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      this.commentValue = '';
     },
     onLike: async function () {
       if (this.liked) {
         // unlike
         try {
           await del(this.$router, `likes`, { photoId: this.photoId });
-        } catch (e) {}
+        } catch (e) {
+          console.error(e);
+        }
         this.liked = false;
         if (this.extraCount == 1) {
           this.extraCount = 0;
