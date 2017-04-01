@@ -32,12 +32,14 @@ export default class User {
     this.id = id;
   }
 
-  save() {
+  async save() {
     const model = new User.model({
       username: this.username,
       password: this.password
     });
-    return model.save();
+    return await model
+      .save()
+      .then(product => mongoose.Types.ObjectId(product._id));
   }
 
   async patch(){
@@ -60,6 +62,19 @@ export default class User {
       throw new Error(e);
     }
     return new User(result);
+  }
+
+static async retrieveMany(conditions : Object, resultLimit : number) {
+    let searchResult, result = [];
+    if (resultLimit != Infinity) {
+      searchResult = await User.model
+        .find(conditions)
+        .sort({ _id: -1 })
+        .limit(resultLimit);
+    } else {
+      searchResult = await User.model.find(conditions);
+    }
+    return searchResult.map(result => new User(result));
   }
 
   static async remove(userId: String){

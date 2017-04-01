@@ -1,4 +1,4 @@
-import Like from '../model';
+import Like from '../model-like';
 
 
 export default async (msg, reply) => {

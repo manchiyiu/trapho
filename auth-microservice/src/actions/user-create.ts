@@ -18,8 +18,8 @@ export default async (msg, reply) => {
   /* create new user */
   const user = new User({ username, password: hashedPassword });
   try {
-    await user.save();
-    reply(null, null);
+    let res = await user.save();
+    reply(null, { id: res });
   } catch (e) {
     reply(new Error('databaseError'), null);
   }

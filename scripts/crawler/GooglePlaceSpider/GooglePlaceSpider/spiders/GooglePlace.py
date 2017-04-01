@@ -14,6 +14,9 @@ _supp_category = ["point_of_interest", "natural_feature"]
 
 _google_api_key = "AIzaSyD_nUa5TDEVMWvZK60VsZ8g5YqHHig7twY"
 
+# CUHK url
+_cuhk_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?rankby=prominence&language=en&key=AIzaSyD_nUa5TDEVMWvZK60VsZ8g5YqHHig7twY&location=22.419343,114.206199&radius=720";
+
 class GoogleplaceSpider(scrapy.Spider):
 	name = "GooglePlace"
 	allowed_domains = ["maps.googleapis.com"]
@@ -23,7 +26,7 @@ class GoogleplaceSpider(scrapy.Spider):
 	# e.g. "victoria harbour, the peak" generates 2 extra request:
 	#		1. victoria harbour
 	#		2. the peak
-	def __init__(self, lat=22.334317, lng = 114.166214, radius = 24000, location = "Hong Kong", keywords = "", *args, **kwargs):
+	def __init__(self, lat=22.334317, lng = 114.166214, radius = 24000, location = "Hong Kong", CUHK = False, keywords = "", *args, **kwargs):
 		super(GoogleplaceSpider, self).__init__(*args, **kwargs)
 		self.center_lat = lat
 		self.center_lng = lng
@@ -31,6 +34,7 @@ class GoogleplaceSpider(scrapy.Spider):
 		self.location = location
 		self.keywords = keywords.split(",")
 		self.keywords = [x.strip() for x in self.keywords if len(x.strip()) > 0]
+		self.CUHK = CUHK
 
 	def start_requests(self):
 		# Search by category
@@ -46,6 +50,10 @@ class GoogleplaceSpider(scrapy.Spider):
 		suppkey_url_combined_prefix = _supp_url_prefix+"&key="+_google_api_key+"&location="+str(self.center_lat)+","+str(self.center_lng)+"&radius="+str(self.center_radius)+"&query="
 		supp_urls = [suppkey_url_combined_prefix+x.replace(" ", "+") for x in self.keywords]
 		urls.extend(supp_urls)
+
+		# CUHK locations
+		if self.CUHK:
+			urls.append(_cuhk_url)
 
 		# Spawn requests
 		print "Spawning requests..."

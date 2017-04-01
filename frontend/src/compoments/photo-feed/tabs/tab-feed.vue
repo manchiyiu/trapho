@@ -1,19 +1,13 @@
 <name>photo-feed-tab-feed</name>
 
 <template>
-  <md-layout md-align="center" md-gutter="64">
+  <md-layout
+    v-infinite-scroll="loadMore"
+    md-align="center"
+    md-gutter="64">
     <photo-feed-content-card-list :photos="photos"></photo-feed-content-card-list>
   </md-layout>
 </template>
-
-<style>
-.md-card .md-card-media img {
-  width: 500px;
-}
-.md-card {
-  margin-bottom: 15px;
-}
-</style>
 
 <script>
 import Vue from 'vue';
@@ -23,11 +17,11 @@ import { get } from '../../../utils.js';
 
 export default {
   data: () => ({
-    photos: {}
+    photos: {},
+    currrentIndex: 0
   }),
   beforeMount: async function () {
-    let { photos } = await get(this.$router, 'photos/stream');
-    this.photos = _.keyBy(photos, 'id');
+    this.loadPosts(0);
   },
   methods: {
     openDialog(ref) {
@@ -41,6 +35,17 @@ export default {
     },
     onClose(type) {
       console.log('Closed', type);
+    },
+    async loadPosts(skip, count = 5) {
+      let { photos } = await get(this.$router, 'photos/stream', { count, skip });
+      photos.forEach((photo, index) => {
+        const result = _.merge(photo, { index: skip + index });
+        Vue.set(this.photos, skip + index, result);
+      });
+      this.currrentIndex = skip + count;
+    },
+    async loadMore() {
+      await this.loadPosts(this.currrentIndex);
     }
   }
 };

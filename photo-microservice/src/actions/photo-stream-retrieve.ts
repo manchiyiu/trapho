@@ -1,19 +1,22 @@
 import Photo from '../model';
-import {retrieveUser, retrieveLocation, retrieveLikes, retrieveComments} from '../utils';
+import {retrieveUser, retrieveUsersByNames, retrieveLocation, retrieveLocations, retrieveLikes, retrieveComments} from '../utils';
 import * as _ from 'lodash';
 
 export default async(msg, reply) => {
   let batchSize : number;
   let batchNo: number;
+  const { username, locationName, timestamp, tags } = msg;
+  const delim = ',';
+  let query:any = {};
 
   try {
-    batchSize = Number(msg.batchSize);
+    batchSize = Number(msg.count);
   } catch (e) {
     batchSize = -1;
   }
 
   try {
-    batchNo = Number(msg.batchNo);
+    batchNo = Number(msg.skip);
   } catch (e) {
     batchNo = -1;
   }
@@ -29,34 +32,100 @@ export default async(msg, reply) => {
 
     let users : any = {};
     let locations : any = {};
-    let photos : [any] = await Photo.retrieveMany({}, batchSize, batchNo);
-
     let index;
-    for (index = 0; index < photos.length; index++) {
-      let photo = photos[index];
-      let casted_photo: any = {};
-      console.log(casted_photo);
-      casted_photo.id = photo.id;
-      casted_photo.timestamp = photo.timestamp;
-      casted_photo.url = photo.url;
-      casted_photo.description = photo.description;
-
-      if (_.isUndefined(users[photo.userId])) {
-        users[photo.userId] = await retrieveUser(photo.userId);
+    let locationNames = [], tags_search = [];
+    if (_.isString(username) && username.trim().length > 0){
+      // Split search string to keywords
+      let usernames_raw = username.trim().split(delim);
+      let usernames = [];
+      // Trim each keyword
+      for(index = 0; index < usernames_raw.length; index++){
+        if(usernames_raw[index].trim().length > 0){
+          usernames.push(usernames_raw[index].trim());
+        }
       }
-      casted_photo.username = users[photo.userId].username;
+      // Retrieve users
+      let users_search =  await retrieveUsersByNames(usernames);
+      query.userId = {};
+      query.userId.$in = [];
 
-      if (_.isUndefined(locations[photo.locationId])) {
-        locations[photo.locationId] = await retrieveLocation(photo.locationId);
+      // Put userIds into one array in query object
+      for(index = 0; index < users_search.length; index++){
+        query.userId.$in.push(users_search[index].id);
+        users[users_search[index].id] = users_search[index];
       }
+    }
 
-      casted_photo.locationName = locations[photo.locationId].name;
-      casted_photo.likesCount = await retrieveLikes(photo.id);
-      casted_photo.comments = await retrieveComments(photo.id);
+    if(_.isString(tags) && tags.trim().length > 0){
+      let tags_raw = tags.trim().split(delim);
+      for(index = 0; index < tags_raw.length; index++){
+        if(tags_raw[index].trim().length > 0){
+          tags_search.push(tags_raw[index]);
+        }
+      }
+    }
 
-      photos[index] = casted_photo;
-    };
-    reply(null, {photos});
+    if(_.isString(locationName) && locationName.trim().length > 0){
+      // Split search string to keywords
+      let locationNames_raw = locationName.trim().split(delim);
+      // Trim each keyword
+      for(index = 0; index < locationNames_raw.length; index++){
+        if(locationNames_raw[index].trim().length > 0){
+          locationNames.push(locationNames_raw[index].trim());
+        }
+      }
+    }
+
+    if(locationNames.length > 0 || tags_search.length > 0){
+      // Retrieve locations
+      let locations_search = await retrieveLocations(locationNames, tags_search);
+      query.locationId = {};
+      query.locationId.$in = [];
+      // Put locationIds into one array in query object
+      for(index = 0; index < locations_search.length; index++){
+        query.locationId.$in.push(locations_search[index].id);
+        locations[locations_search[index].id] = locations_search[index];
+      }
+    }
+    
+    if(_.isString(timestamp)){
+      let stTime = new Date(timestamp);
+      let endTime = new Date(timestamp);
+      if(stTime.getTime() <= 0 || !_.isFinite(stTime.getTime())){
+        throw new Error("timestampError");
+      }
+      stTime.setHours(0,0,0,0);
+      endTime.setHours(23,59,59,999);
+      query.timestamp = {};
+      query.timestamp.$gte = stTime;
+      query.timestamp.$lte = endTime;
+    }
+    let photos : [any] = await Photo.retrieveMany(query, batchSize, batchNo);
+    let result = await Promise.all(photos.map(
+      async photo => {
+        let casted_photo: any = {};
+        casted_photo.id = photo.id;
+        casted_photo.timestamp = photo.timestamp;
+        casted_photo.url = photo.url;
+        casted_photo.description = photo.description;
+
+        if(_.isUndefined(users[photo.userId])){
+          users[photo.userId] = retrieveUser(photo.userId);
+        }
+        
+        if (_.isUndefined(locations[photo.locationId])) {
+          locations[photo.locationId] = retrieveLocation(photo.locationId);
+        }
+
+        casted_photo.likesCount = await retrieveLikes(photo.id);
+        casted_photo.comments = await retrieveComments(photo.id);
+        casted_photo.username = (await users[photo.userId]).username;
+        casted_photo.locationName = (await locations[photo.locationId]).name;
+        return casted_photo;
+      }
+    ));
+   
+    reply(null, {photos: result});
   } catch (e) {
     reply(e, null);
   }

@@ -19,12 +19,17 @@ const helper = async (router, path, method, options, func) => {
   return result;
 };
 
-export const get = async (router, path) => await helper(router, path, 'GET', {
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${localStorage.token}`
+export const get = async (router, path, payload = {}) => await helper(
+  router,
+  `${path}?${queryString.stringify(payload)}`,
+  'GET',
+  {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.token}`
+    }
   }
-});
+);
 
 export const post = async (router, path, payload) => await helper(router, path, 'POST', {
   headers: {

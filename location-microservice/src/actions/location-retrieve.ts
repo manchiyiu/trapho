@@ -50,7 +50,7 @@ export default async (msg, reply) => {
       reply(null, { locations: result });
       return;
     }
-
+    
     let result = await Location.retrieveMany(searchQuery, Infinity);
     reply(null, { locations: result });
 
