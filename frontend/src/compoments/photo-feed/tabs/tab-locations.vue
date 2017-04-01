@@ -1,23 +1,38 @@
 <name>photo-feed-tab-locations</name>
 
 <template>
-  <div class="tab-locations-container">
-    <div class="tab-locations-main">
-      <common-map :onChange="onMapChange" :active="active"></common-map>
-    </div>
-  </div>
+  <md-layout md-gutter>
+    <md-layout
+      md-flex-xsmall="100"
+      md-flex-small="100"
+      md-flex-medium="40"
+      md-flex-large="40"
+      md-flex-xlarge="40"
+      md-align="center">
+      <md-card md-with-hover>
+        <md-card-header>
+          <div style="font-weight: bolder;">Select location</div>
+        </md-card-header>
+        <common-map :onChange="onMapChange" :active="active"></common-map>
+      </md-card>
+    </md-layout>
+    <md-layout
+      md-flex-xsmall="100"
+      md-flex-small="100"
+      md-flex-medium="60"
+      md-flex-large="60"
+      md-flex-xlarge="60"
+      md-align="center"
+      v-infinite-scroll="loadMore">
+      <photo-feed-content-card-list
+        style="padding-left: 10px; padding-right: 10px;"
+        v-if="selectedLocation"
+        :photos="photos">
+      </photo-feed-content-card-list>
+    </md-layout>
+  </md-layout>
 </template>
 
-<style>
-.tab-locations-container {
-  display: flex;
-  justify-content: center;
-}
-.tab-locations-main {
-  width: 100vw;
-  margin: -15px;
-}
-</style>
 
 <script>
 import Vue from 'vue';
@@ -25,7 +40,8 @@ import Vue from 'vue';
 export default {
   props: ['active'],
   data: () => ({
-    selectedLocation: null
+    selectedLocation: null,
+    photos: {}
   }),
   methods: {
     onMapChange: function(location) {
