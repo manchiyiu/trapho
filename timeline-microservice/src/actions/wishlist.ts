@@ -7,13 +7,12 @@ export default async (msg, reply) => {
   try{
     await isValidUser(userId);
     let likes = await Like.retrieveByUserId(userId);
-    likes = await likes.map(async item => {
+    likes = await Promise.all(likes.map(async item => {
       const { id , userId, photoId } = item;
       let { locationId } =  await act({ role: 'photo', cmd: 'photoRetrieve', photoId });
       let wish = { 'likeId':id, photoId, locationId };
       return wish;
-    });
-    console.log(likes);
+    }));
     reply(null, { 'wishlist': likes } );
   } catch(err){
     reply(err, null);
