@@ -13,6 +13,8 @@ import likeCreate from './actions/like-create';
 import likeDelete from './actions/like-delete';
 import likeRetrieve from './actions/like-retrieve';
 
+import wishlistCreate from './actions/wishlist';
+
 mongoose.connect('mongodb://mongo:27017/timeline');
 
 mongoose.connection.on('error', () => {
@@ -35,4 +37,5 @@ seneca
       .add('cmd:likeCreate', likeCreate)
       .add('cmd:likeDelete', likeDelete)
       .add('cmd:likeRetrieve', likeRetrieve)
+      .add('cmd:wishlistCreate', wishlistCreate)
   });
