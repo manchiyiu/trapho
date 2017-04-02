@@ -10,6 +10,7 @@ import TabUpload from './tabs/tab-upload.vue';
 /* content */
 import ContentCard from './content/content-card.vue';
 import ContentCardList from './content/content-card-list.vue';
+import ContentEmpty from './content/content-empty.vue';
 
 Vue.component('photo-feed-toolbar', Toolbar);
 
@@ -19,3 +20,4 @@ Vue.component('photo-feed-tab-upload', TabUpload);
 
 Vue.component('photo-feed-content-card', ContentCard);
 Vue.component('photo-feed-content-card-list', ContentCardList);
+Vue.component('photo-feed-content-empty', ContentEmpty);
