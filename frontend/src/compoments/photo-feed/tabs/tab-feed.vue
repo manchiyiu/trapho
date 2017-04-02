@@ -10,7 +10,49 @@
       md-flex-xlarge="40"
       md-align="center">
       <div style="width: 100%; padding-left: 10px; padding-right: 10px;">
-        <search-bar></search-bar>
+        <!--Search Bar-->
+        <md-card md-with-hover style="margin-bottom: 20px">
+          <md-card-header style="margin-bottom: 0px">
+            <md-card-expand>
+            <md-card-actions>
+              <div class="md-title">Filter</div>
+              <span style="flex: 1"></span>
+              <md-button class="md-icon-button" md-expand-trigger>
+                <md-icon>keyboard_arrow_down</md-icon>
+              </md-button>
+            </md-card-actions>
+
+            <md-card-content>
+              <form novalidate @submit.stop.prevent="submit">
+
+                <md-input-container>
+                  <md-icon>person</md-icon>
+                  <label>Username</label>
+                  <md-input v-model="username"></md-input>
+                </md-input-container>
+
+                <md-input-container>
+                  <md-icon>location_on</md-icon>
+                  <label>Location</label>
+                  <md-input v-model="location"></md-input>
+                </md-input-container>
+
+                <md-input-container>
+                  <md-icon>date_range</md-icon>
+                  <label>Date</label>
+                  <md-input v-model="date" disabled></md-input>
+                </md-input-container>
+
+                <md-card-actions>
+                  <md-button class="md-primary" :disabled="isFilled" @click.native="clear">Clear</md-button>
+                  <md-button class="md-raised md-primary" :disabled="isFilled" @click.native="submit">Submit</md-button>
+                </md-card-actions>
+              </form>
+            </md-card-content>
+          </md-card-expand>
+          </md-card-header>
+        </md-card>
+        <!--VR-->
         <md-card md-with-hover>
           <md-card-header>
             <div style="font-weight: bolder;">VR Discovery</div>
@@ -88,7 +130,10 @@ export default {
   data: () => ({
     currentIndex: 0,
     vrExpanded: false,
-    photos: {}
+    photos: {},
+    username: '',
+    location: '',
+    date: ''
   }),
   watch: {
     active: function () {
@@ -107,11 +152,12 @@ export default {
     },
     currentPhoto: function () {
       return getPhotoUrl(_.get(this.photos, `${this.currentIndex}.url`, ''));
-    }
+    },
+    isFilled: function () { return this.username.length <= 0 && this.location.length <= 0 && this.date.length <= 0; }
   },
   methods: {
-    loadPosts: async function (skip, count = 5) {
-      let { photos } = await get(this.$router, 'photos/stream', { count, skip });
+    loadPosts: async function (skip, username, locationName, count = 5) {
+      let { photos } = await get(this.$router, 'photos/stream', { count, skip, username, locationName });
       photos.forEach((photo, index) => {
         const result = _.merge(photo, { index: skip + index });
         Vue.set(this.photos, skip + index, result);
@@ -119,7 +165,7 @@ export default {
       this.currrentIndex = skip + count;
     },
     loadMore: async function () {
-      await this.loadPosts(this.currrentIndex);
+      await this.loadPosts(this.currrentIndex, this.username, this.location);
     },
     onLastPhoto: function () {
       this.currentIndex--;
@@ -129,6 +175,19 @@ export default {
       if (this.currentIndex == this.totalCount - 1) {
         this.loadMore();
       }
+    },
+    submit: async function () {
+      this.photos = {};
+      this.currrentIndex = 0;
+      await this.loadPosts(this.currrentIndex, this.username, this.location);
+    },
+    clear: async function () {
+      this.username = '';
+      this.location = '';
+      this.date = '';
+      this.photos = {};
+      this.currrentIndex = 0;
+      await this.loadPosts(this.currrentIndex);
     }
   }
 };
