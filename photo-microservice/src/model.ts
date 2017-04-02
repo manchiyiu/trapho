@@ -117,4 +117,38 @@ export default class Photo {
     }
     return searchResult.map(result => new Photo(result));
   }
+  static async retrieveLocationStat(locationIds: string[]){
+    let result:any = await Photo.model
+      .aggregate([
+        {"$match": {"locationId": {"$in": locationIds}}},
+        {"$group": {
+          "_id": '$locationId',
+          "photoCount": {"$sum": 1}
+        }}
+      ]).exec((err, res) => {
+        if(err){
+          throw new Error("databaseError");
+        }
+        return res;
+      });
+    return result;
+  }
+
+  static async retrieveLocationIds(photoIds: string[]){
+    let castedIds:any[] = [];
+    photoIds.forEach(photoId => castedIds.push(new mongoose.Types.ObjectId(photoId)));
+    let result:any = await Photo.model
+      .aggregate([
+        {"$match": {"_id": {"$in": castedIds}}},
+        {"$group": {
+          "_id": '$locationId',
+        }}
+      ]).exec((err, res) => {
+        if(err){
+          throw new Error("databaseError");
+        }
+        return res;
+      });
+    return result;
+  }
 }

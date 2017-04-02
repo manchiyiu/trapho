@@ -89,7 +89,11 @@ export default class Rating{
     if(_.isNil(result)){
       throw new Error("ratingNotExist");
     }
-    return result[0].avgRating;
+    if(_.isUndefined(result[0])){
+      return null;
+    }else{
+      return result[0].avgRating;
+    }
     
   }
 

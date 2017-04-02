@@ -20,6 +20,7 @@ const router = express.Router();
  * @apiParam {String}    [query.range.radius]      Search radius of the circle (in meter)
  * @apiParam {String[]}  [query.tags]              Tags to search
  * @apiParam {String}    [query.name]              Name of the location
+ * @apiParam {Boolean}   [query.photoCount]        Whether photo count needs to be shown
  *
  * @apiUse locationsArray
  */
@@ -166,6 +167,96 @@ router.delete('/id/:locationId', async (req, res) => {
   try {
     const { id } = await act({ role: 'location', cmd: 'locationDelete', locationId });
     res.json({ id });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
+});
+
+/**
+ * @api {get} /locations/wishlist/      Retrieve wishlist locations of current user
+ * @apiName location_wishlist
+ * @apiPermission User
+ * @apiGroup Locations
+ *
+ * @apiUse locations
+ *
+ * @apiError (Error 500) {String} apiError            Error message ('databaseError', etc.)
+ * @apiErrorExample {json} Error-Response:
+ *   {
+ *     "error": "databaseError"
+ *   }
+ * @apiSuccessExample {json} Success-Response:
+ * {
+ *  "locations": [
+ *   {
+ *      "id": "58db3bbe79ff98000f4198ee",
+ *      "name": "Butao",
+ *      "description": "18 Tang Lung Street",
+ *      "tags": [
+ *        "restaurant",
+ *        "food",
+ *        "point of interest",
+ *        "establishment"
+ *      ],
+ *      "coordinates": {
+ *        "lng": 114.181671,
+ *        "lat": 22.27907
+ *      }
+ *    }
+ *  ]
+ *}
+ */
+router.get('/wishlist', async (req, res) => {
+  const userId = req.user.id;
+  try {
+    const {locations} = await act({ role: 'location', cmd: 'locationWishlist', userId });
+    res.json({ locations });
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
+});
+
+/**
+ * @api {get} /locations/wishlist/users/:userId    Retrieve wishlist locations by userId
+ * @apiName location_wishlist
+ * @apiPermission User
+ * @apiGroup Locations
+ *
+ * @apiParam {String} userId      userId
+ *
+ * @apiUse locations
+ *
+ * @apiError (Error 500) {String} apiError            Error message ('userNotExist', 'databaseError', etc.)
+ * @apiErrorExample {json} Error-Response:
+ *   {
+ *     "error": "userNotExist"
+ *   }
+ * @apiSuccessExample {json} Success-Response:
+ * {
+ *  "locations": [
+ *   {
+ *      "id": "58db3bbe79ff98000f4198ee",
+ *      "name": "Butao",
+ *      "description": "18 Tang Lung Street",
+ *      "tags": [
+ *        "restaurant",
+ *        "food",
+ *        "point of interest",
+ *        "establishment"
+ *      ],
+ *      "coordinates": {
+ *        "lng": 114.181671,
+ *        "lat": 22.27907
+ *      }
+ *    }
+ *  ]
+ *}
+ */
+router.get('/wishlist/users/:userId', async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const {locations} = await act({ role: 'location', cmd: 'locationWishlist', userId });
+    res.json({locations});
   } catch (err) {
     res.status(500).json({ error: err.details.message });
   }

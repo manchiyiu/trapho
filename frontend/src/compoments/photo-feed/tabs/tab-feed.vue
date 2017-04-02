@@ -10,7 +10,39 @@
       md-flex-xlarge="40"
       md-align="center">
       <div style="width: 100%; padding-left: 10px; padding-right: 10px;">
-        <md-card md-with-hover>
+        <!--Search Bar-->
+        <md-card md-with-hover style="margin-bottom: 20px">
+          <md-card-header style="margin-bottom: 0px">
+            <div style="font-weight: bolder;">Filter</div>
+          </md-card-header>
+
+          <md-card-content>
+            <form novalidate @submit.stop.prevent="submitFilter">
+              <md-input-container md-inline>
+                <md-icon>person</md-icon>
+                <label>Username</label>
+                <md-input v-model="filter.username"></md-input>
+              </md-input-container>
+              <md-input-container md-inline>
+                <md-icon>location_on</md-icon>
+                <label>Location Name</label>
+                <md-input v-model="filter.locationName"></md-input>
+              </md-input-container>
+              <!--<md-input-container>
+                <md-icon>date_range</md-icon>
+                <label>Date</label>
+                <md-input v-model="date" disabled></md-input>
+              </md-input-container>-->
+              <md-card-actions>
+                <md-button class="md-primary" @click.native="clearFilter">Clear</md-button>
+                <md-button type="submit" class="md-raised md-primary" :disabled="!isFilterFilled" @click.native="submitFilter">Submit</md-button>
+              </md-card-actions>
+            </form>
+          </md-card-content>
+
+        </md-card>
+        <!--VR-->
+        <md-card md-with-hover style="margin-bottom: 20px;">
           <md-card-header>
             <div style="font-weight: bolder;">VR Discovery</div>
             <div style="margin-top: 20px;">
@@ -51,6 +83,7 @@
       <photo-feed-content-card-list
         style="padding-left: 10px; padding-right: 10px;"
         v-if="active"
+        :hasEnded="hasEnded"
         :photos="photos">
       </photo-feed-content-card-list>
     </md-layout>
@@ -87,16 +120,22 @@ export default {
   data: () => ({
     currentIndex: 0,
     vrExpanded: false,
-    photos: {}
+    photos: {},
+    filter: {
+      username: '',
+      locationName: ''
+    },
+    hasEnded: false // whether or not the feed loading has reached the end
   }),
   watch: {
     active: function () {
       if (this.active) {
         // reload
-        this.loadPosts(0);
+        this.resetFeed();
+        this.loadMore();
       } else {
         // clear all photos
-        this.photos = {};
+        this.resetFeed();
       }
     }
   },
@@ -106,19 +145,25 @@ export default {
     },
     currentPhoto: function () {
       return getPhotoUrl(_.get(this.photos, `${this.currentIndex}.url`, ''));
+    },
+    isFilterFilled: function () {
+      return this.filter.username.length > 0 || this.filter.locationName.length > 0;
     }
   },
   methods: {
-    loadPosts: async function (skip, count = 5) {
-      let { photos } = await get(this.$router, 'photos/stream', { count, skip });
+    loadPosts: async function (skip, username, locationName, count = 5) {
+      let { photos } = await get(this.$router, 'photos/stream', { count, skip, username, locationName });
       photos.forEach((photo, index) => {
         const result = _.merge(photo, { index: skip + index });
         Vue.set(this.photos, skip + index, result);
       });
       this.currrentIndex = skip + count;
+      if (photos.length == 0) {
+        this.hasEnded = true;
+      }
     },
     loadMore: async function () {
-      await this.loadPosts(this.currrentIndex);
+      await this.loadPosts(this.currrentIndex, this.filter.username, this.filter.locationName);
     },
     onLastPhoto: function () {
       this.currentIndex--;
@@ -128,6 +173,21 @@ export default {
       if (this.currentIndex == this.totalCount - 1) {
         this.loadMore();
       }
+    },
+    submitFilter: async function () {
+      this.resetFeed();
+      await this.loadPosts(this.currrentIndex, this.filter.username, this.filter.locationName);
+    },
+    clearFilter: async function () {
+      this.filter.username = '';
+      this.filter.locationName = '';
+      this.resetFeed();
+      await this.loadPosts(this.currrentIndex);
+    },
+    resetFeed: function () {
+      this.photos = {};
+      this.hasEnded = false;
+      this.currrentIndex = 0;
     }
   }
 };

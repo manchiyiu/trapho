@@ -104,5 +104,35 @@ export async function getPhotoCount(locationId: String){
   }catch(e){
     return 0;
   }
+}
 
+export async function getPhotoCounts(locationIds: String[]){
+  try{
+    const { stats } = await act({ role: 'photo', cmd: 'photoLocationStat', locationIds });
+    return stats;
+  }catch(e){
+    throw new Error("communicationError");
+  }
+}
+
+export async function getLikedPhotoIds(userId: String){
+  try{
+    const { likes } = await act({ role: 'timeline', cmd: 'likeRetrieve', userId });
+    let result:string[] = [];
+    likes.forEach(like => result.push(like.photoId));
+    return result;
+  }catch(e){
+    throw new Error("communicationError");
+  }
+}
+
+export async function getPhotosLocations(photoIds: String[]){
+  try{
+    const { locationIds } = await act({ role: 'photo', cmd: 'photoRetrieveLocationIds', photoIds });
+    let result:string[] = [];
+    locationIds.forEach(locationId => result.push(locationId._id));
+    return result;
+  }catch(e){
+    throw new Error("communicationError");
+  }
 }
