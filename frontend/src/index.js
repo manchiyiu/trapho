@@ -4,8 +4,6 @@ import VueLazyload from 'vue-lazyload';
 import InfiniteScroll from 'vue-infinite-scroll';
 import VueProgressiveImage from 'vue-progressive-image';
 
-import 'aframe';
-
 import './theme';
 import './compoments/login-page/module';
 import './compoments/photo-feed/module';
@@ -22,7 +20,7 @@ import ActivityPlanningSelect from './compoments/activity-planning-select/view.v
 
 Vue.use(VueLazyload, {
   lazyComponent: true,
-  preLoad: 2
+  preLoad: 5
 });
 Vue.use(VueRouter);
 Vue.use(InfiniteScroll);

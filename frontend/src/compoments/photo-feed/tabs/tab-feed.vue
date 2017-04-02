@@ -86,7 +86,8 @@ export default {
   },
   data: () => ({
     currentIndex: 0,
-    vrExpanded: false
+    vrExpanded: false,
+    photos: {}
   }),
   watch: {
     active: function () {
@@ -100,14 +101,6 @@ export default {
     }
   },
   computed: {
-    photos: {
-      get: function () {
-        return this.$store.state.Photos;
-      },
-      set: function (photos) {
-        return this.$store.commit('photosUpdate', { photos });
-      }
-    },
     totalCount: function () {
       return Object.keys(this.photos).length - 1;
     },

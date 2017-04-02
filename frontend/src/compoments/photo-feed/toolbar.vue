@@ -19,6 +19,7 @@
 <style>
 .md-tabs-navigation {
   background-color: white !important;
+  opacity: 0.8;
   border-bottom: 1px solid #eee !important;
   box-shadow: 0 3px 6px rgba(0,0,0,0.04), 0 3px 6px rgba(0,0,0,0.08);
 }

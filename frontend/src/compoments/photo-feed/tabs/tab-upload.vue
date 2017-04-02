@@ -79,7 +79,7 @@
   margin-top: 20px;
   margin-bottom: 10px;
   font-weight: bolder;
-  color: #888;
+  color: white;
 }
 .item-move {
   transition: all .5s cubic-bezier(.55,0,.1,1);
