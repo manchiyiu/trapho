@@ -96,3 +96,13 @@ export async function checkPhoto(photoId: String, optional){
   }
   return true;
 }
+
+export async function getPhotoCount(locationId: String){
+  try{
+    const { photos } = await act({ role: 'photo', cmd: 'photoRetrieve', locationId });
+    return photos.length;
+  }catch(e){
+    return 0;
+  }
+
+}
