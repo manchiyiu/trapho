@@ -15,7 +15,7 @@
             <label>Password</label>
             <md-input required v-model="password" type="password"></md-input>
           </md-input-container>
-          <md-button class="md-primary md-raised" :disabled="isFilled" @click.native="submit">Login</md-button>
+          <md-button type="submit" class="md-primary md-raised" :disabled="isFilled" @click.native="submit">Login</md-button>
         </form>
       </md-card-content>
     </md-card>

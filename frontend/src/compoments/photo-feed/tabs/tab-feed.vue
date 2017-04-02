@@ -14,21 +14,18 @@
         <md-card md-with-hover style="margin-bottom: 20px">
           <md-card-header style="margin-bottom: 0px">
             <div style="font-weight: bolder;">Filter</div>
-            <div style="margin-top: 20px;">
-              <i>Filter by location name or user name.</i>
-            </div>
           </md-card-header>
 
           <md-card-content>
             <form novalidate @submit.stop.prevent="submit">
-              <md-input-container>
+              <md-input-container md-inline>
                 <md-icon>person</md-icon>
                 <label>Username</label>
                 <md-input v-model="filter.username"></md-input>
               </md-input-container>
-              <md-input-container>
+              <md-input-container md-inline>
                 <md-icon>location_on</md-icon>
-                <label>Location</label>
+                <label>Location Name</label>
                 <md-input v-model="filter.locationName"></md-input>
               </md-input-container>
               <!--<md-input-container>
@@ -38,14 +35,14 @@
               </md-input-container>-->
               <md-card-actions>
                 <md-button class="md-primary" :disabled="!isFilterFilled" @click.native="clearFilter">Clear</md-button>
-                <md-button class="md-raised md-primary" :disabled="!isFilterFilled" @click.native="submitFilter">Submit</md-button>
+                <md-button type="submit" class="md-raised md-primary" :disabled="!isFilterFilled" @click.native="submitFilter">Submit</md-button>
               </md-card-actions>
             </form>
           </md-card-content>
 
         </md-card>
         <!--VR-->
-        <md-card md-with-hover>
+        <md-card md-with-hover style="margin-bottom: 20px;">
           <md-card-header>
             <div style="font-weight: bolder;">VR Discovery</div>
             <div style="margin-top: 20px;">
@@ -86,6 +83,7 @@
       <photo-feed-content-card-list
         style="padding-left: 10px; padding-right: 10px;"
         v-if="active"
+        :hasEnded="hasEnded"
         :photos="photos">
       </photo-feed-content-card-list>
     </md-layout>
@@ -126,16 +124,17 @@ export default {
     filter: {
       username: '',
       locationName: ''
-    }
+    },
+    hasEnded: false // whether or not the feed loading has reached the end
   }),
   watch: {
     active: function () {
       if (this.active) {
         // reload
-        this.loadPosts(0);
+        this.resetFeed();
       } else {
         // clear all photos
-        this.photos = {};
+        this.resetFeed();
       }
     }
   },
@@ -158,6 +157,9 @@ export default {
         Vue.set(this.photos, skip + index, result);
       });
       this.currrentIndex = skip + count;
+      if (photos.length == 0) {
+        this.hasEnded = true;
+      }
     },
     loadMore: async function () {
       await this.loadPosts(this.currrentIndex, this.filter.username, this.filter.locationName);
@@ -172,16 +174,19 @@ export default {
       }
     },
     submitFilter: async function () {
-      this.photos = {};
-      this.currrentIndex = 0;
+      this.resetFeed();
       await this.loadPosts(this.currrentIndex, this.filter.username, this.filter.locationName);
     },
     clearFilter: async function () {
       this.filter.username = '';
       this.filter.locationName = '';
-      this.photos = {};
-      this.currrentIndex = 0;
+      this.resetFeed();
       await this.loadPosts(this.currrentIndex);
+    },
+    resetFeed: function () {
+      this.photos = {};
+      this.hasEnded = false;
+      this.currrentIndex = 0;
     }
   }
 };

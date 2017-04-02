@@ -3,6 +3,7 @@
 <template>
   <md-layout md-gutter class="content-card-main">
     <md-layout md-column>
+      <photo-feed-content-empty v-if="hasEnded && !hasContent" />
       <div v-for="photo in photos" class="content-card-list">
         <photo-feed-content-card
           :photoId="photo.id"
@@ -15,7 +16,7 @@
         </photo-feed-content-card>
       </div>
       <md-layout md-align="center">
-        <md-spinner style="margin-top: 10px;" md-indeterminate class="md-accent"></md-spinner>
+        <md-spinner v-if="!hasEnded" style="margin-top: 10px;" md-indeterminate class="md-accent"></md-spinner>
       </md-layout>
     </md-layout>
   </md-layout>
@@ -38,6 +39,11 @@ import Vue from 'vue';
 import * as _ from 'lodash';
 
 export default {
-  props: ['photos']
+  props: ['photos', 'hasEnded'],
+  computed: {
+    hasContent: function () {
+      return Object.keys(this.photos).length > 0;
+    }
+  }
 };
 </script>

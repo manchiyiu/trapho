@@ -5,13 +5,13 @@
     <md-card class="card">
       <md-card-content>
         <form novalidate @submit.stop.prevent="submit">
-          
+
           <md-input-container class="input-container">
             <md-icon>person</md-icon>
             <label>Username</label>
             <md-input required v-model="username"></md-input>
           </md-input-container>
-         
+
           <md-input-container class="input-container">
             <md-icon>vpn_key</md-icon>
             <label>Password</label>
@@ -19,31 +19,25 @@
           </md-input-container>
 
           <md-input-container class="input-container">
-            <md-icon>phone</md-icon>
-            <label>Mobile</label>
-            <md-input required v-model="password" type="password"></md-input>
+            <md-icon>vpn_key</md-icon>
+            <label>Password Again</label>
+            <md-input required v-model="passwordAgain" type="password"></md-input>
           </md-input-container>
 
           <md-input-container class="input-container">
             <md-icon>email</md-icon>
             <label>Email</label>
-            <md-input required v-model="password" type="password"></md-input>
-          </md-input-container>
-
-          <md-input-container class="input-container">
-            <md-icon>home</md-icon>
-            <label>Address</label>
-            <md-input required v-model="password" type="password"></md-input>
+            <md-input required v-model="email"></md-input>
           </md-input-container>
 
           <md-input-container class="input-container">
             <md-icon>Name</md-icon>
             <label>Nickname</label>
-            <md-input required v-model="password" type="password"></md-input>
+            <md-input required v-model="nickname"></md-input>
           </md-input-container>
 
-          <md-button class="md-primary md-raised" :disabled="isFilled" @click.native="submit">Submit</md-button>
-          
+          <md-button type="submit" class="md-primary md-raised" :disabled="isFilled" @click.native="submit">Submit</md-button>
+
         </form>
       </md-card-content>
     </md-card>
@@ -76,6 +70,9 @@ export default {
   data: () => ({
     username: '',
     password: '',
+    passwordAgain: '',
+    email: '',
+    nickname: '',
     errorMessage: ''
   }),
   computed: {
@@ -83,14 +80,22 @@ export default {
   },
   methods: {
     submit: async function () {
+      if (this.password !== this.passwordAgain) {
+        this.errorMessage = 'Your two password entry does not match. Please try again.';
+        this.$refs.snackbar.open();
+        return;
+      }
+
       let { status, error, token } = await post(this.$router, 'auth/signup', {
         username: this.username,
-        password: this.password
+        password: this.password,
+        email: this.email,
+        nickname: this.nickname
       });
       if (error) {
         switch (error) {
           case 'alreadyExist':
-            this.errorMessage = 'User already exists. Please try again';
+            this.errorMessage = 'User already exists. Please try again.';
             break;
           default:
             this.errorMessage = error;
