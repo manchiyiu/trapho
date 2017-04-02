@@ -7,6 +7,7 @@ import test from './actions/test';
 import photoCreate from './actions/photo-create';
 import photoDelete from './actions/photo-delete';
 import photoPatch from './actions/photo-patch';
+import photoRetrieveLocationIds from './actions/photo-retrieve-locationIds';
 import photoLocationStat from './actions/photo-location-stat';
 import photoRetrieve from './actions/photo-retrieve';
 import photoRetrieveAll from'./actions/photo-retrieveAll';
@@ -33,6 +34,7 @@ seneca
       .add('cmd:photoDelete', photoDelete)
       .add('cmd:photoLocationStat', photoLocationStat)
       .add('cmd:photoPatch', photoPatch)
+      .add('cmd:photoRetrieveLocationIds', photoRetrieveLocationIds)
       .add('cmd:photoRetrieve', photoRetrieve)
       .add('cmd:photoRetrieveAll', photoRetrieveAll)
       .add('cmd:photoStreamRetrieve', photoStreamRetrieve)
