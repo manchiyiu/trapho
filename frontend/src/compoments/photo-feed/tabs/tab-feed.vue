@@ -34,7 +34,7 @@
                 <md-input v-model="date" disabled></md-input>
               </md-input-container>-->
               <md-card-actions>
-                <md-button class="md-primary" :disabled="!isFilterFilled" @click.native="clearFilter">Clear</md-button>
+                <md-button class="md-primary" @click.native="clearFilter">Clear</md-button>
                 <md-button type="submit" class="md-raised md-primary" :disabled="!isFilterFilled" @click.native="submitFilter">Submit</md-button>
               </md-card-actions>
             </form>
@@ -132,6 +132,7 @@ export default {
       if (this.active) {
         // reload
         this.resetFeed();
+        this.loadMore();
       } else {
         // clear all photos
         this.resetFeed();
