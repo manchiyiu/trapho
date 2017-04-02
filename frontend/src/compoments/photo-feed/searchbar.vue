@@ -52,5 +52,37 @@
 </style>
 
 <script>
-  import Vue from 'vue';
+import Vue from 'vue';
+import { post } from '../../utils';
+
+export default {
+  data: () => ({
+    username: '',
+    location: '',
+    date: '',
+    errorMessage: ''
+  }),
+  computed: {
+    isFilled: function () { return this.username.length <= 0 && this.location.length <= 0 && this.date.length <= 0; }
+  },
+  methods: {
+    submit: async function () {
+      window.alert(this.$store.state.User.info.userId);
+      // let { status, error, token } = await get(this.$router, 'photos/users/', {
+      //   userid: 
+      // });
+      // if (error) {
+      //   switch (error) {
+      //     case 'alreadyExist':
+      //       this.errorMessage = 'User already exists. Please try again';
+      //       break;
+      //     default:
+      //       this.errorMessage = error;
+      //   }
+      //   this.$refs.snackbar.open();
+      //   return;
+      // }
+    }
+  }
+}
 </script>
