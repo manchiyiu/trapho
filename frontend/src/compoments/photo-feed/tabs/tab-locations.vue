@@ -22,8 +22,7 @@
       md-flex-medium="60"
       md-flex-large="60"
       md-flex-xlarge="60"
-      md-align="center"
-      v-infinite-scroll="loadMore">
+      md-align="center">
       <photo-feed-content-card-list
         style="padding-left: 10px; padding-right: 10px;"
         v-if="selectedLocation"
@@ -33,6 +32,13 @@
   </md-layout>
 </template>
 
+<style scoped>
+.md-card {
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+</style>
 
 <script>
 import Vue from 'vue';

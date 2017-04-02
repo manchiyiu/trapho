@@ -105,7 +105,7 @@ export default {
         return this.$store.state.Photos;
       },
       set: function (photos) {
-        return this.$store.state.commit('photosUpdate', { photos });
+        return this.$store.commit('photosUpdate', { photos });
       }
     },
     totalCount: function () {

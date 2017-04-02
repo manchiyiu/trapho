@@ -77,7 +77,7 @@
 
 </template>
 
-<style>
+<style scoped>
 .md-card .md-card-media img {
   width: 100%;
 }
