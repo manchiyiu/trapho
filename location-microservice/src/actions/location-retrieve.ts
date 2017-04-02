@@ -1,14 +1,18 @@
 import * as _ from 'lodash';
 import Location from '../model-location';
+import { getPhotoCount } from '../utils';
 
 export default async (msg, reply) => {
 
-  const { locationId, query } = msg;
+  const { locationId, query, photoCount } = msg;
   let searchQuery: any = {};
 
   if (!_.isUndefined(locationId)) {
     try {
-      let result = await Location.retrieveById(locationId);
+      let result:any = await Location.retrieveById(locationId);
+      if(_.isBoolean(photoCount) && photoCount){
+        result.photoCount = await getPhotoCount(locationId);
+      }
       reply(null, { locations: result }); // just return one object
       return;
     } catch (e) {

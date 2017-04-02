@@ -60,6 +60,32 @@ router.get('/id/:locationId', async (req, res) => {
 });
 
 /**
+ * @api {get} /locations/id/:locationId/withPhotoCount Retrieve location by locationId (with photo count)
+ * @apiName location_retrieve_locationId_with_photoCount
+ * @apiPermission User
+ * @apiGroup Locations
+ *
+ * @apiParam {String} locationId      ID of the location
+ *
+ * @apiUse locations
+ *
+ * @apiError (Error 500) {String} apiError            Error message ('locationNotExist', 'databaseError', etc.)
+ * @apiErrorExample {json} Error-Response:
+ *   {
+ *     "error": "locationNotExist"
+ *   }
+ */
+router.get('/id/:locationId/withPhotoCount', async (req, res) => {
+  const { locationId } = req.params;
+  try {
+    const {locations} = await act({ role: 'location', cmd: 'locationRetrieve', locationId, photoCount: true });
+    res.json(locations);
+  } catch (err) {
+    res.status(500).json({ error: err.details.message });
+  }
+});
+
+/**
  * @api {post} /locations Create new location
  * @apiName location_create
  * @apiPermission User
