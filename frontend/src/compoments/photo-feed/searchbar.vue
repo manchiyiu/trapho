@@ -1,7 +1,7 @@
 <name>search-bar</name>
 
 <template>
-  <div>
+  <div style="margin-bottom: 20px;">
     <md-card>
       <md-card-header class="search-bar">
         <md-card-expand>
@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     submit: async function () {
-      window.alert(this.$store.state.User.info.userId);
+      window.alert("Hello");
       // let { status, error, token } = await get(this.$router, 'photos/users/', {
       //   userid: 
       // });
