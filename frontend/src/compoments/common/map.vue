@@ -52,7 +52,7 @@ Vue.use(VueGoogleMaps, {
 });
 
 export default {
-  props: ['onChange'],
+  props: ['onChange', 'active'],
   data: () => ({
     mapTheme,
     center: {

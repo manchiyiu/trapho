@@ -4,8 +4,6 @@ import VueLazyload from 'vue-lazyload';
 import InfiniteScroll from 'vue-infinite-scroll';
 import VueProgressiveImage from 'vue-progressive-image';
 
-import 'aframe';
-
 import './theme';
 import './compoments/edit-profile/module';
 import './compoments/login-page/module';

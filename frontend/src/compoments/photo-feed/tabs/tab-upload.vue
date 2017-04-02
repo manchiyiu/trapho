@@ -9,7 +9,7 @@
         <div id="upload-dropzone" class="dropzone"></div>
       </div>
       <!-- info -->
-      <div v-if="uploadedFiles.length > 0">
+      <div v-if="active && uploadedFiles.length > 0">
         <!-- description -->
         <md-divider></md-divider>
         <div class="photo-upload-header">Description (click image to add caption)</div>
@@ -79,7 +79,7 @@
   margin-top: 20px;
   margin-bottom: 10px;
   font-weight: bolder;
-  color: #888;
+  color: white;
 }
 .item-move {
   transition: all .5s cubic-bezier(.55,0,.1,1);
