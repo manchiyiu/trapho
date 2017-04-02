@@ -17,7 +17,7 @@
           </md-card-header>
 
           <md-card-content>
-            <form novalidate @submit.stop.prevent="submit">
+            <form novalidate @submit.stop.prevent="submitFilter">
               <md-input-container md-inline>
                 <md-icon>person</md-icon>
                 <label>Username</label>
