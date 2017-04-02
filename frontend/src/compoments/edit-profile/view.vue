@@ -62,7 +62,7 @@
 
 <script>
 import Vue from 'vue';
-import { login } from '../../utils';
+import { patch } from '../../utils';
 
 export default {
   data: () => ({
@@ -73,9 +73,26 @@ export default {
   }),
   computed: {
     isFilled: function () { return this.password.length <= 0 || this.newpassword != this.newpassword2; },
+    userId: function () { return this.$store.state.User.info.id; }
   },
   methods: {
-
+    submit: async function (userId, password) {
+      let { error, id } = await patch(this.$router, `auth/id/${this.userId}`, { userId: this.userId, password: this.newpassword });
+      if (error) {
+        switch (error) {
+          case 'userNotExist':
+            this.errorMessage = 'User does not exist. Please try again.';
+            break;
+          default:
+            this.errorMessage = error;
+        }
+        this.$refs.snackbar.open();
+        return;
+      } else {
+        this.errorMessage = 'Password has been changed.';
+        this.$refs.snackbar.open();
+      }
+    }
   }
 }
 </script>
