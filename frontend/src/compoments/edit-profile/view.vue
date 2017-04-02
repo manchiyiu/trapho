@@ -26,11 +26,13 @@
             <md-input v-model="newpassword2" type="password"></md-input>
           </md-input-container>
 
+          <!--
           <md-input-container class="input-container">
             <md-icon>email</md-icon>
             <label>Email</label>
             <md-input v-model="email"></md-input>
           </md-input-container>
+          -->
 
           <md-button class="md-primary md-raised" :disabled="isFilled" @click.native="submit">Submit</md-button>
           
@@ -73,28 +75,7 @@ export default {
     isFilled: function () { return this.password.length <= 0 || this.newpassword != this.newpassword2; },
   },
   methods: {
-    submit: async function () {
-      let { error, token, user } = await login(this.$router, {
-        username: this.username,
-        password: this.password,
-      });
-      if (error) {
-        switch (error) {
-          case 'invalidUser':
-            this.errorMessage = 'User does not exist. Please try again.';
-            break;
-          case 'wrongPassword':
-            this.errorMessage = 'Wrong password. Please try again.';
-            break;
-          default:
-            this.errorMessage = error;
-        }
-        this.$refs.snackbar.open();
-        return;
-      }
-      this.$store.commit('userLogin', { username: this.username, id: user.id, token });
-      this.$router.push('feed');
-    }
+
   }
 }
 </script>
