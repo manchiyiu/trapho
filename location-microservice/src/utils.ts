@@ -104,5 +104,13 @@ export async function getPhotoCount(locationId: String){
   }catch(e){
     return 0;
   }
+}
 
+export async function getPhotoCounts(locationIds: String[]){
+  try{
+    const { stats } = await act({ role: 'photo', cmd: 'photoLocationStat', locationIds });
+    return stats;
+  }catch(e){
+    throw new Error("communicationError");
+  }
 }

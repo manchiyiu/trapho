@@ -20,6 +20,7 @@ const router = express.Router();
  * @apiParam {String}    [query.range.radius]      Search radius of the circle (in meter)
  * @apiParam {String[]}  [query.tags]              Tags to search
  * @apiParam {String}    [query.name]              Name of the location
+ * @apiParam {Boolean}   [query.photoCount]        Whether photo count needs to be shown
  *
  * @apiUse locationsArray
  */

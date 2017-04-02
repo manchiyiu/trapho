@@ -1,6 +1,6 @@
 import * as _ from 'lodash';
 import Location from '../model-location';
-import { getPhotoCount } from '../utils';
+import { getPhotoCount, getPhotoCounts } from '../utils';
 
 export default async (msg, reply) => {
 
@@ -36,6 +36,7 @@ export default async (msg, reply) => {
     searchQuery.tags.$elemMatch.$in = query.tags;
   }
 
+  let locations:[any];
   try {
 
     if (!_.isUndefined(query.range)) {
@@ -47,16 +48,29 @@ export default async (msg, reply) => {
       }
 
       let coordinates = [query.range.lng, query.range.lat];
-      let result = await Location.retrieveManyByDist(
+      locations = await Location.retrieveManyByDist(
         searchQuery, coordinates, query.range.radius, Infinity
       );
-
-      reply(null, { locations: result });
-      return;
+    }else{
+      locations = await Location.retrieveMany(searchQuery, Infinity);
     }
-    
-    let result = await Location.retrieveMany(searchQuery, Infinity);
-    reply(null, { locations: result });
+    if(_.isBoolean(query.photoCount) && query.photoCount && locations.length > 0){
+      let locationIds = [];
+      let locationMap:any = {};
+      locations.forEach(
+        location => {
+          locationIds.push(location.id);
+          locationMap[location.id] = location;
+        }
+      );
+      let stats:[any] = await getPhotoCounts(locationIds);
+      stats.forEach(
+        stat => {
+          locationMap[stat._id].photoCount = stat.photoCount;
+        }
+      );
+    }
+    reply(null, { locations });
 
   } catch (e) {
     reply(e, null);
