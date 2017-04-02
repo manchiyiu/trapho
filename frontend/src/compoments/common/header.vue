@@ -1,7 +1,7 @@
 <name>main-header</name>
 
 <template>
-  <div>
+  <div class="main-toolbar-main">
     <md-whiteframe md-elevation="2">
       <md-toolbar class="main-toolbar">
         <md-button class="md-icon-button" v-if="userHasLogin" @click.native="toggleSidenav">
@@ -40,6 +40,9 @@
 </template>
 
 <style>
+.main-toolbar-main {
+  z-index: 999;
+}
 .main-toolbar {
   background-color: white !important;
 }
