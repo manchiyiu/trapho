@@ -15,15 +15,17 @@
         :options="{styles: mapTheme}"
         :zoom="12"
         style="height: 100%; width: 100%;">
-        <gmap-marker
-          v-for="(location, index) in selectedLocations"
-          :key="index"
-          :position="location.coordinates"
-          :clickable="true"
-          :draggable="false"
-          :label="location.name"
-          @click="onClick(location)">
-        </gmap-marker>
+        <gmap-cluster :gridSize="100">
+          <gmap-marker
+            v-for="(location, index) in selected"
+            :key="index"
+            :position="location.coordinates"
+            :clickable="true"
+            :draggable="false"
+            :label="location.name"
+            @click="onClick(location)">
+          </gmap-marker>
+        </gmap-cluster>
       </gmap-map>
     </md-layout>
     <md-layout
@@ -38,14 +40,23 @@
         <md-subheader>Select locations that you can to go to from your wishlist:</md-subheader>
         <md-tabs md-centered class="md-transparent">
           <md-tab md-label="Wishlist">
-            <activity-planning-wishlist :locations="locations" />
+            <activity-planning-wishlist
+              :toggleSelected="toggleSelected"
+              :locations="locations" />
           </md-tab>
           <md-tab md-label="More">
+            <activity-planning-more
+              :toggleSelected="toggleSelected" />
+          </md-tab>
+          <md-tab md-label="Selected">
+            <activity-planning-wishlist
+              :toggleSelected="toggleSelected"
+              :locations="selected" />
           </md-tab>
         </md-tabs>
       </md-whiteframe>
     </md-layout>
-    <md-button class="md-fab plan-next-fab">
+    <md-button class="md-fab plan-next-fab" :disabled="!hasSelected">
       <md-icon>navigate_next</md-icon>
     </md-button>
   </md-layout>
@@ -87,11 +98,16 @@ export default {
     locations: []
   }),
   computed: {
-    selectedLocations: function () {
-      return this.locations.filter(item => this.selected[item.id]);
+    selected: {
+      get: function () {
+        return this.$store.state.ActivityPlanning.selected;
+      },
+      set: function (value) {
+        this.$store.state.commit('activityPlanningSetSelected', value);
+      }
     },
-    selected: function () {
-      return this.$store.state.ActivityPlanning.selected;
+    hasSelected: function () {
+      return Object.keys(this.selected).length > 0;
     }
   },
   mounted: function () {
@@ -102,11 +118,12 @@ export default {
       let { locations } = await get(this.$router, `locations/wishlist`);
       this.locations = locations;
     },
-    toggleSelected: function(id) {
-      if (this.selected[id]) {
-        Vue.set(this.selected, id, false);
+    toggleSelected: function(location) {
+      console.log(location);
+      if (!this.selected[location.id]) {
+        Vue.set(this.selected, location.id, location);
       } else {
-        Vue.set(this.selected, id, true);
+        Vue.delete(this.selected, location.id);
       }
     }
   }

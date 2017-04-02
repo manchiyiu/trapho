@@ -11,7 +11,7 @@ const initialState = {
 
 const mutations = {
   activityPlanningSetSelected: function (state, payload) {
-    Vue.set(state, 'selected', payload.selected);
+    Vue.set(state, 'selected', payload);
   }
 };
 

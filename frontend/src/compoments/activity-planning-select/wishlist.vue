@@ -2,10 +2,8 @@
 
 <template>
   <div style="padding-bottom: 100px;">
-    <div class="wishlist-card" v-for="location in locations">
-      <md-checkbox
-        v-model="selected[location.id]"
-        @change="toggleSelected(location.id)">
+    <div class="wishlist-card" v-for="location in locations" :key="location.id">
+      <md-checkbox :value="!!selected[location.id]" @change="toggleSelected(location)">
       </md-checkbox>
       <p class="title">{{location.name}}</p>
       <p><i>{{location.description}}</i></p>
@@ -39,17 +37,10 @@
 import Vue from 'vue';
 
 export default {
-  props: ['locations'],
+  props: ['locations', 'toggleSelected'],
   computed: {
     selected: function () {
       return this.$store.state.ActivityPlanning.selected;
-    }
-  },
-  methods: {
-    toggleSelected: function (locationId) {
-      const selected = _.clone(this.selected);
-      Vue.set(selected, locationId, !selected[locationId]);
-      this.$store.commit('activityPlanningSetSelected', { selected });
     }
   }
 };
