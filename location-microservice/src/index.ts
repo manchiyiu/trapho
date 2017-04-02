@@ -8,6 +8,7 @@ import locationCreate from './actions/location-create';
 import locationDelete from './actions/location-delete';
 import locationPatch from './actions/location-patch';
 import locationRetrieve from './actions/location-retrieve';
+import locationWishlist from './actions/location-wishlist';
 
 import ratingCreate from './actions/rating-create';
 import ratingDelete from './actions/rating-delete';
@@ -33,6 +34,7 @@ seneca
       .add('cmd:locationDelete', locationDelete)
       .add('cmd:locationPatch', locationPatch)
       .add('cmd:locationRetrieve', locationRetrieve)
+      .add('cmd:locationWishlist', locationWishlist)
       .add('cmd:ratingCreate', ratingCreate)
       .add('cmd:ratingDelete', ratingDelete)
       .add('cmd:ratingPatch', ratingPatch)
