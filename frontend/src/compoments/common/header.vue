@@ -26,7 +26,7 @@
           <md-icon>flight_takeoff</md-icon>
           <span>Plan My Trip</span>
         </md-list-item>
-        <md-list-item>
+        <md-list-item @click.native="goToEdit">
           <md-icon>edit</md-icon>
           <span>Edit My Profile</span>
         </md-list-item>
@@ -81,6 +81,10 @@
       },
       goToPlan: function () {
         this.$router.push('/plan-select');
+        this.$refs.sidenav.close();
+      },
+      goToEdit: function () {
+        this.$router.push('/edit');
         this.$refs.sidenav.close();
       },
       logout: function () {

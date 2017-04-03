@@ -5,6 +5,7 @@ import InfiniteScroll from 'vue-infinite-scroll';
 import VueProgressiveImage from 'vue-progressive-image';
 
 import './theme';
+import './compoments/edit-profile/module';
 import './compoments/login-page/module';
 import './compoments/photo-feed/module';
 import './compoments/common/module';
@@ -15,6 +16,7 @@ import store from './vuex/store';
 import App from './app.vue';
 
 import LoginPageView from './compoments/login-page/view.vue';
+import EditView from './compoments/edit-profile/view.vue';
 import PhotoFeedView from './compoments/photo-feed/view.vue';
 import ActivityPlanningSelect from './compoments/activity-planning-select/view.vue';
 
@@ -29,6 +31,7 @@ Vue.use(VueProgressiveImage);
 const routes = [
   { path: '/', component: LoginPageView },
   { path: '/feed', component: PhotoFeedView },
+  { path: '/edit', component: EditView },
   { path: '/plan-select', component: ActivityPlanningSelect }
 ];
 
