@@ -56,7 +56,7 @@
         </md-tabs>
       </md-whiteframe>
     </md-layout>
-    <md-button class="md-fab plan-next-fab" :disabled="!hasSelected">
+    <md-button class="md-fab plan-next-fab" :disabled="!hasSelected" @click.native="nextStep">
       <md-icon>navigate_next</md-icon>
     </md-button>
   </md-layout>
@@ -119,12 +119,14 @@ export default {
       this.locations = locations;
     },
     toggleSelected: function(location) {
-      console.log(location);
       if (!this.selected[location.id]) {
         Vue.set(this.selected, location.id, location);
       } else {
         Vue.delete(this.selected, location.id);
       }
+    },
+    nextStep: function () {
+      this.$router.push('/plan-trip');
     }
   }
 };

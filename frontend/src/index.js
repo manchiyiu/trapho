@@ -19,6 +19,7 @@ import LoginPageView from './compoments/login-page/view.vue';
 import EditView from './compoments/edit-profile/view.vue';
 import PhotoFeedView from './compoments/photo-feed/view.vue';
 import ActivityPlanningSelect from './compoments/activity-planning-select/view.vue';
+import ActivityPlanningTrip from './compoments/activity-planning-trip/view.vue';
 
 Vue.use(VueLazyload, {
   lazyComponent: true,
@@ -32,7 +33,8 @@ const routes = [
   { path: '/', component: LoginPageView },
   { path: '/feed', component: PhotoFeedView },
   { path: '/edit', component: EditView },
-  { path: '/plan-select', component: ActivityPlanningSelect }
+  { path: '/plan-select', component: ActivityPlanningSelect },
+  { path: '/plan-trip', component: ActivityPlanningTrip }
 ];
 
 const router = new VueRouter({ routes });
