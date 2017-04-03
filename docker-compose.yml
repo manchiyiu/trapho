@@ -94,4 +94,4 @@ services:
       context: ./frontend
       dockerfile: Dockerfile-prod
     ports:
-      - "5000:5000"
+      - "443:443"

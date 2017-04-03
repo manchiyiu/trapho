@@ -3,7 +3,7 @@ FROM node:7.7.1
 EXPOSE 5000
 CMD [ "yarn", "start" ]
 
-RUN yarn global add serve vbuild@6.9.1
+RUN yarn global add http-server-with-auth vbuild@6.9.1
 
 WORKDIR /usr/src/app
 COPY package.json /usr/src/app/
