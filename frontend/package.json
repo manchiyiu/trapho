@@ -33,7 +33,7 @@
   "author": "ymcatar",
   "license": "MIT",
   "scripts": {
-    "start": "http-server-with-auth dist --username warren --password funnywarren777689 -p 443 --ssl",
+    "start": "http-server-with-auth dist --username warren --password funnywarren777689 -p 443 --ssl --gzip",
     "dev": "vbuild --config vbuild.config.js --port 4000 ./src/index.js --dev",
     "build": "vbuild --config vbuild.config.js ./src/index.js"
   }

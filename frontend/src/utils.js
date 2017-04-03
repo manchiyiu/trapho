@@ -2,7 +2,7 @@ import * as Vue from 'vue';
 import * as queryString from 'query-string';
 import * as _ from 'lodash';
 
-const BASE_PATH = 'http://104.199.134.31:3000/';
+const BASE_PATH = 'https://isaac-unfold.me:3000/';
 
 export const UPLOAD_PATH = `${BASE_PATH}photos/upload`;
 

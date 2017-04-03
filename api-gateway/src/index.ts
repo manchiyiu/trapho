@@ -3,14 +3,18 @@ import * as passport from 'passport';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 import * as cors from 'cors';
-import * as http from 'http';
+import * as https from 'https';
 import * as _ from 'lodash';
 import * as expressJwt from 'express-jwt';
 import * as fileUpload from 'express-fileupload';
+import * as fs from 'fs';
 
 import { seneca, act, errorMiddleware, SERVER_SECRET } from './utils';
 
 import './passport';
+
+const key = fs.readFileSync('./key.pem');
+const cert = fs.readFileSync('./cert.pem');
 
 /* import routes */
 
@@ -67,4 +71,8 @@ seneca
   .client({ host: process.env.BRIDGE_ADDRESS, port: '3004', pin: 'role:photo' })
   .client({ host: process.env.BRIDGE_ADDRESS, port: '3005', pin: 'role:timeline' });
 
-http.createServer(app).listen(3000);
+https
+  .createServer({
+    key, cert
+  }, app)
+  .listen(3000);
