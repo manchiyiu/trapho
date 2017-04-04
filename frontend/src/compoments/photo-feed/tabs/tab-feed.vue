@@ -1,3 +1,21 @@
+<!--
+FUNCTION PHOTO_FEED - Function for user to browse the photo
+PROGRAMMER: Yiu Man CHi
+CALLING SEQUENCE: Will automatically direct to when user successfully login
+VERSION: 1
+PURPOSE: User could browse the photo with filter, hence like or comment the photo according to their interest
+DATA STRUCTURES:  Slide toolbar: Feed; Plan; Edit; Logout;
+                  Photo: Bind to photo-microservice
+                  Location: Bind to location-microservice
+                  Upload: Upload photo to database
+                  Like or Comment:  like count - integer
+                                    comment - string
+ALGORITHM:  Allow user to browse the photo by using filter.
+            In addition, VR is allowed for more fun during browsing.
+            if user apply the filter, retrive related tag from the database for photo;
+            if user like the photo, increase like count in the database.
+-->
+
 <name>photo-feed-tab-feed</name>
 
 <template>
