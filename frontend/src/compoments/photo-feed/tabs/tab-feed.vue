@@ -98,12 +98,12 @@ ALGORITHM:  Allow user to browse the photo by using filter.
       md-flex-xlarge="60"
       md-align="center"
       v-infinite-scroll="loadMore">
-      <photo-feed-content-card-list
+      <common-content-card-list
         style="padding-left: 10px; padding-right: 10px;"
         v-if="active"
         :hasEnded="hasEnded"
         :photos="photos">
-      </photo-feed-content-card-list>
+      </common-content-card-list>
     </md-layout>
   </md-layout>
 </template>

@@ -1,4 +1,4 @@
-<name>photo-content-card</name>
+<name>common-content-card</name>
 
 <template>
 

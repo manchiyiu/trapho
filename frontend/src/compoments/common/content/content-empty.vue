@@ -1,4 +1,4 @@
-<name>photo-content-empty</name>
+<name>common-content-empty</name>
 
 <template>
 

@@ -29,8 +29,8 @@ ALGORITHM:  Allow user to change their username and password;
               <md-layout md-flex="30"><md-icon class="md-size-4x">photo</md-icon></md-layout>
               <md-layout><h1>{{userId}}</h1></md-layout>
             </md-layout>
-              
-              
+
+
             </md-card-content>
           </md-card>
           <!--VR-->
@@ -72,11 +72,11 @@ ALGORITHM:  Allow user to change their username and password;
       md-flex-xlarge="60"
       md-align="center"
       v-infinite-scroll="loadMore">
-      <photo-feed-content-card-list
+      <common-content-card-list
         style="padding-left: 10px; padding-right: 10px;"
         :hasEnded="hasEnded"
         :photos="photos">
-      </photo-feed-content-card-list>
+      </common-content-card-list>
     </md-layout>
   </md-layout>
   </div>
