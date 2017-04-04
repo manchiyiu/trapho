@@ -1,3 +1,17 @@
+<!--
+FUNCTION WISHLIST - Function for user edit their wishlist
+PROGRAMMER: Wong Man Yung / Yiu Man CHi
+CALLING SEQUENCE: Will automatically direct to when user choose manage their wishlist
+VERSION: 1
+PURPOSE: User could edit their wishlist by different filter, for which photo is the liked photo during photo feed
+DATA STRUCTURES:  like - integer
+                  comment - string
+                  share - string copied
+ALGORITHM:  Allow user to manage their wishlst with different filter, photos are retrived from the database;
+            Allow user to like or comment or share theri liked photo;
+            User could also choose PLAN; hence direct to the planning page.
+-->
+
 <name>activity-planning-wishlist</name>
 
 <template>
