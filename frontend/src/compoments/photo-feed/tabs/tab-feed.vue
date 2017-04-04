@@ -59,6 +59,25 @@ ALGORITHM:  Allow user to browse the photo by using filter.
           </md-card-content>
 
         </md-card>
+
+        <!--Search by Tags-->
+        <md-card md-with-hover style="margin-bottom: 20px">
+          <md-card-header>
+            <div style="font-weight: bolder;">Hot Tags</div>
+          </md-card-header>
+
+          <md-card-content>
+            <md-layout md-align="center" md-gutter="16">
+              <md-button-toggle class="md-primary">
+                <md-button @click.native="filterTag1">University</md-button>
+                <md-button @click.native="filterTag2">establishment</md-button>
+                <md-button>Beach</md-button>
+                <md-button>Sun</md-button>
+              </md-button-toggle>
+            </md-layout>
+            
+          </md-card-content>
+        </md-card>
         <!--VR-->
         <md-card md-with-hover style="margin-bottom: 20px;">
           <md-card-header>
@@ -141,7 +160,8 @@ export default {
     photos: {},
     filter: {
       username: '',
-      locationName: ''
+      locationName: '',
+      tags: ''
     },
     hasEnded: false // whether or not the feed loading has reached the end
   }),
@@ -169,8 +189,8 @@ export default {
     }
   },
   methods: {
-    loadPosts: async function (skip, username, locationName, count = 5) {
-      let { photos } = await get(this.$router, 'photos/stream', { count, skip, username, locationName });
+    loadPosts: async function (skip, username, locationName, tags, count = 5) {
+      let { photos } = await get(this.$router, 'photos/stream', { count, skip, username, locationName, tags });
       photos.forEach((photo, index) => {
         const result = _.merge(photo, { index: skip + index });
         Vue.set(this.photos, skip + index, result);
@@ -181,7 +201,7 @@ export default {
       }
     },
     loadMore: async function () {
-      await this.loadPosts(this.currrentIndex, this.filter.username, this.filter.locationName);
+      await this.loadPosts(this.currrentIndex, this.filter.username, this.filter.locationName, this.filter.tags);
     },
     onLastPhoto: function () {
       this.currentIndex--;
@@ -194,7 +214,7 @@ export default {
     },
     submitFilter: async function () {
       this.resetFeed();
-      await this.loadPosts(this.currrentIndex, this.filter.username, this.filter.locationName);
+      await this.loadPosts(this.currrentIndex, this.filter.username, this.filter.locationName, this.filter.tags);
     },
     clearFilter: async function () {
       this.filter.username = '';
@@ -206,6 +226,18 @@ export default {
       this.photos = {};
       this.hasEnded = false;
       this.currrentIndex = 0;
+    },
+    filterTag1: async function() {
+      this.resetFeed();
+      this.filter.tags = 'university';
+      console.log(this.filter.tags);
+      await this.loadPosts(this.currrentIndex, this.filter.username, this.filter.locationName, this.filter.tags);
+    },
+    filterTag2: async function() {
+      this.resetFeed();
+      this.filter.tags = 'establishment';
+      console.log(this.filter.tags);
+      await this.loadPosts(this.currrentIndex, this.filter.username, this.filter.locationName, this.filter.tags);
     }
   }
 };
