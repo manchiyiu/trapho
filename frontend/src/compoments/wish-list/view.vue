@@ -3,14 +3,14 @@
 <template>
   <div class="main">
     <md-card class="wishlist">
-        
+
       <md-card-content>
         <form >
-          
-  
+
+
    <div>
   <md-list>
-      
+
     <md-subheader>
         <font size="5">My Wish List</font>
 
@@ -19,12 +19,12 @@
     <span><md-button class="md-raised md-accent">Plan</md-button></span>
   </md-layout>
 </md-layout>
-                 
+
         </md-subheader>
-    
-              
+
+
 <md-divider></md-divider>
-                        
+
 
 <md-layout md-gutter>
   <md-layout md-column md-flex="20">
@@ -54,31 +54,13 @@
       <md-icon>error</md-icon> <span>Time</span>
     </md-list-item>
     </md-layout>
-                             
+
     </md-layout>
   </md-layout>
 
-                                        
+
 
 <md-layout>
-                                       
-      <md-layout md-align="center">
-        <span>
-      <md-card class="photo">
-        <md-card-media>
-          <img src="assets/card-image-1.jpg" alt="People">
-        </md-card-media>
-        <md-card-actions>
-          <md-button class="md-icon-button">
-      <md-icon>favorite</md-icon>
-    </md-button>
-    <md-button class="md-icon-button">
-      <md-icon>delete</md-icon>
-    </md-button>
-        </md-card-actions>
-      </md-card></span>
-      </md-layout>
-          
 
       <md-layout md-align="center">
         <span>
@@ -96,8 +78,26 @@
         </md-card-actions>
       </md-card></span>
       </md-layout>
-                            
-                                                     
+
+
+      <md-layout md-align="center">
+        <span>
+      <md-card class="photo">
+        <md-card-media>
+          <img src="assets/card-image-1.jpg" alt="People">
+        </md-card-media>
+        <md-card-actions>
+          <md-button class="md-icon-button">
+      <md-icon>favorite</md-icon>
+    </md-button>
+    <md-button class="md-icon-button">
+      <md-icon>delete</md-icon>
+    </md-button>
+        </md-card-actions>
+      </md-card></span>
+      </md-layout>
+
+
       <md-layout md-align="center">
         <span>
       <md-card class="photo">
@@ -115,27 +115,27 @@
       </md-card>
         </span>
       </md-layout>
-                          
-</md-layout>
-
-               
-
-
-
-
-
-
 
 </md-layout>
 
-    
+
+
+
+
+
+
+
+
+</md-layout>
+
+
   </md-list>
 </div>
 
 
 
 
-          
+
         </form>
       </md-card-content>
     </md-card>

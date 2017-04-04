@@ -282,35 +282,35 @@ router.get('/', async (req: any, res) => {
  * @apiPermission User
  * @apiGroup Photos
  *
- * @apiParam {Number} count                   no. of photos per batch
- * @apiParam {Number} skip                    batch number
- * @apiParam {string} username                keywords for username (seperated by comma)
- * @apiParam {String} locationName            keywords for location name (seperated by comma)
- * @apiParam {String} tags                    keywords for tags (seperated by comma)
- * @apiParam {String} timestamp               time of the photo created
- * 
+ * @apiParam {Number} [count]                   no. of photos per batch
+ * @apiParam {Number} [skip]                    batch number
+ * @apiParam {string} [userId]                  keywords for username (seperated by comma)
+ * @apiParam {string} [username]                keywords for username (seperated by comma)
+ * @apiParam {String} [locationName]            keywords for location name (seperated by comma)
+ * @apiParam {String} [tags]                    keywords for tags (seperated by comma)
+ * @apiParam {String} [timestamp]               time of the photo created
  *
- * @apiUse photos
  * @apiSuccessExample  {json} Success-Response:
  * {
  *  "photos": [
  *   {
  *     "id": "58d5b5953bf68e000f54e63e",
  *     "timestamp": "2017-03-25T00:11:01.207Z",
- *     "url": "0ec74250-10ee-11e7-8820-9d67d5433f9f.jpg",
+ *     "url": "{{id-placeholder}}",
+ *     "userId": "{{id-placeholder}}",
  *     "username": "clark",
  *     "locationName": "The Peak Tram",
  *     "likesCount": 0,
  *     "comments": [
  *      {
- *        "id": "58b5062cc9d49c000f114abc",
- *        "userId": "58b5062cc9d49c000f114b3a",
+ *        "id": "{{id-placeholder}}",
+ *        "userId": "{{id-placeholder}}",
  *        "timestamp": "2017-03-02T16:39:27+00:00",
  *        "content": "wow. first!"
  *      },
  *      {
- *        "id": "58b5062cc9d49c000f114def",
- *        "userId": "58b5062cc9d49c000f114b3a",
+ *        "id": "{{id-placeholder}}",
+ *        "userId": "{{id-placeholder}}",
  *        "timestamp": "2017-03-02T16:40:27+00:00",
  *        "content": "wow. second!"
  *      }
@@ -326,8 +326,8 @@ router.get('/', async (req: any, res) => {
  */
 router.get('/stream', async (req: any, res) => {
   try {
-    const { username, locationName, tags, timestamp, count, skip } = req.query;
-    const { photos } = await act({ role: 'photo', cmd: 'photoStreamRetrieve', username, locationName, tags, timestamp, count, skip });
+    const { userId, username, locationName, tags, timestamp, count, skip } = req.query;
+    const { photos } = await act({ role: 'photo', cmd: 'photoStreamRetrieve', userId, username, locationName, tags, timestamp, count, skip });
     res.json({ photos });
   } catch (err) {
     res.status(500).json({ error: err.details.message });

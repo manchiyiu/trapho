@@ -1,4 +1,4 @@
-<name>photo-content-card</name>
+<name>common-content-card</name>
 
 <template>
 
@@ -11,7 +11,7 @@
           <md-avatar class="md-avatar-icon">
             <md-icon>photo</md-icon>
           </md-avatar>
-          <div class="md-title">{{username}}</div>
+          <div class="md-title" @click="gotoProfile">{{username}}</div>
           <div
             class="md-subhead"
             style="height: 20px; overflow: hidden; text-overflow: ellipsis;">
@@ -49,9 +49,9 @@
         </p>
         <md-divider style="margin-bottom: 10px;"></md-divider>
         <div style="padding-left: 15px">
-          <div><i>Be the first to leave a comment!</i></div>
+          <div v-if="comments.length <= 0"><i>Be the first to leave a comment!</i></div>
           <div v-for="comment in comments">
-            <div><b>{{comment.userName + ' '}}</b>{{comment.content}}</div>
+            <div><b>{{comment.username + ' '}}</b>{{comment.content}}</div>
           </div>
         </div>
       </md-card-content>
@@ -108,6 +108,7 @@ export default {
   props: [
     'photoId',
     'username',
+    'userId',
     'locationName',
     'likesCount',
     'photoUrl',
@@ -121,6 +122,9 @@ export default {
     closeDialog: function (ref) {
       this.$refs[ref].close();
     },
+    gotoProfile: function () {
+      this.$router.push(`/profile/${this.userId}`);
+    },
     onCommentClose: async function (state) {
       if (state === 'ok') {
         // submit comments
@@ -128,6 +132,10 @@ export default {
           await post(this.$router, `comments`, {
             photoId: this.photoId,
             timestamp: new Date().getTime(),
+            content: this.commentValue
+          });
+          this.comments.push({
+            username: 'placeholder',
             content: this.commentValue
           });
         } catch (e) {

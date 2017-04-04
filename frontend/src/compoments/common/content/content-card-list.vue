@@ -1,19 +1,20 @@
-<name>photo-feed-content-card-list</name>
+<name>common-content-card-list</name>
 
 <template>
   <md-layout md-gutter class="content-card-main">
     <md-layout md-column>
-      <photo-feed-content-empty v-if="hasEnded && !hasContent" />
+      <common-content-empty v-if="hasEnded && !hasContent" />
       <div v-for="photo in photos" class="content-card-list">
-        <photo-feed-content-card
+        <common-content-card
           :photoId="photo.id"
           :username="photo.username"
+          :userId="photo.userId"
           :locationName="photo.locationName"
           :likesCount="photo.likesCount"
           :photoUrl="photo.url"
           :description="photo.description"
           :comments="photo.comments">
-        </photo-feed-content-card>
+        </common-content-card>
       </div>
       <md-layout md-align="center">
         <md-spinner v-if="!hasEnded" style="margin-top: 10px;" md-indeterminate class="md-accent"></md-spinner>
