@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 export default async(msg, reply) => {
   let batchSize : number;
   let batchNo: number;
-  const { username, locationName, timestamp, tags } = msg;
+  const { username, userId, locationName, timestamp, tags } = msg;
   const delim = ',';
   let query:any = {};
 
@@ -45,7 +45,7 @@ export default async(msg, reply) => {
         }
       }
       // Retrieve users
-      let users_search =  await retrieveUsersByNames(usernames);
+      let users_search = await retrieveUsersByNames(usernames);
       query.userId = {};
       query.userId.$in = [];
 
@@ -54,6 +54,14 @@ export default async(msg, reply) => {
         query.userId.$in.push(users_search[index].id);
         users[users_search[index].id] = users_search[index];
       }
+    }
+
+    if (_.isString(userId) && userId.trim().length > 0) {
+      if (!query.userId) {
+        query.userId = {};
+        query.userId.$in = [];
+      }
+      query.userId.$in.push(userId.split(delim).filter(i => i.length > 0));
     }
 
     if(_.isString(tags) && tags.trim().length > 0){
@@ -87,7 +95,7 @@ export default async(msg, reply) => {
         locations[locations_search[index].id] = locations_search[index];
       }
     }
-    
+
     if(_.isString(timestamp)){
       let stTime = new Date(timestamp);
       let endTime = new Date(timestamp);
@@ -112,7 +120,7 @@ export default async(msg, reply) => {
         if(_.isUndefined(users[photo.userId])){
           users[photo.userId] = retrieveUser(photo.userId);
         }
-        
+
         if (_.isUndefined(locations[photo.locationId])) {
           locations[photo.locationId] = retrieveLocation(photo.locationId);
         }
@@ -120,11 +128,12 @@ export default async(msg, reply) => {
         casted_photo.likesCount = await retrieveLikes(photo.id);
         casted_photo.comments = await retrieveComments(photo.id);
         casted_photo.username = (await users[photo.userId]).username;
+        casted_photo.userId = photo.userId;
         casted_photo.locationName = (await locations[photo.locationId]).name;
         return casted_photo;
       }
     ));
-   
+
     reply(null, {photos: result});
   } catch (e) {
     reply(e, null);

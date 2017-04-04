@@ -45,6 +45,7 @@
 }
 .main-toolbar {
   background-color: white !important;
+  opacity: 0.9;
 }
 .logo-img {
   margin: 0px 10px 0px 5px;
