@@ -1,29 +1,16 @@
-<!--
-FUNCTION WISHLIST - Function for user edit their wishlist
-PROGRAMMER: Wong Man Yung / Yiu Man CHi
-CALLING SEQUENCE: Will automatically direct to when user choose manage their wishlist
-VERSION: 1
-PURPOSE: User could edit their wishlist by different filter, for which photo is the liked photo during photo feed
-DATA STRUCTURES:  like - integer
-                  comment - string
-                  share - string copied
-ALGORITHM:  Allow user to manage their wishlst with different filter, photos are retrived from the database;
-            Allow user to like or comment or share theri liked photo;
-            User could also choose PLAN; hence direct to the planning page.
--->
 <name>wish-list</name>
 
 <template>
   <div class="main">
     <md-card class="wishlist">
-        
+
       <md-card-content>
         <form >
-          
-  
+
+
    <div>
   <md-list>
-      
+
     <md-subheader>
         <font size="5">My Wish List</font>
 
@@ -32,12 +19,12 @@ ALGORITHM:  Allow user to manage their wishlst with different filter, photos are
     <span><md-button class="md-raised md-accent">Plan</md-button></span>
   </md-layout>
 </md-layout>
-                 
+
         </md-subheader>
-    
-              
+
+
 <md-divider></md-divider>
-                        
+
 
 <md-layout md-gutter>
   <md-layout md-column md-flex="20">
@@ -67,31 +54,13 @@ ALGORITHM:  Allow user to manage their wishlst with different filter, photos are
       <md-icon>error</md-icon> <span>Time</span>
     </md-list-item>
     </md-layout>
-                             
+
     </md-layout>
   </md-layout>
 
-                                        
+
 
 <md-layout>
-                                       
-      <md-layout md-align="center">
-        <span>
-      <md-card class="photo">
-        <md-card-media>
-          <img src="assets/card-image-1.jpg" alt="People">
-        </md-card-media>
-        <md-card-actions>
-          <md-button class="md-icon-button">
-      <md-icon>favorite</md-icon>
-    </md-button>
-    <md-button class="md-icon-button">
-      <md-icon>delete</md-icon>
-    </md-button>
-        </md-card-actions>
-      </md-card></span>
-      </md-layout>
-          
 
       <md-layout md-align="center">
         <span>
@@ -109,8 +78,26 @@ ALGORITHM:  Allow user to manage their wishlst with different filter, photos are
         </md-card-actions>
       </md-card></span>
       </md-layout>
-                            
-                                                     
+
+
+      <md-layout md-align="center">
+        <span>
+      <md-card class="photo">
+        <md-card-media>
+          <img src="assets/card-image-1.jpg" alt="People">
+        </md-card-media>
+        <md-card-actions>
+          <md-button class="md-icon-button">
+      <md-icon>favorite</md-icon>
+    </md-button>
+    <md-button class="md-icon-button">
+      <md-icon>delete</md-icon>
+    </md-button>
+        </md-card-actions>
+      </md-card></span>
+      </md-layout>
+
+
       <md-layout md-align="center">
         <span>
       <md-card class="photo">
@@ -128,27 +115,27 @@ ALGORITHM:  Allow user to manage their wishlst with different filter, photos are
       </md-card>
         </span>
       </md-layout>
-                          
-</md-layout>
-
-               
-
-
-
-
-
-
 
 </md-layout>
 
-    
+
+
+
+
+
+
+
+
+</md-layout>
+
+
   </md-list>
 </div>
 
 
 
 
-          
+
         </form>
       </md-card-content>
     </md-card>

@@ -18,18 +18,32 @@
         </div>
       </md-toolbar>
       <md-list>
+
         <md-list-item @click.native="goToPhotoFeed">
           <md-icon>photo_library</md-icon>
           <span>Photo Feed</span>
         </md-list-item>
-        <md-list-item @click.native="goToPlan">
-          <md-icon>flight_takeoff</md-icon>
-          <span>Plan My Trip</span>
+
+        <md-divider></md-divider>
+
+        <md-list-item @click.native="goToProfile">
+          <md-icon>account_circle</md-icon>
+          <span>My Profile</span>
         </md-list-item>
         <md-list-item @click.native="goToEdit">
           <md-icon>edit</md-icon>
           <span>Edit My Profile</span>
         </md-list-item>
+
+        <md-divider></md-divider>
+
+        <md-list-item @click.native="goToPlan">
+          <md-icon>flight_takeoff</md-icon>
+          <span>Plan My Trip</span>
+        </md-list-item>
+
+        <md-divider></md-divider>
+
         <md-list-item @click.native="logout">
           <md-icon>exit_to_app</md-icon>
           <span>Logout</span>
@@ -69,13 +83,20 @@
     computed: {
       ...mapGetters([
         'userHasLogin'
-      ])
+      ]),
+      userId: function () {
+        return this.$store.state.User.info.id;
+      }
     },
     methods: {
       toggleSidenav: function() {
         this.$refs.sidenav.toggle();
       },
       // menu item functions
+      goToProfile: function () {
+        this.$router.push(`/profile/${this.userId}`);
+        this.$refs.sidenav.close();
+      },
       goToPhotoFeed: function () {
         this.$router.push('/feed');
         this.$refs.sidenav.close();

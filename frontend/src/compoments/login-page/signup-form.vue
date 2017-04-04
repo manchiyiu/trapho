@@ -1,16 +1,3 @@
-<!--
-FUNCTION SIGNUP - Function for user to signup if they dont have the accound
-PROGRAMMER: Yiu Man CHi / Wong Man Yung
-CALLING SEQUENCE: When signup is click in the first page, signup form appear
-VERSION: 1
-PURPOSE: User could signup for an account to use the trapho app
-DATA STRUCTURES:  input USERNAME - string
-                  input PASSWORD - string
-ALGORITHM:  Ask user to input the username and password;
-            Meanwhile double bind the input to the database for registration
-            Then check the validation; if user already exit, alert the user;
-            else signup success.
--->
 <name>login-page-login-form</name>
 
 <template>

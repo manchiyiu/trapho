@@ -8,6 +8,7 @@
         <common-content-card
           :photoId="photo.id"
           :username="photo.username"
+          :userId="photo.userId"
           :locationName="photo.locationName"
           :likesCount="photo.likesCount"
           :photoUrl="photo.url"
