@@ -12,11 +12,12 @@ const router = express.Router();
  * @apiPermission None
  * @apiGroup Authentication
  *
- * @apiSuccess {String} user.id User ID
+ * @apiSuccess {String} user User Object
  */
 router.post('/me', async (req, res) => {
   const userId = req.user.id;
-  res.json({ id: userId });
+  const user = await act({ role: 'auth', cmd: 'userRetrieve', userId });
+  res.json(user);
 });
 
 /**
