@@ -124,13 +124,30 @@ export default async(msg, reply) => {
         if (_.isUndefined(locations[photo.locationId])) {
           locations[photo.locationId] = retrieveLocation(photo.locationId);
         }
+        
+        
+        casted_photo.comments = await retrieveComments(photo.id);
+        casted_photo.comments.forEach(
+          comment =>{
+            if(_.isUndefined(users[comment.userId])){
+              users[comment.userId] = retrieveUser(comment.userId);
+            }
+          }
+        );
 
         casted_photo.likesCount = await retrieveLikes(photo.id);
-        casted_photo.comments = await retrieveComments(photo.id);
         casted_photo.username = (await users[photo.userId]).username;
         casted_photo.userId = photo.userId;
         casted_photo.locationName = (await locations[photo.locationId]).name;
+        let casted_comments = await Promise.all(casted_photo.comments.map(
+          async comment => {
+            comment.username = (await users[comment.userId]).username;
+            return comment;
+          }
+        ));
         return casted_photo;
+
+
       }
     ));
 
