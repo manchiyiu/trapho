@@ -36,6 +36,9 @@
 
       <md-card-content>
         {{description}}
+        <i style="color: #aaa; margin-left: 10px;">
+          {{toHumanTime(timestamp)}}
+        </i>
       </md-card-content>
 
       <md-card-media>
@@ -51,7 +54,13 @@
         <div style="padding-left: 15px">
           <div v-if="comments.length <= 0"><i>Be the first to leave a comment!</i></div>
           <div v-for="comment in comments">
-            <div><b>{{comment.username + ' '}}</b>{{comment.content}}</div>
+            <div>
+              <b>{{comment.username + ' '}}</b>
+              {{comment.content}}
+              <i style="color: #aaa; margin-left: 10px;">
+                {{toHumanTimeFromUnix(comment.timestamp)}}
+              </i>
+            </div>
           </div>
         </div>
       </md-card-content>
@@ -102,6 +111,8 @@
 
 <script>
 import Vue from 'vue';
+import moment from 'moment';
+
 import { getPhotoUrl, get, post, del } from '../../../utils.js';
 
 export default {
@@ -110,6 +121,7 @@ export default {
     'username',
     'userId',
     'locationName',
+    'timestamp',
     'likesCount',
     'photoUrl',
     'description',
@@ -135,7 +147,7 @@ export default {
             content: this.commentValue
           });
           this.comments.push({
-            username: 'placeholder',
+            username: this.username,
             content: this.commentValue
           });
         } catch (e) {
@@ -172,6 +184,12 @@ export default {
           this.extraCount = 1;
         }
       }
+    },
+    toHumanTimeFromUnix: function (timestamp) {
+      return moment.unix(timestamp / 1000).fromNow();
+    },
+    toHumanTime: function (timestamp) {
+      return moment(timestamp).fromNow();
     }
   },
   data: () => ({
@@ -196,6 +214,9 @@ export default {
     },
     userId: function () {
       return this.$store.state.User.info.id;
+    },
+    username: function () {
+      return this.$store.state.User.info.username;
     }
   }
 };

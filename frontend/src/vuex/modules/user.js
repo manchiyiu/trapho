@@ -6,7 +6,8 @@ import Vue from 'vue';
 const initialState = {
   info: {
     token: null,
-    id: null
+    id: null,
+    username: null
   }
 };
 
@@ -16,6 +17,7 @@ const mutations = {
   userLogin: function(state, payload) {
     Vue.set(state.info, 'token', payload.token);
     Vue.set(state.info, 'id', payload.id);
+    Vue.set(state.info, 'username', payload.username)
   },
   userLogout: function(state, payload) {
     Vue.set(state.info, 'token', null);
