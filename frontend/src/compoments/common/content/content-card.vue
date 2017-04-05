@@ -147,7 +147,7 @@ export default {
             content: this.commentValue
           });
           this.comments.push({
-            username: this.username,
+            username: this.currentUsername,
             content: this.commentValue,
             timestamp: new Date()
           });
@@ -216,7 +216,7 @@ export default {
     userId: function () {
       return this.$store.state.User.info.id;
     },
-    username: function () {
+    currentUsername: function () {
       return this.$store.state.User.info.username;
     }
   }
