@@ -14,4 +14,4 @@ Vue.material.registerTheme('default', {
   },
   warn: 'red',
   background: 'white'
-})
+});

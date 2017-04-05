@@ -1,7 +1,7 @@
 <name>activity-planning-trip-tab-basic-info</name>
 
 <template>
-  <md-card>
+  <md-card class="tab-basic-info-container">
     <md-card-content>
 
       <p style="margin-bottom: 20px;">
@@ -64,6 +64,13 @@
 </template>
 
 <style>
+.tab-basic-info-container {
+  height: 100vh;
+  margin: -16px;
+  padding: 20px;
+  padding-bottom: 200px;
+  overflow-y: scroll;
+}
 .activity-planning-trip-chip {
   margin-top: 5px;
   width: 100%;

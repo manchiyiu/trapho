@@ -3288,6 +3288,10 @@ sort-keys@^1.0.0:
   dependencies:
     is-plain-obj "^1.0.0"
 
+sortablejs@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/sortablejs/-/sortablejs-1.5.1.tgz#efae13b84c677f3b3d3f4f8e46c7e05fc6acb525"
+
 source-list-map@^0.1.7, source-list-map@~0.1.7:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/source-list-map/-/source-list-map-0.1.8.tgz#c550b2ab5427f6b3f21f5afead88c4f5587b2106"
@@ -3636,14 +3640,7 @@ vue-router@2.3.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-2.3.1.tgz#3135448cf57d4ca576906061a5a9d25fae0214d7"
 
-vue-style-loader@^2.0.0:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/vue-style-loader/-/vue-style-loader-2.0.4.tgz#4fc19e18bf162225338aac3b17d0fd0e1cfb7439"
-  dependencies:
-    hash-sum "^1.0.2"
-    loader-utils "^1.0.2"
-
-vue-style-loader@^2.0.5:
+vue-style-loader@^2.0.0, vue-style-loader@^2.0.5:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/vue-style-loader/-/vue-style-loader-2.0.5.tgz#f0efac992febe3f12e493e334edb13cd235a3d22"
   dependencies:
@@ -3676,6 +3673,12 @@ vue2-google-maps@0.7.1:
 vue@2.2.6, vue@^2.1.10, vue@^2.1.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.2.6.tgz#451714b394dd6d4eae7b773c40c2034a59621aed"
+
+vuedraggable@^2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/vuedraggable/-/vuedraggable-2.9.0.tgz#d3aa8684049d8b3efd27e2b24b6804c235ba74a9"
+  dependencies:
+    sortablejs "^1.5.1"
 
 vuex@2.2.1:
   version "2.2.1"
