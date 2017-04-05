@@ -25,9 +25,13 @@
         <b>Time Planning</b>
         <md-divider></md-divider>
         <div style="margin-top: 20px; border-left: 1px solid #ccc; padding-left: 15px;">
+          <i>
+            Below is the list of location that you have selected for the trip. Click <u><router-link to="/plan-select">here</router-link></u> to modify.
+          </i>
           <div style="margin-top: 20px;">
             <md-chip v-for="location in selected" key="location.id" class="activity-planning-trip-chip">
-              {{location.name}}
+              <b style="margin-right: 2px;">{{location.name}}</b>
+              <i>{{location.description}}</i>
             </md-chip>
           </div>
         </div>
