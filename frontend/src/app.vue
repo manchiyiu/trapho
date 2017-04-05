@@ -31,7 +31,7 @@ export default {
         width: '100vw',
         opacity: 0.6,
         height: '100vh',
-        zIndex: -1
+        zIndex: -100
       }
     }
   })

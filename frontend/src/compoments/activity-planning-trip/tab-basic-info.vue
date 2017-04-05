@@ -11,11 +11,11 @@
           <i>When will you have the trip? Select a start date and end date so you can start planning your trip.</i>
           <div style="margin-top: 20px;">
             <div style="margin-right: 24px; font-weight: bolder;">Start Date</div>
-            <date-picker class="datepicker" :date="startTime" :option="datePickerOption"></date-picker>
+            <input class="date-input" type="text" id="start-picker">
           </div>
           <div style="margin-top: 10px;">
             <div style="margin-right: 30px; font-weight: bolder;">End Date</div>
-            <date-picker :date="endTime" :option="datePickerOption" :limit="endTimeLimit"></date-picker>
+            <input class="date-input" type="text" id="end-picker">
           </div>
         </div>
       </div>
@@ -32,8 +32,10 @@
           </div>
         </div>
       </div>
+
     </md-card-content>
   </md-card>
+
 </template>
 
 <style>
@@ -41,65 +43,47 @@
   margin-top: 5px;
   width: 100%;
 }
-.datepicker {
-  cursor: pointer !important;
+.date-input {
+  padding: 7px;
+  font-size: 13px;
+  border: 1px solid #ddd;
+  border-radius: 2px;
 }
 </style>
 
 <script>
 import Vue from 'vue';
-import VueDatepicker from 'vue-datepicker';
+import pikaday from 'pikaday';
+import _ from 'lodash';
 
 export default {
   data: () => ({
-    startTime: {
-      time: ''
-    },
-    endTime: {
-      time: ''
-    },
-    datePickerOption: {
-      type: 'day',
-      week: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-      month: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-      format: 'YYYY-MM-DD',
-      placeholder: 'Select date',
-      inputStyle: {
-        'display': 'inline-block',
-        'padding': '5px',
-        'line-height': '22px',
-        'font-size': '16px',
-        'border': '1px solid #ddd',
-        'border-radius': '2px',
-        'color': '#5F5F5F',
-        'width': '100%'
-      },
-      color: {
-        header: '#ccc',
-        headerText: '#333'
-      },
-      buttons: {
-        ok: 'Ok',
-        cancel: 'Cancel'
-      },
-      overlayOpacity: 0.001,
-      dismissible: true
-    }
+    startPickerElm: null,
+    endPickerElm: null,
+    startDate: new Date(),
+    endDate: new Date()
   }),
-  components: {
-    'date-picker': VueDatepicker
+  watch: {
+    startDate: function () {
+      console.log('updated', this.startDate);
+      this.endPickerElm.setMinDate(this.startDate.toDate());
+    }
+  },
+  mounted: function () {
+    const self = this;
+    this.startPickerElm = new pikaday({
+      bound: true,
+      field: document.getElementById('start-picker'),
+      onSelect: function () { self.startDate = this.getMoment(); }
+    });
+    this.endPickerElm = new pikaday({
+      field: document.getElementById('end-picker'),
+      onSelect: function () { self.endDate = this.getMoment(); }
+    });
   },
   computed: {
     selected: function () {
       return this.$store.state.ActivityPlanning.selected;
-    },
-    endTimeLimit: function () {
-      return [
-        {
-          type: 'fromto',
-          from: this.startTime.time
-        }
-      ];
     }
   }
 };
