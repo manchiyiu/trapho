@@ -148,7 +148,8 @@ export default {
           });
           this.comments.push({
             username: this.username,
-            content: this.commentValue
+            content: this.commentValue,
+            timestamp: new Date()
           });
         } catch (e) {
           console.error(e);
