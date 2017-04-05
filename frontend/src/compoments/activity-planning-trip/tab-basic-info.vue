@@ -3,6 +3,11 @@
 <template>
   <md-card>
     <md-card-content>
+
+      <p style="margin-bottom: 20px;">
+        <i>Please fill in the follow information to start trip planning. Note that once submitted this cannot be changed anymore.</i>
+      </p>
+
       <!-- trip info -->
       <div>
         <b>Trip Information</b>
@@ -11,11 +16,11 @@
           <i>When will you have the trip? Select a start date and end date so you can start planning your trip.</i>
           <div style="margin-top: 20px;">
             <div style="margin-right: 24px; font-weight: bolder;">Start Date</div>
-            <input class="date-input" type="text" id="start-picker">
+            <input :disabled="hasCommitted" class="date-input" type="text" id="start-picker">
           </div>
           <div style="margin-top: 10px;">
             <div style="margin-right: 30px; font-weight: bolder;">End Date</div>
-            <input class="date-input" type="text" id="end-picker">
+            <input :disabled="hasCommitted" class="date-input" type="text" id="end-picker">
           </div>
         </div>
       </div>
@@ -25,17 +30,33 @@
         <b>Time Planning</b>
         <md-divider></md-divider>
         <div style="margin-top: 20px; border-left: 1px solid #ccc; padding-left: 15px;">
-          <i>
+          <i v-if="hasSelected">
             Below is the list of location that you have selected for the trip. Click <u><router-link to="/plan-select">here</router-link></u> to modify.
           </i>
-          <div style="margin-top: 20px;">
+          <i v-if="!hasSelected">
+            It seems that you have not selected any location. Click <u><router-link to="/plan-select">here</router-link></u> to add.
+          </i>
+          <div style="margin-top: 20px; margin-bottom: 20px;">
             <md-chip v-for="location in selected" key="location.id" class="activity-planning-trip-chip">
-              <b style="margin-right: 2px;">{{location.name}}</b>
-              <i>{{location.description}}</i>
+              <div style="overflow: hidden; width: 100%;">
+                <b style="margin-right: 2px;">{{location.name}}</b>
+                <i>{{location.description}}</i>
+              </div>
             </md-chip>
           </div>
         </div>
       </div>
+
+      <form @submit.prevent="submit">
+        <md-button
+          class="md-raised md-primary"
+          @click.native="submit"
+          :disabled="hasCommitted || !hasCompleted">
+          <span v-if="hasCommitted">Confirmed</span>
+          <span v-if="!hasCommitted">Confirm</span>
+        </md-button>
+        <md-button class="md-raised md-accent" @click.native="reset">Reset</md-button>
+      </form>
 
     </md-card-content>
   </md-card>
@@ -59,35 +80,83 @@
 import Vue from 'vue';
 import pikaday from 'pikaday';
 import _ from 'lodash';
+import moment from 'moment';
 
 export default {
+  props: ['hasCommitted'],
   data: () => ({
     startPickerElm: null,
-    endPickerElm: null,
-    startDate: new Date(),
-    endDate: new Date()
+    endPickerElm: null
   }),
-  watch: {
-    startDate: function () {
-      console.log('updated', this.startDate);
-      this.endPickerElm.setMinDate(this.startDate.toDate());
-    }
-  },
   mounted: function () {
     const self = this;
+
     this.startPickerElm = new pikaday({
-      bound: true,
       field: document.getElementById('start-picker'),
+      yearRange: 1,
       onSelect: function () { self.startDate = this.getMoment(); }
     });
+
     this.endPickerElm = new pikaday({
       field: document.getElementById('end-picker'),
+      yearRange: 1,
       onSelect: function () { self.endDate = this.getMoment(); }
     });
+
+    if (this.startDate != null) {
+      this.startPickerElm.setDate(this.startDate.toDate());
+    } else {
+      this.startPickerElm.setDate(new Date()); // set to today
+    }
+
+    if (this.endDate != null) {
+      this.endPickerElm.setDate(this.endDate.toDate());
+    } else {
+      this.endPickerElm.setDate(new Date()); // set to today
+    }
+  },
+  watch: {
+    startDate: function () {
+      this.endPickerElm.setMinDate(this.startDate.toDate());
+    }
   },
   computed: {
     selected: function () {
       return this.$store.state.ActivityPlanning.selected;
+    },
+    hasSelected: function () {
+      return Object.keys(this.selected).length > 0;
+    },
+    hasCompleted: function () {
+      return this.hasSelected && this.startDate && this.endDate;
+    },
+    startDate: {
+      get: function () {
+        return this.$store.state.ActivityPlanning.startDate;
+      },
+      set: function (value) {
+        this.$store.commit('activityPlanningSetTripStartDate', value);
+      }
+    },
+    endDate: {
+      get: function () {
+        return this.$store.state.ActivityPlanning.endDate;
+      },
+      set: function (value) {
+        this.$store.commit('activityPlanningSetTripEndDate', value);
+      }
+    }
+  },
+  methods: {
+    submit: function () {
+      this.$store.commit('activityPlanningSetCommitted', true);
+    },
+    reset: function () {
+      this.$store.commit('activityPlanningSetCommitted', false);
+      this.startDate = null;
+      this.endDate = null;
+      this.startPickerElm.setDate(new Date()); // set to today
+      this.endPickerElm.setDate(new Date()); // set to today
     }
   }
 };
