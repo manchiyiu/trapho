@@ -10,6 +10,7 @@ import './compoments/login-page/module';
 import './compoments/photo-feed/module';
 import './compoments/common/module';
 import './compoments/activity-planning-select/module';
+import './compoments/activity-planning-trip/module';
 import './compoments/user-profile/module';
 
 import store from './vuex/store';
