@@ -48,14 +48,14 @@
       </div>
 
       <form @submit.prevent="submit">
-        <md-button
-          class="md-raised md-primary"
-          @click.native="submit"
-          :disabled="hasCommitted || !hasCompleted">
-          <span v-if="hasCommitted">Confirmed</span>
-          <span v-if="!hasCommitted">Confirm</span>
-        </md-button>
-        <md-button class="md-raised md-accent" @click.native="reset">Reset</md-button>
+        <div class="tab-basic-info-submit">
+          <md-button type="submit" :disabled="hasCommitted || !hasCompleted" class="md-raised md-fab md-primary">
+            <md-icon>check</md-icon>
+          </md-button>
+          <md-button @click.native="reset" :disabled="!hasCommitted" class="md-raised md-fab md-accent">
+            <md-icon>refresh</md-icon>
+          </md-button>
+        </div>
       </form>
 
     </md-card-content>
@@ -80,6 +80,13 @@
   font-size: 13px;
   border: 1px solid #ddd;
   border-radius: 2px;
+}
+.tab-basic-info-submit {
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
+  display: flex;
+  margin-top: 30px;
+  justify-content: center;
 }
 </style>
 
