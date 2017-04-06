@@ -3670,7 +3670,13 @@ vue2-google-maps@0.7.1:
     babel-runtime "^5.8.0"
     marker-clusterer-plus "^2.1.4"
 
-vue@2.2.6, vue@^2.1.10, vue@^2.1.6:
+vue2-timepicker@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/vue2-timepicker/-/vue2-timepicker-0.1.4.tgz#0809d9b07e9c8642de360044b6a14c2b7f203815"
+  dependencies:
+    vue "^2.0.1"
+
+vue@2.2.6, vue@^2.0.1, vue@^2.1.10, vue@^2.1.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.2.6.tgz#451714b394dd6d4eae7b773c40c2034a59621aed"
 

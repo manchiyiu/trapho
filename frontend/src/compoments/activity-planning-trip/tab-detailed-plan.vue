@@ -35,6 +35,17 @@
               <md-card-content>
                 <div class="md-title">{{chip.label}}</div>
                 <div class="md-subtitle">{{chip.subLabel}}</div>
+                <md-divider style="margin-top: 10px;"></md-divider>
+                <md-layout md-gutter>
+                  <md-layout md-flex="50" style="display: flex; align-items: center;">
+                    <b style="margin-top: 10px; height: inherit; margin-right: 5px;">From:</b>
+                    <vue-timepicker></vue-timepicker>
+                  </md-layout>
+                  <md-layout md-flex="50" style="display: flex; align-items: center;">
+                    <b style="margin-top: 10px; height: inherit; margin-right: 5px;">To:</b>
+                    <vue-timepicker></vue-timepicker>
+                  </md-layout>
+                </md-layout>
               </md-card-content>
             </md-card>
             <!-- is indicator item -->
@@ -92,6 +103,16 @@
   margin-top: 30px;
   justify-content: center;
 }
+.time-picker {
+  margin-top: 10px;
+}
+.time-picker input {
+  border-bottom: 1px solid #ddd;
+  border-radius: 5px;
+}
+.time-picker .dropdown {
+  position: static !important;
+}
 </style>
 
 <script>
@@ -99,6 +120,7 @@ import Vue from 'vue';
 import moment from 'moment';
 import _ from 'lodash';
 import draggable from 'vuedraggable';
+import VueTimepicker from 'vue2-timepicker';
 
 export default {
   props: ['hasCommitted'],
@@ -108,7 +130,8 @@ export default {
     selectedDate: 0,
   }),
   components: {
-    draggable
+    draggable,
+    VueTimepicker
   },
   mounted: function () {
     this.updateRange();
