@@ -2,7 +2,7 @@
 
 <template>
 
-  <lazy-component style="width: 100%">
+  <lazy-component style="width: 100%" v-if="!isDeleted">
 
     <md-card md-with-hover>
 
@@ -11,27 +11,26 @@
           <md-avatar class="md-avatar-icon">
             <md-icon>photo</md-icon>
           </md-avatar>
-          <div class="md-title" @click="gotoProfile">{{username}}</div>
+          <div class="md-title" @click="gotoProfile(userId)">{{username}}</div>
           <div
             class="md-subhead"
             style="height: 20px; overflow: hidden; text-overflow: ellipsis;">
             <md-icon>location_on</md-icon>{{locationName}}
           </div>
         </md-card-header-text>
-        <!--
-        <md-menu md-size="4" md-direction="bottom left">
+        <md-menu md-size="4" md-direction="bottom left" v-if="currentUserId == userId">
           <md-button class="md-icon-button" md-menu-trigger><md-icon>more_vert</md-icon></md-button>
           <md-menu-content>
-            <md-menu-item>
+            <md-menu-item @click.native="onEditPost">
               <span>Edit</span>
               <md-icon>mode_edit</md-icon>
             </md-menu-item>
-            <md-menu-item>
+            <md-menu-item @click.native="deletePost">
               <span>Delete</span>
               <md-icon>delete</md-icon>
             </md-menu-item>
           </md-menu-content>
-        </md-menu>-->
+        </md-menu>
       </md-card-header>
 
       <md-card-content>
@@ -55,7 +54,7 @@
           <div v-if="comments.length <= 0"><i>Be the first to leave a comment!</i></div>
           <div v-for="comment in comments">
             <div>
-              <b>{{comment.username + ' '}}</b>
+              <b @click="gotoProfile(comment.userId)">{{comment.username + ' '}}</b>
               {{comment.content}}
               <i style="color: #aaa; margin-left: 10px;">
                 {{toHumanTimeFromUnix(comment.timestamp)}}
@@ -70,15 +69,25 @@
           <md-icon :class="{'liked': this.liked}">favorite</md-icon>
           <b :class="{'liked': this.liked}">{{likesCount + extraCount}}</b>
         </md-button>
-        <md-dialog-prompt
-          v-model="commentValue"
-          md-title="Leave your comment"
-          md-ok-text="Submit"
-          md-cancel-text="Cancel"
-          @close="onCommentClose"
-          ref="comment_box">
-        </md-dialog-prompt>
       </div>
+
+      <md-dialog-prompt
+        v-model="commentValue"
+        md-title="Leave your comment"
+        md-ok-text="Submit"
+        md-cancel-text="Cancel"
+        @close="onCommentClose"
+        ref="comment_box">
+      </md-dialog-prompt>
+
+      <md-dialog-prompt
+        v-model="descriptionValue"
+        md-title="Edit photo description"
+        md-ok-text="Edit"
+        md-cancel-text="Cancel"
+        @close="editPost"
+        ref="edit_box">
+      </md-dialog-prompt>
 
     </md-card>
 
@@ -113,7 +122,7 @@
 import Vue from 'vue';
 import moment from 'moment';
 
-import { getPhotoUrl, get, post, del } from '../../../utils.js';
+import { getPhotoUrl, get, post, del, patch } from '../../../utils.js';
 
 export default {
   props: [
@@ -134,8 +143,8 @@ export default {
     closeDialog: function (ref) {
       this.$refs[ref].close();
     },
-    gotoProfile: function () {
-      this.$router.push(`/profile/${this.userId}`);
+    gotoProfile: function (userId) {
+      this.$router.push(`/profile/${userId}`);
     },
     onCommentClose: async function (state) {
       if (state === 'ok') {
@@ -191,18 +200,43 @@ export default {
     },
     toHumanTime: function (timestamp) {
       return moment(timestamp).fromNow();
+    },
+    onEditPost: function () {
+      this.descriptionValue = this.description;
+      this.openDialog('edit_box');
+    },
+    editPost: async function () {
+      try {
+        await patch(this.$router, `photos/id/${this.photoId}`, {
+          description: this.descriptionValue
+         });
+        this.description = this.descriptionValue;
+        this.descriptionValue = '';
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    deletePost: async function () {
+      try {
+        await del(this.$router, `photos/id/${this.photoId}`);
+        this.isDeleted = true;
+      } catch (e) {
+        console.error(e);
+      }
     }
   },
   data: () => ({
     liked: false,
     extraCount: 0,
-    commentValue: ''
+    commentValue: '',
+    descriptionValue: '',
+    isDeleted: false
   }),
   beforeMount: async function () {
     try {
       var { liked } = await get(
         this.$router,
-        `likes/users/${this.userId}/photos/${this.photoId}`
+        `likes/users/${this.currentUserId}/photos/${this.photoId}`
       );
       this.liked = liked;
     } catch (e) {
@@ -213,7 +247,7 @@ export default {
     actualPhotoUrl: function () {
       return getPhotoUrl(this.photoUrl);
     },
-    userId: function () {
+    currentUserId: function () {
       return this.$store.state.User.info.id;
     },
     currentUsername: function () {
