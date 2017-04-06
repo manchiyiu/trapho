@@ -80,7 +80,8 @@ router.get('/id/:tripId', async (req, res) => {
  *    }
  */
 router.post('/', async (req, res) => {
-  const { name, userId, timestamp, locations } = req.body;
+  const userId = req.user.id;
+  const { name, timestamp, locations } = req.body;
   try {
     const { id } = await act({ role: 'activity', cmd: 'tripCreate', name, userId, timestamp, locations });
     res.json({ id });
@@ -114,8 +115,9 @@ router.post('/', async (req, res) => {
  *   }
  */
 router.patch('/id/:tripId', async (req, res) => {
+  const userId = req.user.id;
   const { tripId } = req.params;
-  const { name, userId, timestamp, locations } = req.body;
+  const { name, timestamp, locations } = req.body;
   try {
     const { id } = await act({ role: 'activity', cmd: 'tripPatch', tripId, name, userId, timestamp, locations });
     res.json({ id });
