@@ -9,17 +9,6 @@
 
     <!-- committed -->
     <md-card-content v-if="hasCommitted">
-      <!-- selected element -->
-      <!--
-      <md-input-container>
-        <label for="date">Date</label>
-        <md-select v-model="selectedDate">
-          <md-option :key="index" :value="index" v-for="(date, index) in dates">
-            Day {{index + 1}} ({{toHumanDate(date)}})
-          </md-option>
-        </md-select>
-      </md-input-container>
-      -->
 
       <!-- timetable -->
       <div class="timetable-container">
@@ -28,10 +17,16 @@
             Backlog
           </div>
         </div>
-        <draggable v-model="chips" :options="{ filter: '.timetable-indicator' }" @change="onMoved">
+        <draggable
+          v-model="chips"
+          :options="{ filter: '.timetable-indicator' }"
+          @change="onMoved">
           <div class="timetable-row" v-for="(chip, index) in chips" :key="chip.id">
             <!-- is actual trip item -->
-            <md-card v-if="!chip.isIndicator" class="timetable-item" md-with-hover>
+            <md-card
+              v-if="!chip.isIndicator"
+              class="timetable-item"
+              md-with-hover>
               <md-card-content>
                 <div class="md-title">{{chip.label}}</div>
                 <div class="md-subtitle">{{chip.subLabel}}</div>
@@ -41,7 +36,7 @@
                     <b style="margin-top: 10px; height: inherit; margin-right: 5px;">From:</b>
                     <vue-timepicker
                       v-model="chip.startTime"
-                      format="hh:mm"
+                      format="HH:mm"
                       :minute-interval="15"
                       :ref="`start_${index}`"
                       v-on-clickaway="() => toggleTimepicker(index)" />
@@ -50,7 +45,7 @@
                     <b style="margin-top: 10px; height: inherit; margin-right: 5px;">To:</b>
                     <vue-timepicker
                       v-model="chip.endTime"
-                      format="hh:mm"
+                      format="HH:mm"
                       :minute-interval="15"
                       :ref="`end_${index}`"
                       v-on-clickaway="() => toggleTimepicker(index)" />
@@ -85,8 +80,6 @@
   padding-bottom: 200px;
   overflow-y: scroll;
 }
-.timetable-container {
-}
 .timetable-row {
   display: flex;
   width: 100%;
@@ -119,9 +112,15 @@
 .time-picker-overlay {
   display: none;
 }
+.timetable-invalid {
+  border: 5px solid rgba(255, 100, 100, 0.3) !important;
+  border-style: inset;
+  border-radius: 3px;
+}
 .time-picker input {
-  border-bottom: 1px solid #ddd;
-  border-radius: 5px;
+  border-bottom: 1px solid rgba(200, 200, 200, 0.3);
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.3);
 }
 .time-picker .dropdown {
   position: static !important;
