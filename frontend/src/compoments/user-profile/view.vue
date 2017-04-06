@@ -19,7 +19,21 @@
             <div class="md-title">{{username}}</div>
             <div class="md-subhead">User Profile</div>
           </md-card-header>
+        </md-card>
+        <md-card md-with-hover style="margin-bottom: 20px">
+          <md-card-header>
+            <div class="md-title">Created trips</div>
+          </md-card-header>
           <md-card-content>
+            <div v-if="!trips" style="margin-left: 30px;">
+              <md-spinner md-indeterminate></md-spinner>
+            </div>
+            <ul v-if="trips && trips.length > 0">
+              <li v-for="trip in trips">
+                <router-link :to="`/trip/${trip.id}`">{{trip.name}}</router-link>
+              </li>
+            </ul>
+            <p style="margin-left: 30px;" v-if="trips && trips.length <= 0">No created trip for this user. SAD.</p>
           </md-card-content>
         </md-card>
       </div>
@@ -54,22 +68,32 @@ export default {
     currentIndex: 0,
     username: '',
     photos: {},
+    trips: null,
     hasEnded: false // whether or not the feed loading has reached the end
   }),
   beforeMount: async function () {
     await this.loadPosts(0);
-    this.username = (await get(this.$router, `auth/id/${this.userId}`)).username;
+    try {
+      this.username = (await get(this.$router, `auth/id/${this.userId}`)).username;
+      this.trips = (await get(this.$router, `trips/users/${this.userId}`)).trips;
+    } catch (e) {
+      console.error(e);
+    }
   },
   methods: {
     loadPosts: async function (skip = 0, userId = this.userId, count = 5) {
-      let { photos } = await get(this.$router, 'photos/stream', { count, skip, userId });
-      photos.forEach((photo, index) => {
-        const result = _.merge(photo, { index: skip + index });
-        Vue.set(this.photos, skip + index, result);
-      });
-      this.currrentIndex = skip + photos.length;
-      if (photos.length == 0) {
-        this.hasEnded = true;
+      try {
+        let { photos } = await get(this.$router, 'photos/stream', { count, skip, userId });
+        photos.forEach((photo, index) => {
+          const result = _.merge(photo, { index: skip + index });
+          Vue.set(this.photos, skip + index, result);
+        });
+        this.currrentIndex = skip + photos.length;
+        if (photos.length == 0) {
+          this.hasEnded = true;
+        }
+      } catch (e) {
+        console.error(e);
       }
     },
     loadMore: async function () {
