@@ -29,7 +29,7 @@
           </div>
         </div>
         <draggable v-model="chips" :options="{ filter: '.timetable-indicator' }">
-          <div class="timetable-row" v-for="(chip, index) in chips" :key="index">
+          <div class="timetable-row" v-for="(chip, index) in chips" :key="chip.id">
             <!-- is actual trip item -->
             <md-card v-if="!chip.isIndicator" class="timetable-item" md-with-hover>
               <md-card-content>
@@ -39,11 +39,21 @@
                 <md-layout md-gutter>
                   <md-layout md-flex="50" style="display: flex; align-items: center;">
                     <b style="margin-top: 10px; height: inherit; margin-right: 5px;">From:</b>
-                    <vue-timepicker></vue-timepicker>
+                    <vue-timepicker
+                      v-model="chip.startTime"
+                      format="hh:mm"
+                      :minute-interval="15"
+                      :ref="`start_${index}`"
+                      v-on-clickaway="() => toggleTimepicker(index)" />
                   </md-layout>
                   <md-layout md-flex="50" style="display: flex; align-items: center;">
                     <b style="margin-top: 10px; height: inherit; margin-right: 5px;">To:</b>
-                    <vue-timepicker></vue-timepicker>
+                    <vue-timepicker
+                      v-model="chip.endTime"
+                      format="hh:mm"
+                      :minute-interval="15"
+                      :ref="`end_${index}`"
+                      v-on-clickaway="() => toggleTimepicker(index)" />
                   </md-layout>
                 </md-layout>
               </md-card-content>
@@ -57,7 +67,7 @@
       </div>
 
       <div class="tab-detailed-plan-submit">
-        <md-button class="md-raised md-fab md-primary">
+        <md-button :disabled="!hasCompleted" class="md-raised md-fab md-primary">
           <md-icon>check</md-icon>
         </md-button>
       </div>
@@ -106,6 +116,9 @@
 .time-picker {
   margin-top: 10px;
 }
+.time-picker-overlay {
+  display: none;
+}
 .time-picker input {
   border-bottom: 1px solid #ddd;
   border-radius: 5px;
@@ -121,14 +134,18 @@ import moment from 'moment';
 import _ from 'lodash';
 import draggable from 'vuedraggable';
 import VueTimepicker from 'vue2-timepicker';
+import { directive as onClickaway } from 'vue-clickaway';
 
 export default {
   props: ['hasCommitted'],
   data: () => ({
     dates: [],
     chips: [],
-    selectedDate: 0,
+    selectedDate: 0
   }),
+  directives: {
+    onClickaway
+  },
   components: {
     draggable,
     VueTimepicker
@@ -150,9 +167,23 @@ export default {
     },
     selected: function () {
       return this.$store.state.ActivityPlanning.selected;
+    },
+    hasCompleted: function () {
+      return _.every(
+        this.chips.map(chip => {
+          if (chip.isIndicator) {
+            return true;
+          }
+          return chip.startTime && chip.endTime;
+        })
+      );
     }
   },
   methods: {
+    toggleTimepicker: function (index) {
+      this.$refs[`start_${index}`][0].showDropdown = false;
+      this.$refs[`end_${index}`][0].showDropdown = false;
+    },
     updateRange: function () {
       this.dates = [];
       this.chips = [];
@@ -160,8 +191,11 @@ export default {
       // push selected locations
       _.forEach(this.selected, location => {
         this.chips.push({
+          id: location.id,
           label: location.name,
-          subLabel: location.description
+          subLabel: location.description,
+          startTime: null,
+          endTime: null
         });
       });
 
@@ -170,11 +204,11 @@ export default {
       let i = 1;
       for(let date = moment(this.startDate); date.diff(this.endDate) < 0; date.add('days', 1)) {
         this.dates.push(date.toDate().toString());
-        this.chips.push({ label: `Day ${i}`, isIndicator: true });
+        this.chips.push({ id: `day_${i}`, label: `Day ${i}`, isIndicator: true });
         i++;
       }
       this.dates.push(moment(this.endDate).toDate().toString());
-      this.chips.push({ label: `Day ${i}`, isIndicator: true });
+      this.chips.push({ id: `day_${i}`, label: `Day ${i}`, isIndicator: true });
     },
     toHumanDate: function (date) {
       return moment(date).format('ll');
