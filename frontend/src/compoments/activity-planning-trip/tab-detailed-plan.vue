@@ -28,7 +28,7 @@
             Backlog
           </div>
         </div>
-        <draggable v-model="chips" :options="{ filter: '.timetable-indicator' }">
+        <draggable v-model="chips" :options="{ filter: '.timetable-indicator' }" @change="onMoved">
           <div class="timetable-row" v-for="(chip, index) in chips" :key="chip.id">
             <!-- is actual trip item -->
             <md-card v-if="!chip.isIndicator" class="timetable-item" md-with-hover>
@@ -180,6 +180,18 @@ export default {
     }
   },
   methods: {
+    onMoved: function (change) {
+      const { newIndex } = change.moved;
+      for (let i = newIndex - 1; i >= 0; i--) {
+        // do a reverse search and find an indicator element so as to locate the date
+        if (this.chips[i].isIndicator === true) { // found
+          this.chips[newIndex].date = this.chips[i].date;
+          console.log('location moved to', this.chips[i].date);
+          break;
+        }
+      }
+      console.log(this.chips);
+    },
     toggleTimepicker: function (index) {
       this.$refs[`start_${index}`][0].showDropdown = false;
       this.$refs[`end_${index}`][0].showDropdown = false;
@@ -194,6 +206,7 @@ export default {
           id: location.id,
           label: location.name,
           subLabel: location.description,
+          date: null,
           startTime: null,
           endTime: null
         });
@@ -204,11 +217,21 @@ export default {
       let i = 1;
       for(let date = moment(this.startDate); date.diff(this.endDate) < 0; date.add('days', 1)) {
         this.dates.push(date.toDate().toString());
-        this.chips.push({ id: `day_${i}`, label: `Day ${i}`, isIndicator: true });
+        this.chips.push({
+          id: `day_${i}`,
+          label: `Day ${i} (${this.toHumanDate(date)})`,
+          date: date.toDate().toString(),
+          isIndicator: true
+        });
         i++;
       }
       this.dates.push(moment(this.endDate).toDate().toString());
-      this.chips.push({ id: `day_${i}`, label: `Day ${i}`, isIndicator: true });
+      this.chips.push({
+        id: `day_${i}`,
+        label: `Day ${i} (${this.toHumanDate(this.endDate)})`,
+        date: this.endDate.toString(),
+        isIndicator: true
+       });
     },
     toHumanDate: function (date) {
       return moment(date).format('ll');
