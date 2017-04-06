@@ -3,15 +3,23 @@
 <template>
   <div class="tab-detailed-plan-container">
     <!-- uncommitted -->
-    <md-card-content v-if="!hasCommitted">
+    <md-card-content v-if="!hasCommitted && !hasSubmitted">
       <p>Please confirm the basic information before proceeding to this step.</p>
     </md-card-content>
 
     <!-- committed -->
-    <md-card-content v-if="hasCommitted">
+    <md-card-content v-if="hasCommitted && !hasSubmitted">
 
       <!-- timetable -->
       <div class="timetable-container">
+
+        <div class="timetable-row">
+          <md-input-container style="width: 50%">
+            <label>Trip name</label>
+            <md-input v-model="tripName"></md-input>
+          </md-input-container>
+        </div>
+
         <div class="timetable-row">
           <div class="timetable-item timetable-indicator">
             Backlog
@@ -39,6 +47,7 @@
                       format="HH:mm"
                       :minute-interval="15"
                       :ref="`start_${index}`"
+                      hide-clear-button
                       v-on-clickaway="() => toggleTimepicker(index)" />
                   </md-layout>
                   <md-layout md-flex="50" style="display: flex; align-items: center;">
@@ -48,6 +57,7 @@
                       format="HH:mm"
                       :minute-interval="15"
                       :ref="`end_${index}`"
+                      hide-clear-button
                       v-on-clickaway="() => toggleTimepicker(index)" />
                   </md-layout>
                 </md-layout>
@@ -62,12 +72,22 @@
       </div>
 
       <div class="tab-detailed-plan-submit">
-        <md-button :disabled="!hasCompleted" class="md-raised md-fab md-primary">
+        <md-button @click.native="submit" :disabled="!hasCompleted" class="md-raised md-fab md-primary">
           <md-icon>check</md-icon>
         </md-button>
       </div>
 
     </md-card-content>
+
+    <md-card-content v-if="hasSubmitted">
+      <div style="text-align: center; font-size: 20px;">
+        <div style="margin-bottom: 20px;">
+          <md-icon class="md-size-4x">check</md-icon>
+        </div>
+        Congrats. Trip created.
+      </div>
+    </md-card-content>
+
   </div>
 </template>
 
@@ -112,11 +132,6 @@
 .time-picker-overlay {
   display: none;
 }
-.timetable-invalid {
-  border: 5px solid rgba(255, 100, 100, 0.3) !important;
-  border-style: inset;
-  border-radius: 3px;
-}
 .time-picker input {
   border-bottom: 1px solid rgba(200, 200, 200, 0.3);
   border-radius: 2px;
@@ -135,12 +150,16 @@ import draggable from 'vuedraggable';
 import VueTimepicker from 'vue2-timepicker';
 import { directive as onClickaway } from 'vue-clickaway';
 
+import { post } from '../../utils.js';
+
 export default {
   props: ['hasCommitted'],
   data: () => ({
     dates: [],
     chips: [],
-    selectedDate: 0
+    selectedDate: 0,
+    tripName: '',
+    hasSubmitted: false
   }),
   directives: {
     onClickaway
@@ -155,6 +174,7 @@ export default {
   watch: {
     hasCommitted: function () {
       this.updateRange();
+      this.hasSubmitted = false;
     }
   },
   computed: {
@@ -168,12 +188,15 @@ export default {
       return this.$store.state.ActivityPlanning.selected;
     },
     hasCompleted: function () {
-      return _.every(
+      return this.tripName.trim().length > 0 && _.every(
         this.chips.map(chip => {
           if (chip.isIndicator) {
             return true;
           }
-          return chip.startTime && chip.endTime;
+          return chip.startTime.HH
+            && chip.startTime.mm
+            && chip.endTime.HH
+            && chip.endTime.mm;
         })
       );
     }
@@ -189,7 +212,6 @@ export default {
           break;
         }
       }
-      console.log(this.chips);
     },
     toggleTimepicker: function (index) {
       this.$refs[`start_${index}`][0].showDropdown = false;
@@ -199,41 +221,74 @@ export default {
       this.dates = [];
       this.chips = [];
 
+      let i = 0;
+
       // push selected locations
       _.forEach(this.selected, location => {
-        this.chips.push({
+        Vue.set(this.chips, i, {
           id: location.id,
           label: location.name,
           subLabel: location.description,
           date: null,
-          startTime: null,
-          endTime: null
+          startTime: { HH: null, mm: null },
+          endTime: { HH: null, mm: null }
         });
+        i++;
       });
 
       let startDate = moment(this.startDate);
       let endDate = moment(this.endDate);
-      let i = 1;
+
+      let j = 1;
       for(let date = moment(this.startDate); date.diff(this.endDate) < 0; date.add('days', 1)) {
         this.dates.push(date.toDate().toString());
-        this.chips.push({
-          id: `day_${i}`,
-          label: `Day ${i} (${this.toHumanDate(date)})`,
+        Vue.set(this.chips, i, {
+          id: `day_${j}`,
+          label: `Day ${j} (${this.toHumanDate(date)})`,
           date: date.toDate().toString(),
           isIndicator: true
         });
         i++;
+        j++;
       }
+
       this.dates.push(moment(this.endDate).toDate().toString());
-      this.chips.push({
-        id: `day_${i}`,
-        label: `Day ${i} (${this.toHumanDate(this.endDate)})`,
-        date: this.endDate.toString(),
+
+      Vue.set(this.chips, i, {
+        id: `day_${j}`,
+        label: `Day ${j} (${this.toHumanDate(this.endDate)})`,
+        date: this.endDate.toDate().toString(),
         isIndicator: true
-       });
+      });
+      i++;
     },
     toHumanDate: function (date) {
       return moment(date).format('ll');
+    },
+    submit: async function () {
+      const locations = this.chips
+        .filter(item => !item.isIndicator && item.date)
+        .map(location => ({
+          id: location.id,
+          startTime: moment(location.date)
+            .hour(location.startTime.HH)
+            .minute(location.startTime.mm)
+            .toISOString(),
+          endTime: moment(location.date)
+            .hour(location.endTime.HH)
+            .minute(location.endTime.mm)
+            .toISOString()
+        }));
+      try {
+        await post(this.$router, 'trips', {
+          name: this.tripName.trim(),
+          timestamp: moment().toISOString(),
+          locations
+        });
+        this.hasSubmitted = true;
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
 };
