@@ -60,7 +60,7 @@
 
 <script>
 import Vue from 'vue';
-import { login, patch } from '../../utils';
+import { loginTest, patch } from '../../utils';
 
 export default {
   data: () => ({
@@ -89,7 +89,7 @@ export default {
   },
   methods: {
     submit: async function () {
-      let { error, token, user } = await logintest(this.$router, {
+      let { error, token, user } = await loginTest(this.$router, {
         username: this.username,
         password: this.password,
       });
@@ -100,6 +100,7 @@ export default {
             break;
           case 'wrongPassword':
             this.errorMessage = 'Wrong password. Please try again.';
+            this.password = '';
             break;
           default:
             this.errorMessage = error;
@@ -121,6 +122,10 @@ export default {
         return;
       } else {
         this.errorMessage = 'Personal information has been changed.';
+        password = '';
+        newpassword = '';
+        newpassword2 = '';
+        email = '';
         this.$refs.snackbar.open();
       }
     }
