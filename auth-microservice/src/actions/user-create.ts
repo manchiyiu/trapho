@@ -8,10 +8,14 @@ export default async (msg, reply) => {
   let hashedPassword = await bcrypt.hash(password, 10);
 
   /* check if user already exists */
-  const result: User = await User.retrieve({ username });
-
-  if (result) {
-    reply(new Error('alreadyExist'), null);
+  let result: User;
+  try{
+     result = await User.retrieve({ username });
+     if(result){
+      throw new Error('alreadyExist');
+     }
+  }catch(e){
+    reply(e, null);
     return;
   }
 
