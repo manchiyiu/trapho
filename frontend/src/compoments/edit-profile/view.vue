@@ -32,7 +32,7 @@
             <md-input v-model="email"></md-input>
           </md-input-container>
 
-          <md-button class="md-primary md-raised" :disabled="isFilled" @click.native="submit">Submit</md-button>
+          <md-button class="md-primary md-raised" :disabled="!isFilled" @click.native="submit">Submit</md-button>
           
         </form>
       </md-card-content>
@@ -60,24 +60,57 @@
 
 <script>
 import Vue from 'vue';
-import { patch } from '../../utils';
+import { login, patch } from '../../utils';
 
 export default {
   data: () => ({
     password: '',
     newpassword: '',
     newpassword2: '',
-    errorMessage: ''
+    errorMessage: '',
+    email: '',
+    isEmailInvalid: true
   }),
   computed: {
-    isFilled: function () { return this.password.length <= 0 || this.newpassword != this.newpassword2 || this.newpassword.length <= 0 || this.email.length <= 0; },
-    userId: function () { return this.$store.state.User.info.id; }
+    isFilled: function () { return this.password.length > 0 && ((this.newpassword == this.newpassword2 && this.newpassword.length > 0) || (this.email.length > 0 && !this.isEmailInvalid)); },
+    userId: function () { return this.$store.state.User.info.id; },
+    username: function () { return this.$store.state.User.info.username; }
+  },
+  watch: {
+    email: function() {
+      let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (re.test(this.email)) {
+        this.isEmailInvalid = false;
+      }
+      else {
+        this.isEmailInvalid = true;
+      }
+    }
   },
   methods: {
-    submit: async function (userId, password) {
-      let { error, id } = await patch(this.$router, `auth/id/${this.userId}`, { userId: this.userId, password: this.newpassword });
+    submit: async function () {
+      let { error, token, user } = await logintest(this.$router, {
+        username: this.username,
+        password: this.password,
+      });
       if (error) {
         switch (error) {
+          case 'invalidUser':
+            this.errorMessage = 'User does not exist. Please try again.';
+            break;
+          case 'wrongPassword':
+            this.errorMessage = 'Wrong password. Please try again.';
+            break;
+          default:
+            this.errorMessage = error;
+        }
+        this.$refs.snackbar.open();
+        return;
+      }
+
+      let { error2, id } = await patch(this.$router, `auth/id/${this.userId}`, { userId: this.userId, password: this.newpassword, email: this.email });
+      if (error2) {
+        switch (error2) {
           case 'userNotExist':
             this.errorMessage = 'User does not exist. Please try again.';
             break;
@@ -87,7 +120,7 @@ export default {
         this.$refs.snackbar.open();
         return;
       } else {
-        this.errorMessage = 'Password has been changed.';
+        this.errorMessage = 'Personal information has been changed.';
         this.$refs.snackbar.open();
       }
     }
