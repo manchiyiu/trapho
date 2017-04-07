@@ -86,15 +86,23 @@ export default {
     days: {}
   }),
   beforeMount: async function () {
-    try {
-      const trip = await get(this.$router, `trips/id/${this.tripId}`);
-      this.name = trip.name;
-      this.deserializeTrip(trip);
-    } catch (e) {
-      console.error(e);
+    await this.loadTrip();
+  },
+  watch: {
+    tripId: async function () {
+      await this.loadTrip();
     }
   },
   methods: {
+    loadTrip: async function () {
+      try {
+        const trip = await get(this.$router, `trips/id/${this.tripId}`);
+        this.name = trip.name;
+        this.deserializeTrip(trip);
+      } catch (e) {
+        console.error(e);
+      }
+    },
     deserializeTrip: async function(trip) {
       const minTime = trip.locations.reduce(
         (a, b) => moment(a.startTime).isBefore(b.startTime) ? a : b
