@@ -36,7 +36,7 @@
             <md-input required v-model="nickname"></md-input>
           </md-input-container>
 
-          <md-button type="submit" class="md-primary md-raised" :disabled="isFilled" @click.native="submit">Submit</md-button>
+          <md-button type="submit" class="md-primary md-raised" :disabled="isNotFilled || isEmailInvalid" @click.native="submit">Submit</md-button>
 
         </form>
       </md-card-content>
@@ -73,10 +73,22 @@ export default {
     passwordAgain: '',
     email: '',
     nickname: '',
-    errorMessage: ''
+    errorMessage: '',
+    isEmailInvalid: true,
   }),
   computed: {
-    isFilled: function () { return this.username.length <= 0 || this.password.length <= 0; }
+    isNotFilled: function () { return this.username.length <= 0 || this.password.length <= 0; }
+  },
+  watch: {
+    email: function() {
+      let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (re.test(this.email)) {
+        this.isEmailInvalid = false;
+      }
+      else {
+        this.isEmailInvalid = true;
+      }
+    }
   },
   methods: {
     submit: async function () {
