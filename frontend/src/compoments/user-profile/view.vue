@@ -17,7 +17,7 @@
               <img :src="`https://api.adorable.io/avatars/285/${userId}@adorable.png`"></img>
             </md-avatar>
             <div class="md-title">{{username}}</div>
-            <div class="md-subhead">User Profile</div>
+            <div class="md-subhead">{{userEmail}}</div>
           </md-card-header>
         </md-card>
         <md-card md-with-hover style="margin-bottom: 20px">
@@ -67,6 +67,7 @@ export default {
   data: () => ({
     currentIndex: 0,
     username: '',
+    userEmail: '',
     photos: {},
     trips: null,
     hasEnded: false // whether or not the feed loading has reached the end
@@ -86,13 +87,14 @@ export default {
       try {
         this.username = (await get(this.$router, `auth/id/${this.userId}`)).username;
         this.trips = (await get(this.$router, `trips/users/${this.userId}`)).trips;
+        this.userEmail = (await get(this.$router, `auth/id/${this.userId}`)).email;
       } catch (e) {
         console.error(e);
       }
     },
     loadPosts: async function (skip = 0, userId = this.userId, count = 5) {
       try {
-        let { photos } = await get(this.$router, 'photos/stream', { count, skip, userId });
+        let { photos } = await get(this.$router, 'photos/stream', { count, skip, userId: this.userId });
         photos.forEach((photo, index) => {
           const result = _.merge(photo, { index: skip + index });
           Vue.set(this.photos, skip + index, result);

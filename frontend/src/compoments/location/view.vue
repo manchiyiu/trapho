@@ -18,8 +18,8 @@
                 class="md-subhead"
                 style="height: 20px; overflow: hidden; text-overflow: ellipsis;"
                 >
-                Rating: <span v-if="!rating">0</span><span v-else>{{rating}}</span>
-                <md-icon class="md-warn">star</md-icon>
+                Rating: <span v-if="!rating">No Ratings Yet</span><span v-else>{{rating}}
+                <md-icon class="md-warn">star</md-icon></span>
               </div>
               <div class="md-subhead" style="margin-top: 20px">
                 <span v-for="tag in tags">#{{tag}} </span>
