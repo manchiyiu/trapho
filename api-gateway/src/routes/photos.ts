@@ -166,7 +166,7 @@ router.patch('/id/:photoId', async (req, res) => {
  *
  * @apiParam {String} photoId                 photo id of the photo to be deleted
  *
- * @apiUse objectId
+ * @apiUse objectIdd
  *
  * @apiError (Error 500) {String} apiError            Error message ('photoNotExist', 'databaseError', etc.)
  * @apiErrorExample {json} Error-Response:

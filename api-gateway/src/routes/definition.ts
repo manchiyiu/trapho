@@ -1,9 +1,23 @@
 /**
+ * @apiDefine objectIdd
+ * @apiSuccess {String} id    ID of the modified/created/deleted resource
+ * @apiSuccessExample {json} Success-Response:
+ *    {
+ *      "id": "{{id-placeholder}}",
+ *      "userId": "{{id-placeholder}}",
+ *      "locationId": "{{id-placeholder}}",
+ *      "url": "{{id-placeholder}}",
+ *      "description": "Beautiful.",
+ *      "timestamp": "2017-03-02T16:39:27+00:00"
+ *    }
+ */
+
+/**
  * @apiDefine objectId
  * @apiSuccess {String} id    ID of the modified/created/deleted resource
  * @apiSuccessExample {json} Success-Response:
  *    {
- *      "id": "{{id-placeholder}}"
+ *      "id": "{{id-placeholder}}",
  *    }
  */
 
@@ -85,6 +99,8 @@
  */
 
 // ------------- locations --------------
+
+
 
 /**
  * @apiDefine locations

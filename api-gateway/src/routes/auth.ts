@@ -42,6 +42,7 @@ router.post('/me', async (req, res) => {
  * @apiError (Error 500) {String} error Possible value: 'wrongPassword', 'invalidUser', etc.
  * @apiErrorExample {json} Error-Response:
  *    {
+ *      "status": "error",
  *      "error": "wrongPassword"
  *    }
  */

@@ -68,7 +68,19 @@ router.get('/id/:locationId', async (req, res) => {
  *
  * @apiParam {String} locationId      ID of the location
  *
- * @apiUse locations
+ * @apiSuccess {Location[]} locations               Array containing all matching locations, empty array if no match. For detailed strucuture, please refer to "Retrieve location by id".
+ * @apiSuccessExample  {json} Success-Response:
+ *   {
+ *     "id": "{{id-placeholder}}",
+ *     "name": "Small Bridge Flowing Water",
+ *     "description": "Some fun place.",
+ *     "tags": ["CUHK", "fun"],
+ *     "coordinates": {
+ *       "lat": 23.02323,
+ *       "lng": -23.323223
+ *      },
+ *     "photocount": 5
+ *  }
  *
  * @apiError (Error 500) {String} apiError            Error message ('locationNotExist', 'databaseError', etc.)
  * @apiErrorExample {json} Error-Response:
@@ -202,6 +214,7 @@ router.delete('/id/:locationId', async (req, res) => {
  *        "lng": 114.181671,
  *        "lat": 22.27907
  *      }
+ *      "rating": 7.8
  *    }
  *  ]
  *}
