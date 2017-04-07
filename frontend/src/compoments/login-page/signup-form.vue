@@ -36,7 +36,7 @@
             <md-input required v-model="nickname"></md-input>
           </md-input-container>
 
-          <md-button type="submit" class="md-primary md-raised" :disabled="isNotFilled || isEmailInvalid" @click.native="submit">Submit</md-button>
+          <md-button type="submit" class="md-primary md-raised" :disabled="isNotFilled || isEmailInvalid || isNotSame">Submit</md-button>
 
         </form>
       </md-card-content>
@@ -77,7 +77,8 @@ export default {
     isEmailInvalid: true,
   }),
   computed: {
-    isNotFilled: function () { return this.username.length <= 0 || this.password.length <= 0; }
+    isNotFilled: function () { return this.username.length <= 0 || this.password.length <= 0; },
+    isNotSame: function () {return this.password != this.passwordAgain;}
   },
   watch: {
     email: function() {
@@ -90,6 +91,7 @@ export default {
       }
     }
   },
+  
   methods: {
     submit: async function () {
       if (this.password !== this.passwordAgain) {
@@ -115,6 +117,12 @@ export default {
         this.$refs.snackbar.open();
         return;
       }
+      //   this.$store.commit('userLogin', {
+      //   username: this.username,
+      //   id: user.id,
+      //   token
+      // });
+      // this.$router.push('feed');
     }
   }
 }
