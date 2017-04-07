@@ -110,3 +110,12 @@ export async function retrieveComments(photoId : String) {
     return [];
   }
 }
+
+export async function retrieveRating(userId : String, locationId : String, photoId : String) {
+  try {
+    const { ratings } =  await act({ role: 'location', cmd: 'ratingRetrieve', userId, locationId, photoId });
+    return ratings[0].rating;
+  } catch (e) {
+    return null;
+  }
+}
