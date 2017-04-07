@@ -326,8 +326,8 @@ router.get('/', async (req: any, res) => {
  */
 router.get('/stream', async (req: any, res) => {
   try {
-    const { userId, username, locationName, tags, timestamp, count, skip } = req.query;
-    const { photos } = await act({ role: 'photo', cmd: 'photoStreamRetrieve', userId, username, locationName, tags, timestamp, count, skip });
+    const { userId, username, locationId, locationName, tags, timestamp, count, skip } = req.query;
+    const { photos } = await act({ role: 'photo', cmd: 'photoStreamRetrieve', userId, username, locationId, locationName, tags, timestamp, count, skip });
     res.json({ photos });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
