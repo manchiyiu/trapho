@@ -14,7 +14,8 @@
           <div class="md-title" @click="gotoProfile(userId)">{{username}}</div>
           <div
             class="md-subhead"
-            style="height: 20px; overflow: hidden; text-overflow: ellipsis;">
+            style="height: 20px; overflow: hidden; text-overflow: ellipsis;"
+            @click="gotoLocation(locationId)">
             <md-icon>location_on</md-icon>{{locationName}}
           </div>
         </md-card-header-text>
@@ -129,6 +130,7 @@ export default {
     'photoId',
     'username',
     'userId',
+    'locationId',
     'locationName',
     'timestamp',
     'likesCount',
@@ -145,6 +147,9 @@ export default {
     },
     gotoProfile: function (userId) {
       this.$router.push(`/profile/${userId}`);
+    },
+    gotoLocation: function (locationId) {
+      this.$router.push(`/location/${locationId}`);
     },
     onCommentClose: async function (state) {
       if (state === 'ok') {
