@@ -20,7 +20,7 @@ export default class User {
     let result;
     try {
       result = await this.model.findOne(query);
-      if (!result) throw new Error();
+      if (!result) return null;
     } catch (e) {
       return null;
     }
