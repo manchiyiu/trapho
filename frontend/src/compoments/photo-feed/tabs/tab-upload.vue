@@ -52,7 +52,7 @@
           </md-input-container>
           <md-input-container>
             <label>Rating</label>
-            <md-input type="number" v-model="dialogRating"></md-input>
+            <md-input type="number" min="1" max="10" v-model="dialogRating"></md-input>
           </md-input-container>
         </md-dialog-content>
         <md-dialog-actions>

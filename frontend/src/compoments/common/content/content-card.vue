@@ -8,8 +8,8 @@
 
       <md-card-header>
         <md-card-header-text>
-          <md-avatar class="md-avatar-icon">
-            <md-icon>photo</md-icon>
+          <md-avatar>
+            <img :src="`https://api.adorable.io/avatars/285/${userId}@adorable.png`"></img>
           </md-avatar>
           <div class="md-title" @click="gotoProfile(userId)">{{username}}</div>
           <div

@@ -1,7 +1,7 @@
 <name>edit-view</name>
 
 <template>
-    <div class="main">
+  <div class="main">
     <md-card class="card">
       <md-card-content>
         <form novalidate @submit.stop.prevent="submit">
@@ -26,13 +26,11 @@
             <md-input v-model="newpassword2" type="password"></md-input>
           </md-input-container>
 
-          <!--
           <md-input-container class="input-container">
             <md-icon>email</md-icon>
             <label>Email</label>
             <md-input v-model="email"></md-input>
           </md-input-container>
-          -->
 
           <md-button class="md-primary md-raised" :disabled="isFilled" @click.native="submit">Submit</md-button>
           
@@ -72,7 +70,7 @@ export default {
     errorMessage: ''
   }),
   computed: {
-    isFilled: function () { return this.password.length <= 0 || this.newpassword != this.newpassword2; },
+    isFilled: function () { return this.password.length <= 0 || this.newpassword != this.newpassword2 || this.newpassword.length <= 0 || this.email.length <= 0; },
     userId: function () { return this.$store.state.User.info.id; }
   },
   methods: {
