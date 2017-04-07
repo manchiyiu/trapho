@@ -34,12 +34,13 @@
             <md-card
               v-if="!chip.isIndicator"
               class="timetable-item"
+              :class="{ 'isInvalid': chip.isInvalid, 'isValid': !chip.isInvalid }"
               md-with-hover>
               <md-card-content>
                 <div class="md-title">{{chip.label}}</div>
                 <div class="md-subtitle">{{chip.subLabel}}</div>
                 <md-divider style="margin-top: 10px;"></md-divider>
-                <md-layout md-gutter>
+                <md-layout md-gutter v-if="chip.date">
                   <md-layout md-flex="50" style="display: flex; align-items: center;">
                     <b style="margin-top: 10px; height: inherit; margin-right: 5px;">From:</b>
                     <vue-timepicker
@@ -48,6 +49,7 @@
                       :minute-interval="15"
                       :ref="`start_${index}`"
                       hide-clear-button
+                      @change="onTimeUpdate"
                       v-on-clickaway="() => toggleTimepicker(index)" />
                   </md-layout>
                   <md-layout md-flex="50" style="display: flex; align-items: center;">
@@ -58,6 +60,7 @@
                       :minute-interval="15"
                       :ref="`end_${index}`"
                       hide-clear-button
+                      @change="onTimeUpdate"
                       v-on-clickaway="() => toggleTimepicker(index)" />
                   </md-layout>
                 </md-layout>
@@ -85,6 +88,9 @@
           <md-icon class="md-size-4x">check</md-icon>
         </div>
         Congrats. Trip created.
+        <div style="margin-top: 10px">
+          <router-link :to="`trips/${this.createdId}`">View here</router-link>
+        </div>
       </div>
     </md-card-content>
 
@@ -106,10 +112,22 @@
   justify-content: center;
 }
 .timetable-item {
+  background-color: transparent !important;
+  box-shadow: none;
   width: 500px;
   max-width: 100vw;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+.timetable-item.isValid {
+  box-shadow: none;
+  border: 1px solid rgba(200, 200, 200, 0.5);
+  border-radius: 2px;
+}
+.timetable-item.isInvalid {
+  box-shadow: none;
+  border: 1px solid rgba(227, 27, 37, 0.3);
+  border-radius: 2px;
 }
 .timetable-indicator {
   border-top: 1px solid #ddd;
@@ -159,7 +177,8 @@ export default {
     chips: [],
     selectedDate: 0,
     tripName: '',
-    hasSubmitted: false
+    hasSubmitted: false,
+    createdId: null
   }),
   directives: {
     onClickaway
@@ -168,13 +187,17 @@ export default {
     draggable,
     VueTimepicker
   },
-  mounted: function () {
+  beforeMount: function () {
     this.updateRange();
+    this.onTimeUpdate();
   },
   watch: {
     hasCommitted: function () {
       this.updateRange();
       this.hasSubmitted = false;
+    },
+    chips: function () {
+      this.onTimeUpdate();
     }
   },
   computed: {
@@ -196,7 +219,8 @@ export default {
           return chip.startTime.HH
             && chip.startTime.mm
             && chip.endTime.HH
-            && chip.endTime.mm;
+            && chip.endTime.mm
+            && !chip.isInvalid;
         })
       );
     }
@@ -208,10 +232,53 @@ export default {
         // do a reverse search and find an indicator element so as to locate the date
         if (this.chips[i].isIndicator === true) { // found
           this.chips[newIndex].date = this.chips[i].date;
-          console.log('location moved to', this.chips[i].date);
+          // console.log('location moved to', this.chips[i].date);
           break;
         }
       }
+      this.onTimeUpdate();
+    },
+    getTimeValue: function (time) {
+      return parseInt(time.HH) * 60 + parseInt(time.mm);
+    },
+    onTimeUpdate: function () {
+      this.chips.filter(chip => !chip.isIndicator).forEach(chip => {
+        if (!chip.startTime.HH || !chip.startTime.mm || !chip.endTime.HH || !chip.endTime.mm) {
+          Vue.set(chip, 'isInvalid', true);
+          return;
+        }
+
+        // check if startTime < endTime
+        if (this.getTimeValue(chip.startTime) >= this.getTimeValue(chip.endTime)) {
+          Vue.set(chip, 'isInvalid', true);
+          return;
+        }
+
+        const dateHeaderIndex = _.findIndex(this.chips, item => item.date == chip.date);
+        // iterate through all the location items within the same date, check if any time conflict
+        let isInvalid = false;
+
+        const sameDateLocation = this.chips
+          .filter(item =>
+            !item.isIndicator &&
+            item.date === chip.date &&
+            item.id !== chip.id &&
+            item.startTime && item.startTime.HH && item.startTime.mm &&
+            item.endTime && item.endTime.HH && item.endTime.mm
+          );
+
+        sameDateLocation.forEach(other => {
+          const otherStartTime = this.getTimeValue(other.startTime);
+          const otherEndTime = this.getTimeValue(other.endTime);
+          const myStartTime = this.getTimeValue(chip.startTime);
+          const myEndTime = this.getTimeValue(chip.endTime);
+          if (myStartTime < otherEndTime && otherStartTime < myEndTime) {
+            isInvalid = true;
+          }
+        });
+
+        Vue.set(chip, 'isInvalid', isInvalid);
+      });
     },
     toggleTimepicker: function (index) {
       this.$refs[`start_${index}`][0].showDropdown = false;
@@ -280,12 +347,13 @@ export default {
             .toISOString()
         }));
       try {
-        await post(this.$router, 'trips', {
+        let { id } = await post(this.$router, 'trips', {
           name: this.tripName.trim(),
           timestamp: moment().toISOString(),
           locations
         });
         this.hasSubmitted = true;
+        this.createdId = id;
       } catch (e) {
         console.error(e);
       }

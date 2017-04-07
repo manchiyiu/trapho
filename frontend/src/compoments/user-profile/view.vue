@@ -73,17 +73,26 @@ export default {
     hasEnded: false // whether or not the feed loading has reached the end
   }),
   beforeMount: async function () {
-    await this.loadPosts(0);
-    try {
-      this.username = (await get(this.$router, `auth/id/${this.userId}`)).username;
-      this.userEmail = (await get(this.$router, `auth/id/${this.userId}`)).email;
-      this.trips = (await get(this.$router, `trips/users/${this.userId}`)).trips;
-    } catch (e) {
-      console.error(e);
+    await this.load();
+  },
+  watch: {
+    $route: function() {
+      this.load();
     }
   },
   methods: {
-    loadPosts: async function (skip = 0, count = 5) {
+    load: async function () {
+      this.photos = {};
+      await this.loadPosts(0);
+      try {
+        this.username = (await get(this.$router, `auth/id/${this.userId}`)).username;
+        this.trips = (await get(this.$router, `trips/users/${this.userId}`)).trips;
+        this.userEmail = (await get(this.$router, `auth/id/${this.userId}`)).email;
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    loadPosts: async function (skip = 0, userId = this.userId, count = 5) {
       try {
         let { photos } = await get(this.$router, 'photos/stream', { count, skip, userId: this.userId });
         photos.forEach((photo, index) => {
@@ -91,7 +100,7 @@ export default {
           Vue.set(this.photos, skip + index, result);
         });
         this.currrentIndex = skip + photos.length;
-        if (photos.length == 0) {
+        if (photos.length < count) {
           this.hasEnded = true;
         }
       } catch (e) {
