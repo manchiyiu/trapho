@@ -92,12 +92,19 @@ export default {
     hasEnded: false // whether or not the feed loading has reached the end
   }),
   beforeMount: async function () {
-    
-    await this.loadPosts(0);
-    await this.loadLocation();
-    await this.loadRating();
+    await this.load();
+  },
+  watch: {
+    $route: async function () {
+      await this.load();
+    }
   },
   methods: {
+    load: async function () {
+      await this.loadPosts(0);
+      await this.loadLocation();
+      await this.loadRating();
+    },
     loadPosts: async function (skip = 0, locationId = this.locationId, count = 5) {
       try {
         let { photos } = await get(this.$router, 'photos/stream', { count, skip, locationId });
