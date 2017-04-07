@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 export default async(msg, reply) => {
   let batchSize : number;
   let batchNo: number;
-  const { username, userId, locationName, timestamp, tags } = msg;
+  const { username, userId, locationName, timestamp, tags, locationId } = msg;
   const delim = ',';
   let query:any = {};
 
@@ -108,6 +108,10 @@ export default async(msg, reply) => {
       query.timestamp.$gte = stTime;
       query.timestamp.$lte = endTime;
     }
+    if(_.isString(locationId)){
+      query.locationId = locationId;
+    }
+    
     let photos : [any] = await Photo.retrieveMany(query, batchSize, batchNo);
     let result = await Promise.all(photos.map(
       async photo => {
