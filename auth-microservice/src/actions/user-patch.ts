@@ -1,8 +1,9 @@
 import User from '../model';
 import * as bcrypt from 'bcryptjs';
+import * as _ from 'lodash';
 
 export default async (msg, reply) => {
-  const { userId, password } = msg;
+  const { userId, password, email } = msg;
   let hashedPassword;
   try {
     hashedPassword = await bcrypt.hash(password, 10);
@@ -13,6 +14,9 @@ export default async (msg, reply) => {
   try{
     const user: User = await User.retrieveById(userId);
     user.password = hashedPassword;
+    if(!_.isUndefined(email)){
+      user.email = email;
+    }
     user.patch();
     reply(null, { "id": userId });
   } catch(e) {

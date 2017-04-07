@@ -6,10 +6,12 @@ export default class User {
   id: string = null;
   username: string = null;
   password: string = null;
+  email: string = null;
 
   static schema = new mongoose.Schema({
     username: String,
-    password: String
+    password: String,
+    email: String
   });
 
   static model = mongoose.model('User', User.schema);
@@ -26,16 +28,22 @@ export default class User {
   }
 
   constructor(object: any) {
-    const { username, password, _id: id } = object;
+    const { username, password, _id: id, email } = object;
     this.username = username;
     this.password = password;
     this.id = id;
+    if(!_.isUndefined(email)){
+      this.email = email;
+    }else{
+      this.email = "abc@example.com";
+    }
   }
 
   async save() {
     const model = new User.model({
       username: this.username,
-      password: this.password
+      password: this.password,
+      email: this.email
     });
     return await model
       .save()
@@ -45,7 +53,8 @@ export default class User {
   async patch(){
     const newInfo = {
       username: this.username,
-      password: this.password
+      password: this.password,
+      email: this.email
     }
     try {
       await User.model.findByIdAndUpdate(this.id, newInfo);
