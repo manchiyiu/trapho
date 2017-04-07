@@ -16,7 +16,7 @@
             <md-avatar>
               <img :src="`https://api.adorable.io/avatars/285/${userId}@adorable.png`"></img>
             </md-avatar>
-            <div class="md-title">{{username}}</div>
+            <div class="md-title">{{username}} <router-link :to="`/edit`" v-if="currentUserId == userId">(edit)</router-link></div>
             <div class="md-subhead">{{userEmail}}</div>
           </md-card-header>
         </md-card>
@@ -74,6 +74,11 @@ export default {
   }),
   beforeMount: async function () {
     await this.load();
+  },
+  computed: {
+    currentUserId: function () {
+      return this.$store.state.User.info.id;
+    }
   },
   watch: {
     $route: function() {
