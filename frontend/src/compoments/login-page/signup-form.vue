@@ -64,7 +64,7 @@
 
 <script>
 import Vue from 'vue';
-import { post } from '../../utils';
+import { post, login } from '../../utils';
 
 export default {
   data: () => ({
@@ -117,12 +117,25 @@ export default {
         this.$refs.snackbar.open();
         return;
       }
-      //   this.$store.commit('userLogin', {
-      //   username: this.username,
-      //   id: user.id,
-      //   token
-      // });
-      // this.$router.push('feed');
+      let { err, tok, user } = await login(this.$router, {
+        username: this.username,
+        password: this.password,
+      });
+      if (err) {
+        switch (err) {
+          default:
+            this.errorMessage = err;
+        }
+        this.$refs.snackbar.open();
+        return;
+      }
+      this.$store.commit('userLogin', {
+        username: this.username,
+        id: user.id,
+        tok
+      });
+      this.$router.push('feed');
+      
     }
   }
 }
