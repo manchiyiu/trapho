@@ -286,10 +286,9 @@ router.get('/', async (req: any, res) => {
  * @apiParam {Number} [skip]                    batch number
  * @apiParam {string} [userId]                  keywords for username (seperated by comma)
  * @apiParam {string} [username]                keywords for username (seperated by comma)
- * @apiParam {string} [locationId]              locationId for location
- * @apiParam {string} [locationName]            keywords for location name (seperated by comma)
- * @apiParam {string} [tags]                    keywords for tags (seperated by comma)
- * @apiParam {string} [timestamp]               time of the photo created
+ * @apiParam {String} [locationName]            keywords for location name (seperated by comma)
+ * @apiParam {String} [tags]                    keywords for tags (seperated by comma)
+ * @apiParam {String} [timestamp]               time of the photo created
  *
  * @apiSuccessExample  {json} Success-Response:
  * {
@@ -327,8 +326,8 @@ router.get('/', async (req: any, res) => {
  */
 router.get('/stream', async (req: any, res) => {
   try {
-    const { userId, username, locationName, tags, timestamp, count, skip, locationId } = req.query;
-    const { photos } = await act({ role: 'photo', cmd: 'photoStreamRetrieve', userId, username, locationId, locationName, tags, timestamp, count, skip });
+    const { userId, username, locationName, tags, timestamp, count, skip } = req.query;
+    const { photos } = await act({ role: 'photo', cmd: 'photoStreamRetrieve', userId, username, locationName, tags, timestamp, count, skip });
     res.json({ photos });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
