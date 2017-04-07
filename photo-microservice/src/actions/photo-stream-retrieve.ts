@@ -1,5 +1,5 @@
 import Photo from '../model';
-import {retrieveUser, retrieveUsersByNames, retrieveLocation, retrieveLocations, retrieveLikes, retrieveComments} from '../utils';
+import {retrieveUser, retrieveUsersByNames, retrieveLocation, retrieveLocations, retrieveLikes, retrieveComments, retrieveRating} from '../utils';
 import * as _ from 'lodash';
 
 export default async(msg, reply) => {
@@ -139,12 +139,17 @@ export default async(msg, reply) => {
         casted_photo.username = (await users[photo.userId]).username;
         casted_photo.userId = photo.userId;
         casted_photo.locationName = (await locations[photo.locationId]).name;
+
+        casted_photo.locationId = photo.locationId;
+        casted_photo.locationTags = (await locations[photo.locationId]).tags;
+        
         let casted_comments = await Promise.all(casted_photo.comments.map(
           async comment => {
             comment.username = (await users[comment.userId]).username;
             return comment;
           }
         ));
+        casted_photo.rating = await retrieveRating(casted_photo.userId, casted_photo.locationId, casted_photo.id);
         return casted_photo;
 
 
