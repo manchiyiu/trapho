@@ -86,7 +86,7 @@ export default {
       }
     }
   },
-  
+
   methods: {
     submit: async function () {
       if (this.password !== this.passwordAgain) {
@@ -95,7 +95,7 @@ export default {
         return;
       }
 
-      let { status, error, token } = await post(this.$router, 'auth/signup', {
+      let { status, error } = await post(this.$router, 'auth/signup', {
         username: this.username,
         password: this.password,
         email: this.email,
@@ -112,7 +112,8 @@ export default {
         this.$refs.snackbar.open();
         return;
       }
-      let { err, tok, user } = await login(this.$router, {
+
+      let { err, user, token } = await login(this.$router, {
         username: this.username,
         password: this.password,
       });
@@ -122,15 +123,16 @@ export default {
             this.errorMessage = err;
         }
         this.$refs.snackbar.open();
-        return;
+        return
       }
       this.$store.commit('userLogin', {
         username: this.username,
         id: user.id,
-        tok
+        token
       });
+
       this.$router.push('feed');
-      
+
     }
   }
 }
