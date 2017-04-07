@@ -10,6 +10,7 @@
           :username="photo.username"
           :userId="photo.userId"
           :timestamp="photo.timestamp"
+          :locationId="photo.locationId"
           :locationName="photo.locationName"
           :likesCount="photo.likesCount"
           :photoUrl="photo.url"
