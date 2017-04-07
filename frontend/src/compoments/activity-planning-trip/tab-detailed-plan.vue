@@ -34,14 +34,13 @@
             <md-card
               v-if="!chip.isIndicator"
               class="timetable-item"
-              :class="{ invalid: chip.isInvalid }"
               md-with-hover>
               <md-card-content>
                 <div class="md-title">{{chip.label}}</div>
                 <div class="md-subtitle">{{chip.subLabel}}</div>
                 <md-divider style="margin-top: 10px;"></md-divider>
                 <md-layout md-gutter>
-                  <md-layout md-flex="50" style="display: flex; align-items: center;" v-show="chip.date != null">
+                  <md-layout md-flex="50" style="display: flex; align-items: center;">
                     <b style="margin-top: 10px; height: inherit; margin-right: 5px;">From:</b>
                     <vue-timepicker
                       v-model="chip.startTime"
@@ -49,10 +48,9 @@
                       :minute-interval="15"
                       :ref="`start_${index}`"
                       hide-clear-button
-                      @change="onTimeUpdate"
                       v-on-clickaway="() => toggleTimepicker(index)" />
                   </md-layout>
-                  <md-layout md-flex="50" style="display: flex; align-items: center;" v-show="chip.date != null">
+                  <md-layout md-flex="50" style="display: flex; align-items: center;">
                     <b style="margin-top: 10px; height: inherit; margin-right: 5px;">To:</b>
                     <vue-timepicker
                       v-model="chip.endTime"
@@ -60,7 +58,6 @@
                       :minute-interval="15"
                       :ref="`end_${index}`"
                       hide-clear-button
-                      @change="onTimeUpdate"
                       v-on-clickaway="() => toggleTimepicker(index)" />
                   </md-layout>
                 </md-layout>
@@ -113,9 +110,6 @@
   max-width: 100vw;
   margin-top: 10px;
   margin-bottom: 10px;
-}
-.timetable-item.invalid {
-  opacity: 0.3;
 }
 .timetable-indicator {
   border-top: 1px solid #ddd;
@@ -219,46 +213,6 @@ export default {
         }
       }
     },
-    onTimeUpdate: function () {
-      this.chips.filter(chip => !chip.isIndicator).forEach(chip => {
-        if (!chip.startTime.HH || !chip.startTime.mm || !chip.endTime.HH || !chip.endTime.mm) {
-          Vue.set(chip, 'isInvalid', true);
-          return;
-        }
-
-        // check if startTime < endTime
-        if (chip.startTime.HH * 60 + chip.startTime.mm > chip.endTime.HH * 60 + chip.endTime.mm) {
-          Vue.set(chip, 'isInvalid', true);
-          return;
-        }
-
-        const dateHeaderIndex = _.findIndex(this.chips, item => item.date == chip.date);
-        // iterate through all the location items within the same date, check if any time conflict
-        let i = dateHeaderIndex + 1;
-        let isInvalid = false;
-        while (i < this.chips.length && this.chips[i].date === chip.date) {
-          if (
-            this.chips[i].id == chip.id ||
-            !this.chips[i].startTime.HH || !this.chips[i].startTime.mm ||
-            !this.chips[i].endTime.HH || !this.chips[i].endTime.mm
-          ) {
-            i++;
-            continue;
-          }
-          const otherStartTime = this.chips[i].startTime.HH * 60 + this.chips[i].startTime.mm;
-          const otherEndTime = this.chips[i].endTime.HH * 60 + this.chips[i].endTime.mm;
-          const myStartTime = chip.startTime.HH * 60 + chip.startTime.mm;
-          const myEndTime = chip.endTime.HH * 60 + chip.endTime.mm;
-          if (myStartTime < otherEndTime && otherStartTime < myEndTime) {
-            isInvalid = true;
-            break;
-          }
-          i++;
-        }
-
-        Vue.set(chip, 'isInvalid', isInvalid);
-      });
-    },
     toggleTimepicker: function (index) {
       this.$refs[`start_${index}`][0].showDropdown = false;
       this.$refs[`end_${index}`][0].showDropdown = false;
@@ -277,8 +231,7 @@ export default {
           subLabel: location.description,
           date: null,
           startTime: { HH: null, mm: null },
-          endTime: { HH: null, mm: null },
-          isInvalid: true
+          endTime: { HH: null, mm: null }
         });
         i++;
       });
