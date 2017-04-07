@@ -132,6 +132,9 @@ export default {
   watch: {
     startDate: function () {
       this.endPickerElm.setMinDate(this.startDate.toDate());
+    },
+    endDate: function () {
+      this.startPickerElm.setMaxDate(this.endDate.toDate());
     }
   },
   computed: {
