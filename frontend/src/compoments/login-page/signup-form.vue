@@ -30,11 +30,6 @@
             <md-input required v-model="email"></md-input>
           </md-input-container>
 
-          <md-input-container class="input-container">
-            <md-icon>Name</md-icon>
-            <label>Nickname</label>
-            <md-input required v-model="nickname"></md-input>
-          </md-input-container>
 
           <md-button type="submit" class="md-primary md-raised" :disabled="isNotFilled || isEmailInvalid || isNotSame">Submit</md-button>
 
