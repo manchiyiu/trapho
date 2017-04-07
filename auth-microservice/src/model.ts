@@ -22,7 +22,7 @@ export default class User {
       result = await this.model.findOne(query);
       if (!result) return null;
     } catch (e) {
-      return null;
+      return new Error("databaseError");
     }
     return new User(result);
   }
