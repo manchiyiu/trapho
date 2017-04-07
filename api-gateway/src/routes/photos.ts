@@ -115,10 +115,10 @@ router.get('/users/:userId', async (req, res) => {
  *
  */
 router.post('/', async (req, res) => {
-  const { locationId, url, description } = req.body;
+  const { locationId, url, description, rating } = req.body;
   const userId = req.user.id;
   try {
-    const { id } = await act({ role: 'photo', cmd: 'photoCreate', userId, locationId, url, description });
+    const { id } = await act({ role: 'photo', cmd: 'photoCreate', userId, locationId, url, description, rating });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
