@@ -1,3 +1,21 @@
+<!--
+FUNCTION PHOTO_FEED - Function for user to browse the photo
+PROGRAMMER: Yiu Man CHi
+CALLING SEQUENCE: Will automatically direct to when user successfully login
+VERSION: 1
+PURPOSE: User could browse the photo with filter, hence like or comment the photo according to their interest
+DATA STRUCTURES:  Slide toolbar: Feed; Plan; Edit; Logout;
+                  Photo: Bind to photo-microservice
+                  Location: Bind to location-microservice
+                  Upload: Upload photo to database
+                  Like or Comment:  like count - integer
+                                    comment - string
+ALGORITHM:  Allow user to browse the photo by using filter.
+            In addition, VR is allowed for more fun during browsing.
+            if user apply the filter, retrive related tag from the database for photo;
+            if user like the photo, increase like count in the database.
+-->
+
 <name>photo-feed-tab-feed</name>
 
 <template>
@@ -28,11 +46,11 @@
                 <label>Location Name</label>
                 <md-input v-model="filter.locationName"></md-input>
               </md-input-container>
-              <!--<md-input-container>
-                <md-icon>date_range</md-icon>
-                <label>Date</label>
-                <md-input v-model="date" disabled></md-input>
-              </md-input-container>-->
+              <md-input-container>
+                <md-icon>bookmark</md-icon>
+                <label>Tags</label>
+                <md-input v-model="filter.tags"></md-input>
+              </md-input-container>
               <md-card-actions>
                 <md-button class="md-primary" @click.native="clearFilter">Clear</md-button>
                 <md-button type="submit" class="md-raised md-primary" :disabled="!isFilterFilled" @click.native="submitFilter">Submit</md-button>
@@ -123,7 +141,8 @@ export default {
     photos: {},
     filter: {
       username: '',
-      locationName: ''
+      locationName: '',
+      tags: ''
     },
     hasEnded: false // whether or not the feed loading has reached the end
   }),
@@ -147,12 +166,12 @@ export default {
       return getPhotoUrl(_.get(this.photos, `${this.currentIndex}.url`, ''));
     },
     isFilterFilled: function () {
-      return this.filter.username.length > 0 || this.filter.locationName.length > 0;
+      return this.filter.username.length > 0 || this.filter.locationName.length > 0 || this.filter.tags.length > 0;
     }
   },
   methods: {
-    loadPosts: async function (skip, username, locationName, count = 5) {
-      let { photos } = await get(this.$router, 'photos/stream', { count, skip, username, locationName });
+    loadPosts: async function (skip, username, locationName, tags, count = 5) {
+      let { photos } = await get(this.$router, 'photos/stream', { count, skip, username, locationName, tags });
       photos.forEach((photo, index) => {
         const result = _.merge(photo, { index: skip + index });
         Vue.set(this.photos, skip + index, result);
@@ -163,7 +182,7 @@ export default {
       this.currrentIndex = skip + photos.length;
     },
     loadMore: async function () {
-      await this.loadPosts(this.currrentIndex, this.filter.username, this.filter.locationName);
+      await this.loadPosts(this.currrentIndex, this.filter.username, this.filter.locationName, this.filter.tags);
     },
     onLastPhoto: function () {
       this.currentIndex--;
@@ -176,11 +195,12 @@ export default {
     },
     submitFilter: async function () {
       this.resetFeed();
-      await this.loadPosts(this.currrentIndex, this.filter.username, this.filter.locationName);
+      await this.loadPosts(this.currrentIndex, this.filter.username, this.filter.locationName, this.filter.tags);
     },
     clearFilter: async function () {
       this.filter.username = '';
       this.filter.locationName = '';
+      this.filter.tags = '';
       this.resetFeed();
       await this.loadPosts(this.currrentIndex);
     },

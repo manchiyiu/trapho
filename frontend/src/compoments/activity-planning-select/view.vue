@@ -1,3 +1,18 @@
+<!--
+FUNCTION PLANNING - Function for user plan their trip
+PROGRAMMER: Yiu Man CHi
+CALLING SEQUENCE: Will automatically direct to when user choose Plan 
+VERSION: 1
+PURPOSE: User could plan their trip from location in the wistlist or searching
+DATA STRUCTURES:  whishlist - liked photo
+                  searching - search photo
+                  select    - selected location
+ALGORITHM:  Allow user to plan their trip with different choices;
+            User can choose location from the wishlist, or choose loaction that not related to wishlist by searching;
+            Hence store the choices to the select database;
+            Then allow finish planning the trip.
+-->
+
 <name>activity-planning-view</name>
 
 <template>

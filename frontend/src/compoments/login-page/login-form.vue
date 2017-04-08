@@ -1,3 +1,16 @@
+<!--
+FUNCTION LOGIN - Function for user to LOGIN just entering the app
+PROGRAMMER: Yiu Man CHi
+CALLING SEQUENCE: First page of the app when entering
+VERSION: 1
+PURPOSE: User are asked to login before using the trapho app
+DATA STRUCTURES:  input USERNAME - string
+                  input PASSWORD - string
+ALGORITHM:  Ask user to input the username and password;
+            Meanwhile retrive the username and password from database;
+            Then check the validation; if yes, go to the photo-feed page;
+            else ask for re-input.
+-->
 <name>login-page-login-form</name>
 
 <template>
