@@ -6,24 +6,15 @@
       <md-tab id="photos" md-label="Photo">
         <photo-feed-tab-feed :active="this.currentTab === 0"></photo-feed-tab-feed>
       </md-tab>
-      <md-tab id="locations" md-label="Locations">
+      <!--<md-tab id="locations" md-label="Locations">
         <photo-feed-tab-locations :active="this.currentTab === 1"></photo-feed-tab-locations>
-      </md-tab>
-      <md-tab id="upload" md-label="Upload">
-        <photo-feed-tab-upload :active="this.currentTab === 2"></photo-feed-tab-upload>
+      </md-tab>-->
+      <md-tab id="upload" md-icon="add">
+        <photo-feed-tab-upload :active="this.currentTab === 1"></photo-feed-tab-upload>
       </md-tab>
     </md-tabs>
   </div>
 </template>
-
-<style>
-.md-tabs-navigation {
-  background-color: white !important;
-  opacity: 0.8;
-  border-bottom: 1px solid #eee !important;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.04), 0 3px 6px rgba(0,0,0,0.08);
-}
-</style>
 
 <script>
   import Vue from 'vue';

@@ -63,3 +63,10 @@ export const login = async (router, { username, password }) => await helper(rout
 }, (result) => {
   localStorage.token = result.token;
 });
+
+export const loginTest = async (router, { username, password }) => await helper(router, 'auth/login', 'POST', {
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  },
+  body: queryString.stringify({ username, password })
+});

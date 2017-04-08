@@ -99,7 +99,8 @@ router.get('/id/:commentId', async (req, res) => {
  *
  */
 router.post('/', async (req, res) => {
-  const { userId, photoId, timestamp, content } = req.body;
+  const userId = req.user.id;
+  const { photoId, timestamp, content } = req.body;
   try {
     const { id } = await act({ role: 'timeline', cmd: 'commentCreate', userId, photoId, timestamp, content });
     res.json({ id });
@@ -130,7 +131,8 @@ router.post('/', async (req, res) => {
  */
 router.patch('/id/:commentId', async (req, res) => {
   const { commentId } = req.params;
-  const { userId, photoId, timestamp, content } = req.body;
+  const userId = req.user.id;
+  const { photoId, timestamp, content } = req.body;
   try {
     const { id } = await act({ role: 'timeline', cmd: 'commentPatch', commentId, userId, photoId, timestamp, content });
     res.json({ id });

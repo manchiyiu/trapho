@@ -27,7 +27,7 @@ export default async (msg, reply) => {
 
   if (!_.isUndefined(photoId)){
     try{
-      await isValidUser(photoId);
+      await isValidPhoto(photoId);
       let res = await Comment.retrieveByPhotoId(photoId);
       reply(null, { comments: res });
     } catch(e){

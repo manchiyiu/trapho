@@ -2,12 +2,25 @@
 
 <template>
   <md-layout md-gutter>
-    <b>New page</b>
+    <md-tabs md-centered class="main-tab md-transparent">
+      <md-tab id="basic-info" md-label="Basic Info">
+        <activity-planning-trip-tab-basic-info :hasCommitted="hasCommitted" />
+      </md-tab>
+      <md-tab id="detail-plan" md-label="Detailed Plan">
+        <activity-planning-trip-tab-detailed-plan :hasCommitted="hasCommitted" />
+      </md-tab>
+    </md-tabs>
   </md-layout>
 </template>
 
 <script>
 import Vue from 'vue';
 
-export default {};
+export default {
+  computed: {
+    hasCommitted: function() {
+      return this.$store.state.ActivityPlanning.hasCommitted;
+    }
+  }
+};
 </script>

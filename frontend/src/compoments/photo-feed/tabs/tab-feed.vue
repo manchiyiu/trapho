@@ -117,12 +117,12 @@ ALGORITHM:  Allow user to browse the photo by using filter.
       md-flex-xlarge="60"
       md-align="center"
       v-infinite-scroll="loadMore">
-      <photo-feed-content-card-list
+      <common-content-card-list
         style="padding-left: 10px; padding-right: 10px;"
         v-if="active"
         :hasEnded="hasEnded"
         :photos="photos">
-      </photo-feed-content-card-list>
+      </common-content-card-list>
     </md-layout>
   </md-layout>
 </template>
@@ -195,10 +195,10 @@ export default {
         const result = _.merge(photo, { index: skip + index });
         Vue.set(this.photos, skip + index, result);
       });
-      this.currrentIndex = skip + count;
       if (photos.length == 0) {
         this.hasEnded = true;
       }
+      this.currrentIndex = skip + photos.length;
     },
     loadMore: async function () {
       await this.loadPosts(this.currrentIndex, this.filter.username, this.filter.locationName, this.filter.tags);

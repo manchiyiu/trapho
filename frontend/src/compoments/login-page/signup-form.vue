@@ -43,13 +43,8 @@ ALGORITHM:  Ask user to input the username and password;
             <md-input required v-model="email"></md-input>
           </md-input-container>
 
-          <md-input-container class="input-container">
-            <md-icon>Name</md-icon>
-            <label>Nickname</label>
-            <md-input required v-model="nickname"></md-input>
-          </md-input-container>
 
-          <md-button type="submit" class="md-primary md-raised" :disabled="isFilled" @click.native="submit">Submit</md-button>
+          <md-button type="submit" class="md-primary md-raised" :disabled="isNotFilled || isEmailInvalid || isNotSame">Submit</md-button>
 
         </form>
       </md-card-content>
@@ -77,7 +72,7 @@ ALGORITHM:  Ask user to input the username and password;
 
 <script>
 import Vue from 'vue';
-import { post } from '../../utils';
+import { post, login } from '../../utils';
 
 export default {
   data: () => ({
@@ -86,11 +81,25 @@ export default {
     passwordAgain: '',
     email: '',
     nickname: '',
-    errorMessage: ''
+    errorMessage: '',
+    isEmailInvalid: true,
   }),
   computed: {
-    isFilled: function () { return this.username.length <= 0 || this.password.length <= 0; }
+    isNotFilled: function () { return this.username.length <= 0 || this.password.length <= 0; },
+    isNotSame: function () {return this.password != this.passwordAgain;}
   },
+  watch: {
+    email: function() {
+      let re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (re.test(this.email)) {
+        this.isEmailInvalid = false;
+      }
+      else {
+        this.isEmailInvalid = true;
+      }
+    }
+  },
+
   methods: {
     submit: async function () {
       if (this.password !== this.passwordAgain) {
@@ -99,7 +108,7 @@ export default {
         return;
       }
 
-      let { status, error, token } = await post(this.$router, 'auth/signup', {
+      let { status, error } = await post(this.$router, 'auth/signup', {
         username: this.username,
         password: this.password,
         email: this.email,
@@ -116,6 +125,27 @@ export default {
         this.$refs.snackbar.open();
         return;
       }
+
+      let { err, user, token } = await login(this.$router, {
+        username: this.username,
+        password: this.password,
+      });
+      if (err) {
+        switch (err) {
+          default:
+            this.errorMessage = err;
+        }
+        this.$refs.snackbar.open();
+        return
+      }
+      this.$store.commit('userLogin', {
+        username: this.username,
+        id: user.id,
+        token
+      });
+
+      this.$router.push('feed');
+
     }
   }
 }

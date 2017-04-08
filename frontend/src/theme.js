@@ -9,9 +9,9 @@ Vue.material.registerTheme('default', {
     hue: 'A700'
   },
   accent: {
-    color: 'green',
+    color: 'brown',
     hue: 'A200'
   },
   warn: 'red',
   background: 'white'
-})
+});

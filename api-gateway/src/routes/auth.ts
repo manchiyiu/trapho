@@ -12,11 +12,12 @@ const router = express.Router();
  * @apiPermission None
  * @apiGroup Authentication
  *
- * @apiSuccess {String} user.id User ID
+ * @apiSuccess {String} user User Object
  */
 router.post('/me', async (req, res) => {
   const userId = req.user.id;
-  res.json({ id: userId });
+  const user = await act({ role: 'auth', cmd: 'userRetrieve', userId });
+  res.json(user);
 });
 
 /**
@@ -60,6 +61,7 @@ router.post('/login',
  *
  * @apiParam {String} username Username of the new user
  * @apiParam {String} password Password of the new user
+ * @apiParam {String} email Email
  *
  * @apiUse objectId
  *
@@ -70,9 +72,9 @@ router.post('/login',
  *    }
  */
 router.post('/signup', async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password, email } = req.body;
   try {
-    const { id } = await act({ role: 'auth', cmd: 'userCreate', username, password });
+    const { id } = await act({ role: 'auth', cmd: 'userCreate', username, password, email });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -119,6 +121,7 @@ router.get('/id/:userId', async (req, res) => {
  *
  * @apiParam {String} userId Id of the user
  * @apiParam {String} [password] New password
+ * @apiParam {String} [email] Email
  *
  * @apiUse objectId
  *
@@ -130,9 +133,9 @@ router.get('/id/:userId', async (req, res) => {
  */
 router.patch('/id/:userId', async (req, res) => {
   const { userId } = req.params;
-  const { password } = req.body;
+  const { password, email } = req.body;
   try {
-    const id = await act({ role: 'auth', cmd: 'userPatch', userId, password });
+    const id = await act({ role: 'auth', cmd: 'userPatch', userId, password, email });
     res.json(id);
   } catch(err) {
     res.status(500).json({ error: err.details.message });

@@ -60,6 +60,10 @@ ALGORITHM:  Allow user to upload any photos;
             <label>Caption</label>
             <md-textarea v-model="dialogDescription"></md-textarea>
           </md-input-container>
+          <md-input-container>
+            <label>Rating</label>
+            <md-input type="number" min="1" max="10" v-model="dialogRating"></md-input>
+          </md-input-container>
         </md-dialog-content>
         <md-dialog-actions>
           <md-button class="md-primary" @click.native="closeDescriptionModal">Add</md-button>
@@ -137,6 +141,7 @@ export default {
     uploadedFiles: [],
     dialogCurrentIndex: null,
     dialogDescription: '',
+    dialogRating: null,
     selectedLocation: null,
     dropzone: null
   }),
@@ -171,11 +176,13 @@ export default {
     },
     openDescriptionModal: function(index) {
       this.dialogDescription = this.uploadedFiles[index].description;
+      this.dialogRating = this.uploadedFiles[index].rating;
       this.dialogCurrentIndex = index;
       this.$refs.dialog.open();
     },
     closeDescriptionModal: function() {
       Vue.set(this.uploadedFiles[this.dialogCurrentIndex], 'description', this.dialogDescription);
+      Vue.set(this.uploadedFiles[this.dialogCurrentIndex], 'rating', this.dialogRating);
       this.dialogCurrentIndex = null;
       this.$refs.dialog.close();
     },
@@ -184,8 +191,8 @@ export default {
     },
     submit: async function() {
       const locationId = this.selectedLocation.id;
-      const payloads = this.uploadedFiles.map(({ url, height, width, description }) => ({
-        url, description, locationId
+      const payloads = this.uploadedFiles.map(({ url, height, width, description, rating }) => ({
+        url, description, locationId, rating
       }));
       try {
         await Promise.all(payloads.map(

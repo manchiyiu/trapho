@@ -17,8 +17,12 @@ import background from './static/bg.jpg';
 export default {
   mounted: async function() {
     if (localStorage.token) { /* if the user has logged in */
-      const { id } = await post(this.$router, 'auth/me');
-      this.$store.commit('userLogin', { id, token: localStorage.token });
+      const { id, username } = await post(this.$router, 'auth/me');
+      this.$store.commit('userLogin', {
+        id,
+        username,
+        token: localStorage.token
+      });
     }
   },
   data: () => ({
@@ -31,7 +35,7 @@ export default {
         width: '100vw',
         opacity: 0.6,
         height: '100vh',
-        zIndex: -1
+        zIndex: -100
       }
     }
   })

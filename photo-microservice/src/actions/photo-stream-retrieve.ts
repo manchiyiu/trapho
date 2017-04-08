@@ -1,11 +1,11 @@
 import Photo from '../model';
-import {retrieveUser, retrieveUsersByNames, retrieveLocation, retrieveLocations, retrieveLikes, retrieveComments} from '../utils';
+import {retrieveUser, retrieveUsersByNames, retrieveLocation, retrieveLocations, retrieveLikes, retrieveComments, retrieveRating} from '../utils';
 import * as _ from 'lodash';
 
 export default async(msg, reply) => {
   let batchSize : number;
   let batchNo: number;
-  const { username, locationName, timestamp, tags } = msg;
+  const { username, userId, locationName, timestamp, tags, locationId } = msg;
   const delim = ',';
   let query:any = {};
 
@@ -45,7 +45,7 @@ export default async(msg, reply) => {
         }
       }
       // Retrieve users
-      let users_search =  await retrieveUsersByNames(usernames);
+      let users_search = await retrieveUsersByNames(usernames);
       query.userId = {};
       query.userId.$in = [];
 
@@ -54,6 +54,14 @@ export default async(msg, reply) => {
         query.userId.$in.push(users_search[index].id);
         users[users_search[index].id] = users_search[index];
       }
+    }
+
+    if (_.isString(userId) && userId.trim().length > 0) {
+      if (!query.userId) {
+        query.userId = {};
+        query.userId.$in = [];
+      }
+      query.userId.$in.push(userId.split(delim).filter(i => i.length > 0));
     }
 
     if(_.isString(tags) && tags.trim().length > 0){
@@ -87,7 +95,7 @@ export default async(msg, reply) => {
         locations[locations_search[index].id] = locations_search[index];
       }
     }
-    
+
     if(_.isString(timestamp)){
       let stTime = new Date(timestamp);
       let endTime = new Date(timestamp);
@@ -100,6 +108,10 @@ export default async(msg, reply) => {
       query.timestamp.$gte = stTime;
       query.timestamp.$lte = endTime;
     }
+    if(_.isString(locationId)){
+      query.locationId = locationId;
+    }
+    
     let photos : [any] = await Photo.retrieveMany(query, batchSize, batchNo);
     let result = await Promise.all(photos.map(
       async photo => {
@@ -112,19 +124,42 @@ export default async(msg, reply) => {
         if(_.isUndefined(users[photo.userId])){
           users[photo.userId] = retrieveUser(photo.userId);
         }
-        
+
         if (_.isUndefined(locations[photo.locationId])) {
           locations[photo.locationId] = retrieveLocation(photo.locationId);
         }
+        
+        
+        casted_photo.comments = await retrieveComments(photo.id);
+        casted_photo.comments.forEach(
+          comment =>{
+            if(_.isUndefined(users[comment.userId])){
+              users[comment.userId] = retrieveUser(comment.userId);
+            }
+          }
+        );
 
         casted_photo.likesCount = await retrieveLikes(photo.id);
-        casted_photo.comments = await retrieveComments(photo.id);
         casted_photo.username = (await users[photo.userId]).username;
+        casted_photo.userId = photo.userId;
         casted_photo.locationName = (await locations[photo.locationId]).name;
+
+        casted_photo.locationId = photo.locationId;
+        casted_photo.locationTags = (await locations[photo.locationId]).tags;
+        
+        let casted_comments = await Promise.all(casted_photo.comments.map(
+          async comment => {
+            comment.username = (await users[comment.userId]).username;
+            return comment;
+          }
+        ));
+        casted_photo.rating = await retrieveRating(casted_photo.userId, casted_photo.locationId, casted_photo.id);
         return casted_photo;
+
+
       }
     ));
-   
+
     reply(null, {photos: result});
   } catch (e) {
     reply(e, null);
