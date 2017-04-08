@@ -44,6 +44,7 @@
                   <md-layout md-flex="50" style="display: flex; align-items: center;">
                     <b style="margin-top: 10px; height: inherit; margin-right: 5px;">From:</b>
                     <vue-timepicker
+                      style="overflow-y: scroll; overflow-x: hidden;"
                       v-model="chip.startTime"
                       format="HH:mm"
                       :minute-interval="15"
@@ -55,6 +56,7 @@
                   <md-layout md-flex="50" style="display: flex; align-items: center;">
                     <b style="margin-top: 10px; height: inherit; margin-right: 5px;">To:</b>
                     <vue-timepicker
+                      style="overflow-y: scroll; overflow-x: hidden;"
                       v-model="chip.endTime"
                       format="HH:mm"
                       :minute-interval="15"
@@ -75,6 +77,7 @@
       </div>
 
       <div class="tab-detailed-plan-submit">
+        <md-divider></md-divider>
         <md-button @click.native="submit" :disabled="!hasCompleted" class="md-raised md-fab md-primary">
           <md-icon>check</md-icon>
         </md-button>
