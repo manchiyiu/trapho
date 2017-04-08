@@ -46,11 +46,11 @@ ALGORITHM:  Allow user to browse the photo by using filter.
                 <label>Location Name</label>
                 <md-input v-model="filter.locationName"></md-input>
               </md-input-container>
-              <!--<md-input-container>
-                <md-icon>date_range</md-icon>
-                <label>Date</label>
-                <md-input v-model="date" disabled></md-input>
-              </md-input-container>-->
+              <md-input-container>
+                <md-icon>bookmark</md-icon>
+                <label>Tags</label>
+                <md-input v-model="filter.tags"></md-input>
+              </md-input-container>
               <md-card-actions>
                 <md-button class="md-primary" @click.native="clearFilter">Clear</md-button>
                 <md-button type="submit" class="md-raised md-primary" :disabled="!isFilterFilled" @click.native="submitFilter">Submit</md-button>
@@ -58,25 +58,6 @@ ALGORITHM:  Allow user to browse the photo by using filter.
             </form>
           </md-card-content>
 
-        </md-card>
-
-        <!--Search by Tags-->
-        <md-card md-with-hover style="margin-bottom: 20px">
-          <md-card-header>
-            <div style="font-weight: bolder;">Hot Tags</div>
-          </md-card-header>
-
-          <md-card-content>
-            <md-layout md-align="center" md-gutter="16">
-              <md-button-toggle class="md-primary">
-                <md-button @click.native="filterTag1">University</md-button>
-                <md-button @click.native="filterTag2">establishment</md-button>
-                <md-button>Beach</md-button>
-                <md-button>Sun</md-button>
-              </md-button-toggle>
-            </md-layout>
-            
-          </md-card-content>
         </md-card>
         <!--VR-->
         <md-card md-with-hover style="margin-bottom: 20px;">
@@ -185,7 +166,7 @@ export default {
       return getPhotoUrl(_.get(this.photos, `${this.currentIndex}.url`, ''));
     },
     isFilterFilled: function () {
-      return this.filter.username.length > 0 || this.filter.locationName.length > 0;
+      return this.filter.username.length > 0 || this.filter.locationName.length > 0 || this.filter.tags.length > 0;
     }
   },
   methods: {
@@ -219,6 +200,7 @@ export default {
     clearFilter: async function () {
       this.filter.username = '';
       this.filter.locationName = '';
+      this.filter.tags = '';
       this.resetFeed();
       await this.loadPosts(this.currrentIndex);
     },
@@ -226,18 +208,6 @@ export default {
       this.photos = {};
       this.hasEnded = false;
       this.currrentIndex = 0;
-    },
-    filterTag1: async function() {
-      this.resetFeed();
-      this.filter.tags = 'university';
-      console.log(this.filter.tags);
-      await this.loadPosts(this.currrentIndex, this.filter.username, this.filter.locationName, this.filter.tags);
-    },
-    filterTag2: async function() {
-      this.resetFeed();
-      this.filter.tags = 'establishment';
-      console.log(this.filter.tags);
-      await this.loadPosts(this.currrentIndex, this.filter.username, this.filter.locationName, this.filter.tags);
     }
   }
 };
