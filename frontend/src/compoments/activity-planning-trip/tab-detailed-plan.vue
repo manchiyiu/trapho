@@ -8,7 +8,7 @@
     </md-card-content>
 
     <common-plan-edit
-      v-if="hasCommitted"
+      v-if="hasCommitted && !hasSubmitted"
       :createdId="createdId"
       :hasCommitted="hasCommitted"
       :data="chips"
@@ -16,6 +16,18 @@
       :dataTripName="tripName"
       :updateTripName="updateTripName"
       @submit="submit" />
+
+    <md-card-content v-if="hasCommitted && createdId">
+      <div style="text-align: center; font-size: 20px;">
+        <div style="margin-bottom: 20px;">
+          <md-icon class="md-size-4x">check</md-icon>
+        </div>
+        Congrats. Trip created.
+        <div style="margin-top: 10px">
+          <router-link :to="`trip/${this.createdId}`">View here</router-link>
+        </div>
+      </div>
+    </md-card-content>
 
   </div>
 </template>
