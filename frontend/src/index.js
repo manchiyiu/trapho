@@ -13,6 +13,7 @@ import './compoments/activity-planning-select/module';
 import './compoments/activity-planning-trip/module';
 import './compoments/user-profile/module';
 import './compoments/trip/module';
+import './compoments/edit-profile/module';
 
 import store from './vuex/store';
 
@@ -26,6 +27,7 @@ import ActivityPlanningTrip from './compoments/activity-planning-trip/view.vue';
 import Profile from './compoments/user-profile/view.vue';
 import Location from './compoments/location/view.vue';
 import Trip from './compoments/trip/view.vue';
+import EditTrip from './compoments/edit-trip/view.vue';
 
 Vue.use(VueLazyload, {
   lazyComponent: true,
@@ -69,6 +71,11 @@ const routes = [
   {
     path: '/trip/:tripId',
     components: { default: Trip },
+    props: { default: true }
+  },
+  {
+    path: '/edit-trip/:tripId',
+    components: { default: EditTrip },
     props: { default: true }
   }
 ];

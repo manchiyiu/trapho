@@ -10,6 +10,11 @@
           <md-input disabled v-model="name"></md-input>
         </md-input-container>
       </div>
+      <div class="trip-row" v-if="trip && trip.userId === currentUserId">
+        <div>
+          <router-link :to="`/edit-trip/${trip.id}`">(Edit trip)</router-link>
+        </div>
+      </div>
       <!-- trip content -->
       <div v-for="(day, index) in days" :key="index">
         <div class="trip-item trip-day-header">{{day.label}}</div>
@@ -88,6 +93,11 @@ export default {
   beforeMount: async function () {
     await this.loadTrip();
   },
+  computed: {
+    currentUserId: function () {
+      return this.$store.state.User.info.id;
+    }
+  },
   watch: {
     $route: async function () {
       await this.loadTrip();
@@ -96,9 +106,9 @@ export default {
   methods: {
     loadTrip: async function () {
       try {
-        const trip = await get(this.$router, `trips/id/${this.tripId}`);
-        this.name = trip.name;
-        this.deserializeTrip(trip);
+        this.trip = await get(this.$router, `trips/id/${this.tripId}`);
+        this.name = this.trip.name;
+        this.deserializeTrip(this.trip);
       } catch (e) {
         console.error(e);
       }
