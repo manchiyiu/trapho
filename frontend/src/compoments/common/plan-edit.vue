@@ -22,7 +22,7 @@
         </div>
         <draggable
           v-model="chips"
-          :options="{ filter: '.timetable-indicator' }"
+          :options="{ filter: '.timetable-indicator', handle: '.timetable-item-handle' }"
           @change="onMoved">
           <div class="timetable-row" v-for="(chip, index) in chips" :key="chip.id">
             <!-- is actual trip item -->
@@ -32,7 +32,10 @@
               :class="{ 'isInvalid': chip.isInvalid, 'isValid': !chip.isInvalid }"
               md-with-hover>
               <md-card-content>
-                <div class="md-title">{{chip.label}}</div>
+                <div class="md-title">
+                  <span class="timetable-item-handle">::</span>
+                  {{chip.label}}
+                </div>
                 <div class="md-subtitle">{{chip.subLabel}}</div>
                 <md-divider style="margin-top: 10px;"></md-divider>
                 <md-layout md-gutter v-if="chip.date">
