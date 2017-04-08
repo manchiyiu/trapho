@@ -20,7 +20,7 @@
 
           <md-input-container class="input-container">
             <md-icon>vpn_key</md-icon>
-            <label>Password Again</label>
+            <label>Re-enter Password</label>
             <md-input required v-model="passwordAgain" type="password"></md-input>
           </md-input-container>
 
