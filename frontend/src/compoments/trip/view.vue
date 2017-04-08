@@ -57,7 +57,7 @@
 }
 .trip-item {
   width: 500px;
-  max-width: 100vw;
+  max-width: 90vw;
   margin-top: 10px;
   margin-bottom: 10px;
 }
@@ -89,7 +89,7 @@ export default {
     await this.loadTrip();
   },
   watch: {
-    tripId: async function () {
+    $route: async function () {
       await this.loadTrip();
     }
   },
