@@ -10,7 +10,7 @@ export default async (msg, reply) => {
     checkDate(startDate, false);
     checkDate(endDate, false);
     await checkLocations(locations, false);
-    let trip = new Trip({ name, userId, timestamp, locations });
+    let trip = new Trip({ name, userId, timestamp, locations, startDate, endDate });
     let result = await trip.save();
     reply(null, { id : String(result) });
   }catch(e){
