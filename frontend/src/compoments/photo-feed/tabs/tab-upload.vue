@@ -1,13 +1,3 @@
-<!--
-FUNCTION PHOTO_FEED_UPLOAD - Function for user to upload photo
-PROGRAMMER: Yiu Man CHi
-CALLING SEQUENCE: Will automatically direct to when user choose upload from the bar after login
-VERSION: 1
-PURPOSE: User could upload the photo
-DATA STRUCTURES:  input - library link to the photo database
-ALGORITHM:  Allow user to upload any photos;
-            Hence store the photo, grading and comments for different locaton by using the tag;
--->
 <name>photo-feed-tab-upload</name>
 
 <template>

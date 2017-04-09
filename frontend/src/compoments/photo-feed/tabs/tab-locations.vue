@@ -1,14 +1,3 @@
-<!--
-FUNCTION PHOTO_FEED_LOCATION - Function for user to browse by location
-PROGRAMMER: Yiu Man CHi
-CALLING SEQUENCE: Will automatically direct to when user choose location from the bar after login
-VERSION: 1
-PURPOSE: User could browse the photo by location
-DATA STRUCTURES:  MAP - library link to the goole map
-ALGORITHM:  Allow user to choose any place;
-            Hence retrive the photo for the related locaton by using the tag;
--->
-
 <name>photo-feed-tab-locations</name>
 
 <template>
