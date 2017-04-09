@@ -86,7 +86,6 @@ export default {
       this.tripName = tripName;
     },
     updateRange: function () {
-      this.dates = [];
       this.chips = [];
 
       let i = 0;
@@ -109,7 +108,6 @@ export default {
 
       let j = 1;
       for(let date = moment(this.startDate); date.diff(this.endDate) < 0; date.add('days', 1)) {
-        this.dates.push(date.toDate().toString());
         Vue.set(this.chips, i, {
           id: `day_${j}`,
           label: `Day ${j} (${this.toHumanDate(date)})`,
@@ -119,8 +117,6 @@ export default {
         i++;
         j++;
       }
-
-      this.dates.push(moment(this.endDate).toDate().toString());
 
       Vue.set(this.chips, i, {
         id: `day_${j}`,
