@@ -21,10 +21,9 @@
   margin-bottom: 20px;
 }
 .empty-main {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 200px;
+  margin-top: 20px;
+  margin-left: 40px;
+  margin-bottom: 20px;
 }
 .empty-text {
   font-size: 20px;
