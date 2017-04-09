@@ -39,6 +39,10 @@
         <i style="color: #aaa; margin-left: 10px;">
           {{toHumanTime(timestamp)}}
         </i>
+        <br>
+        <i style="color: #aaa;">
+          <span v-for="tag in tags">#{{tag}} </span>
+        </i>
       </md-card-content>
 
       <md-card-media>
@@ -228,22 +232,33 @@ export default {
       } catch (e) {
         console.error(e);
       }
-    }
+    },
+    loadTags: async function (locationId = this.locationId) {
+      try {
+        let { tags } = await get(this.$router, `locations/id/${locationId}`, { locationId });
+        this.tags = tags;
+      } catch (e) {
+        console.error(e);
+      }
+    },
   },
   data: () => ({
     liked: false,
     extraCount: 0,
     commentValue: '',
     descriptionValue: '',
-    isDeleted: false
+    isDeleted: false,
+    tags: {}
   }),
   beforeMount: async function () {
+    await this.loadTags();
     try {
       var { liked } = await get(
         this.$router,
         `likes/users/${this.currentUserId}/photos/${this.photoId}`
       );
       this.liked = liked;
+      
     } catch (e) {
       this.liked = false;
     }
