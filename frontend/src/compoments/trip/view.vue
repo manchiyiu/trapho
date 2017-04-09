@@ -19,7 +19,7 @@
       </div>
 
       <!-- trip content -->
-      <div v-for="(day, index) in days" :key="index">
+      <div v-for="(day, index) in days" :key="index" id="print-element">
         <div class="trip-item trip-day-header">{{day.label}}</div>
         <p class="trip-row" v-if="day.locations.length <= 0">
           <b><i>No plan for this day?</i></b>
@@ -85,6 +85,7 @@
 <script>
 import Vue from 'vue';
 import moment from 'moment';
+import { printElement } from 'print-html-element';
 
 import { get, del } from '../../utils.js';
 
@@ -158,7 +159,7 @@ export default {
       return moment(time).format('LLL');
     },
     print: async function () {
-      window.print();
+      printElement(document.getElementById('print-element'));
     },
     remove: async function () {
       try {
