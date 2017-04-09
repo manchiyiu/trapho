@@ -10,6 +10,7 @@
       style="margin-bottom: 20px; height: 500px; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); transition: all 0.3s cubic-bezier(.25,.8,.25,1);">
         <gmap-cluster :gridSize="100">
           <gmap-marker
+            :key="location.id"
             v-for="location in locations"
             :position="location.coordinates"
             :clickable="false"
