@@ -117,13 +117,12 @@ export default {
         this.trip.locations
           .filter(item => moment(item.startTime).isSame(date, 'day'))
           .forEach(location => {
-            console.log(date);
             Vue.set(this.chips, i, {
               id: location.id,
               label: locations[location.id].name,
               subLabel: location.description,
               comment: location.comment,
-              date,
+              date: date.toDate().toString(),
               startTime: {
                 HH: moment(location.startTime).hour() || '00',
                 mm: moment(location.startTime).minute() || '00'
