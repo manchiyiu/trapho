@@ -77,7 +77,7 @@ export async function checkLocation(location : any, optional : boolean){
     }
     if( castedStartTime.getTime() <= 0 ||
         castedEndTime.getTime() <= 0 ||
-        castedStartTime > castedEndTime
+        castedStartTime.getTime() > castedEndTime.getTime()
     ){
         throw new Error("startEndTimeError");
     }
