@@ -4,17 +4,19 @@
   <div class="trip-container">
     <div style="margin: 20px;">
       <!-- header -->
+      <md-layout md-align="end" md-gutter="16">
+        <md-layout md-flex="33">
+          <md-button class="md-icon-button" v-if="trip && trip.userId === currentUserId"><router-link :to="`/edit-trip/${trip.id}`"><md-icon>create</md-icon></router-link></md-button>
+          <md-button class="md-icon-button" @click.native="print"><md-icon>print</md-icon></md-button>
+        </md-layout>
+      </md-layout>
       <div class="trip-row">
         <md-input-container style="width: 50%">
           <label>Trip name</label>
           <md-input disabled v-model="name"></md-input>
         </md-input-container>
       </div>
-      <div class="trip-row" v-if="trip && trip.userId === currentUserId">
-        <div>
-          <router-link :to="`/edit-trip/${trip.id}`">(Edit trip)</router-link>
-        </div>
-      </div>
+      
       <!-- trip content -->
       <div v-for="(day, index) in days" :key="index">
         <div class="trip-item trip-day-header">{{day.label}}</div>
@@ -158,6 +160,9 @@ export default {
     },
     toHumanTime: function (time) {
       return moment(time).format('LLL');
+    },
+    print: async function () {
+      window.print();
     }
   }
 };
