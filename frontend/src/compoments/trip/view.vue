@@ -18,6 +18,23 @@
         </md-input-container>
       </div>
 
+      <!-- map -->
+     <gmap-map
+      :center="coordinates"
+      :options="{styles: mapTheme}"
+      :zoom="15"
+      style="margin-bottom: 20px; height: 500px; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); transition: all 0.3s cubic-bezier(.25,.8,.25,1);">
+        <gmap-cluster :gridSize="100">
+          <gmap-marker
+            v-for="location in locations"
+            :position="location.coordinates"
+            :clickable="false"
+            :draggable="false"
+            :label="location.name">
+          </gmap-marker>
+        </gmap-cluster>
+      </gmap-map>
+
       <!-- trip content -->
       <div v-for="(day, index) in days" :key="index" id="print-element">
         <div class="trip-item trip-day-header">{{day.label}}</div>
@@ -86,15 +103,28 @@
 import Vue from 'vue';
 import moment from 'moment';
 import { printElement } from 'print-html-element';
+import * as VueGoogleMaps from 'vue2-google-maps';
 
+import mapTheme from '../common/config/map-theme.js';
 import { get, del } from '../../utils.js';
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyAoH1TSHe7EpvUrTY51p15d0hndY7ZRGEQ',
+    v: '3.27',
+    libraries: 'places'
+  }
+});
 
 export default {
   props: ['tripId'],
   data: () => ({
     name: '',
     trip: null,
-    days: {}
+    days: {},
+    mapTheme,
+    locations: [],
+    coordinates: { lat: 22.4213, lng: 114.2071 }
   }),
   beforeMount: async function () {
     await this.loadTrip();
@@ -123,6 +153,8 @@ export default {
       let startDate = moment(new Date(trip.startDate));
       let endDate = moment(new Date(trip.endDate));
 
+      this.locations = [];
+
       let i = 0;
       for(let date = moment(startDate); date.diff(endDate) <= 0; date.add(1, 'day')) {
         Vue.set(this.days, i, {
@@ -143,6 +175,7 @@ export default {
           day.locations.map(location => get(this.$router, `locations/id/${location.id}`))
         );
         results.forEach((result, i) => {
+          this.locations.push(result);
           Vue.set(
             this.days[index].locations,
             i,

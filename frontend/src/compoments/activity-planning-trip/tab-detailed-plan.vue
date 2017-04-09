@@ -7,15 +7,34 @@
       <p>Please confirm the basic information before proceeding to this step.</p>
     </md-card-content>
 
-    <common-plan-edit
-      v-if="hasCommitted && !hasSubmitted"
-      :createdId="createdId"
-      :hasCommitted="hasCommitted"
-      :data="chips"
-      :updateData="updateChip"
-      :dataTripName="tripName"
-      :updateTripName="updateTripName"
-      @submit="submit" />
+    <div v-if="hasCommitted && !hasSubmitted">
+
+      <gmap-map
+        :center="coordinates"
+        :options="{styles: mapTheme}"
+        :zoom="15"
+        style="margin-bottom: 20px; height: 500px; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); transition: all 0.3s cubic-bezier(.25,.8,.25,1);">
+          <gmap-cluster :gridSize="100">
+            <gmap-marker
+              v-for="location in selected"
+              :position="location.coordinates"
+              :clickable="false"
+              :draggable="false"
+              :label="location.name">
+            </gmap-marker>
+          </gmap-cluster>
+      </gmap-map>
+
+      <common-plan-edit
+        :createdId="createdId"
+        :hasCommitted="hasCommitted"
+        :data="chips"
+        :updateData="updateChip"
+        :dataTripName="tripName"
+        :updateTripName="updateTripName"
+        @submit="submit" />
+
+    </div>
 
     <md-card-content v-if="hasCommitted && createdId">
       <div style="text-align: center; font-size: 20px;">
@@ -47,12 +66,24 @@
 import Vue from 'vue';
 import moment from 'moment';
 import _ from 'lodash';
+import * as VueGoogleMaps from 'vue2-google-maps';
 
 import { post } from '../../utils.js';
+import mapTheme from '../common/config/map-theme.js';
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyAoH1TSHe7EpvUrTY51p15d0hndY7ZRGEQ',
+    v: '3.27',
+    libraries: 'places'
+  }
+});
 
 export default {
   props: ['hasCommitted'],
   data: () => ({
+    mapTheme,
+    coordinates: { lat: 22.4213, lng: 114.2071 },
     dates: [],
     chips: [],
     selectedDate: 0,
