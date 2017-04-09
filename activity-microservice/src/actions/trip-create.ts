@@ -1,12 +1,14 @@
 import Trip from '../model';
-import { checkName, checkUser, checkTimestamp, checkLocations } from '../utils'
+import { checkName, checkUser, checkTimestamp, checkLocations, checkDate } from '../utils';
 
 export default async (msg, reply) => {
-  const { name, userId, timestamp, locations } = msg;
+  const { name, userId, timestamp, locations, startDate, endDate } = msg;
   try{
     checkName(name, false);
     await checkUser(userId, false);
     checkTimestamp(timestamp, false);
+    checkDate(startDate, false);
+    checkDate(endDate, false);
     await checkLocations(locations, false);
     let trip = new Trip({ name, userId, timestamp, locations });
     let result = await trip.save();

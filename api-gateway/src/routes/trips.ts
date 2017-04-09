@@ -66,6 +66,8 @@ router.get('/id/:tripId', async (req, res) => {
  * @apiParam {String}     name                   Name of the trip
  * @apiParam {String}     userId                 ID of the user who created the trip
  * @apiParam {String}     timestamp              Timestamp when the trip is created
+ * @apiParam {String}     startDate              Start date
+ * @apiParam {String}     endDate                End date
  * @apiParam {Object[]}   locations              See below for object structure
  * @apiParam {String}     locations.id           ID of the locationId
  * @apiParam {String}     locations.startTime    Timestamp when the location visit starts
@@ -81,9 +83,9 @@ router.get('/id/:tripId', async (req, res) => {
  */
 router.post('/', async (req, res) => {
   const userId = req.user.id;
-  const { name, timestamp, locations } = req.body;
+  const { name, timestamp, locations, startDate, endDate } = req.body;
   try {
-    const { id } = await act({ role: 'activity', cmd: 'tripCreate', name, userId, timestamp, locations });
+    const { id } = await act({ role: 'activity', cmd: 'tripCreate', name, userId, timestamp, locations, startDate, endDate });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -99,6 +101,8 @@ router.post('/', async (req, res) => {
  * @apiParam {String}     tripId                 ID of the trip to be patched
  * @apiParam {String}     name                   Name of the trip
  * @apiParam {String}     userId                 ID of the user who created the trip
+ * @apiParam {String}     startDate              Start date
+ * @apiParam {String}     endDate                End date
  * @apiParam {String}     timestamp              Timestamp when the trip is created
  * @apiParam {Object[]}   locations              See below for object structure
  * @apiParam {String}     locations.id           ID of the locationId
@@ -117,9 +121,9 @@ router.post('/', async (req, res) => {
 router.patch('/id/:tripId', async (req, res) => {
   const userId = req.user.id;
   const { tripId } = req.params;
-  const { name, timestamp, locations } = req.body;
+  const { name, timestamp, locations, startDate, endDate } = req.body;
   try {
-    const { id } = await act({ role: 'activity', cmd: 'tripPatch', tripId, name, userId, timestamp, locations });
+    const { id } = await act({ role: 'activity', cmd: 'tripPatch', tripId, name, userId, timestamp, locations, startDate, endDate });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });

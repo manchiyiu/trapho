@@ -204,6 +204,8 @@
  * @apiSuccess {String}     trips.id                     ID of the trip
  * @apiSuccess {String}     trips.name                   Name of the trip
  * @apiSuccess {String}     trips.userId                 ID of the user who created the trip
+ * @apiSuccess {String}     trips.startDate              Start date
+ * @apiSuccess {String}     trips.endDate                End date
  * @apiSuccess {String}     trips.timestamp              Timestamp when the trip is created
  * @apiSuccess {Object[]}   trips.locations              See below for object structure
  * @apiSuccess {String}     trips.locations.id           ID of the locationId
@@ -216,6 +218,8 @@
  *        "id": "{{id-placeholder}}",
  *        "name": "Taiwan Trip",
  *        "userId": "{{id-placeholder}}",
+ *        "startDate": "2017-03-02T16:39:27+00:00",
+ *        "endDate": "2017-03-02T16:39:27+00:00",
  *        "timestamp": "2017-03-02T16:39:27+00:00",
  *        "locations": [
  *          {
@@ -235,6 +239,8 @@
  * @apiSuccess {String}     id                     ID of the trip
  * @apiSuccess {String}     name                   Name of the trip
  * @apiSuccess {String}     userId                 ID of the user who created the trip
+ * @apiSuccess {String}     startDate              Start date
+ * @apiSuccess {String}     endDate                End date
  * @apiSuccess {String}     timestamp              Timestamp when the trip is created
  * @apiSuccess {Object[]}   locations              See below for object structure
  * @apiSuccess {String}     locations.id           ID of the locationId
@@ -246,6 +252,8 @@
  *      "id": "{{id-placeholder}}",
  *      "name": "Taiwan Trip",
  *      "userId": "{{id-placeholder}}",
+ *      "startDate": "2017-03-02T16:39:27+00:00",
+ *      "endDate": "2017-03-02T16:39:27+00:00",
  *      "timestamp": "2017-03-02T16:39:27+00:00",
  *      "locations": [
  *        {

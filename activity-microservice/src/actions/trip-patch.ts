@@ -1,8 +1,8 @@
 import Trip from '../model';
-import { checkName, checkUser, checkTimestamp, checkLocations } from '../utils'
+import { checkName, checkUser, checkTimestamp, checkLocations, checkDate } from '../utils'
 
 export default async (msg, reply) => {
-  const { tripId, name, userId, timestamp, locations } = msg;
+  const { tripId, name, userId, timestamp, locations, startDate, endDate } = msg;
   try{
     let trip = await Trip.retrieveById(tripId);
     if(checkName(name, true)){
@@ -13,6 +13,12 @@ export default async (msg, reply) => {
     }
     if(checkTimestamp(timestamp, true)){
       trip.timestamp = timestamp;
+    }
+    if(checkDate(startDate, true)) {
+      this.startDate = startDate;
+    }
+    if(checkDate(endDate, true)) {
+      this.endDate = endDate;
     }
     if(await checkLocations(locations, true)){
       trip.locations = locations;

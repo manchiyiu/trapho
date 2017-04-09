@@ -17,6 +17,16 @@ export function checkName(name : string, optional : boolean) {
   return true;
 }
 
+export function checkDate(date: String, optional : boolean) {
+    if (!_.isString(date)) {
+        if (!optional) {
+            throw new Error("invalidDate");
+        }
+        return false;
+    }
+    return true;
+}
+
 export async function checkUser(userId : String, optional : boolean) {
   let res;
 
@@ -65,7 +75,7 @@ export async function checkLocation(location : any, optional : boolean){
     }catch(e){
         throw new Error("locationNotExist");
     }
-    if( castedStartTime.getTime() <= 0 || 
+    if( castedStartTime.getTime() <= 0 ||
         castedEndTime.getTime() <= 0 ||
         castedStartTime > castedEndTime
     ){

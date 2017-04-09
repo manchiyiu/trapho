@@ -7,11 +7,15 @@ export default class Trip {
   name : string = null;
   userId : string = null;
   timestamp: string = null;
+  startDate: string = null;
+  endDate: string = null;
   locations: [object] = null;
 
   static schema = new mongoose.Schema({
     name: String,
     userId: String,
+    startDate: String,
+    endDate: String,
     timestamp: String,
     locations: [mongoose.Schema.Types.Mixed]
   });
@@ -23,17 +27,21 @@ export default class Trip {
       name,
       userId,
       timestamp,
+      startDate,
+      endDate,
       locations,
       _id: id
     } = object;
 
-    Object.assign(this, { id, name, userId, timestamp, locations });
+    Object.assign(this, { id, name, userId, startDate, endDate, timestamp, locations });
   }
 
   async save() {
     const model = new Trip.model({
       name: this.name,
       userId: this.userId,
+      startDate: this.startDate,
+      endDate: this.endDate,
       timestamp: this.timestamp,
       locations: this.locations
     });
@@ -46,6 +54,8 @@ export default class Trip {
     const modifiedTrip = {
       name: this.name,
       userId: this.userId,
+      startDate: this.startDate,
+      endDate: this.endDate,
       timestamp: this.timestamp,
       locations: this.locations
     };
