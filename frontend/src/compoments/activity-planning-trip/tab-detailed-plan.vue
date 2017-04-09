@@ -92,8 +92,9 @@ export default {
         Vue.set(this.chips, i, {
           id: location.id,
           label: location.name,
-          subLabel: location.description,
+          subLabel: location.comment,
           date: null,
+          comment: '',
           startTime: { HH: null, mm: null },
           endTime: { HH: null, mm: null }
         });
@@ -131,6 +132,7 @@ export default {
         .filter(item => !item.isIndicator && item.date)
         .map(location => ({
           id: location.id,
+          comment: location.comment,
           startTime: moment(location.date)
             .hour(location.startTime.HH)
             .minute(location.startTime.mm)

@@ -30,6 +30,8 @@
               <div class="md-title">{{location.name}}</div>
               <div class="md-subtitle">{{location.description}}</div>
               <md-divider style="margin-top: 10px; margin-bottom: 10px;"></md-divider>
+              {{location.comment}}
+              <md-divider style="margin-top: 10px; margin-bottom: 10px;"></md-divider>
               <!-- show time -->
               <div>
                 <b style="margin-right: 20px;">From</b>

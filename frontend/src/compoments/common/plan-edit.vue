@@ -38,6 +38,10 @@
                 </div>
                 <div class="md-subtitle">{{chip.subLabel}}</div>
                 <md-divider style="margin-top: 10px;"></md-divider>
+                <md-input-container md-inline>
+                  <label>Comment</label>
+                  <md-textarea v-model="chip.comment"></md-textarea>
+                </md-input-container>
                 <md-layout md-gutter v-if="chip.date">
                   <md-layout md-flex="50" style="display: flex; align-items: center;">
                     <b style="margin-top: 10px; height: inherit; margin-right: 5px;">From:</b>

@@ -122,6 +122,7 @@ export default {
               id: location.id,
               label: locations[location.id].name,
               subLabel: location.description,
+              comment: location.comment,
               date,
               startTime: {
                 HH: moment(location.startTime).hour() || '00',
@@ -153,6 +154,7 @@ export default {
             label: locations[location.id].name,
             subLabel: location.description,
             date: this.endDate,
+            comment: location.comment,
             startTime: {
               HH: moment(location.startTime).hour() || '00',
               mm: moment(location.startTime).minute() || '00'
@@ -172,6 +174,7 @@ export default {
         .filter(item => !item.isIndicator && item.date)
         .map(location => ({
           id: location.id,
+          comment: location.comment,
           startTime: moment(location.date)
             .hour(location.startTime.HH)
             .minute(location.startTime.mm)
