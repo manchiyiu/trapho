@@ -84,15 +84,24 @@ export default {
     toHumanDate: function (date) {
       return moment(date).format('ll');
     },
-    deserializeTrip: async function() {
+    deserializeTrip: async function(trip) {
       this.hasLoaded = false;
 
-      this.startDate = moment.min(this.trip.locations.map(item => moment(item.startTime)));
-      this.endDate = moment.max(this.trip.locations.map(item => moment(item.endTime)));
+      this.startDate = moment(new Date(trip.startDate));
+      this.endDate = moment(new Date(trip.endDate));
+
+      let locations = _.keyBy(await Promise.all(
+        trip.locations.map(async location => {
+          const { id } = location;
+          return get(this.$router, `locations/id/${id}`);
+        })
+      ), 'id');
 
       let i = 0;
       let j = 1;
-      for(let date = moment(this.startDate); date.diff(this.endDate) < 0; date.add('days', 1)) {
+
+      for(let date = this.startDate; date.diff(this.endDate) < 0; date.add(1, 'day')) {
+
         Vue.set(this.chips, i, {
           id: `day_${j}`,
           label: `Day ${j} (${this.toHumanDate(date)})`,
@@ -103,17 +112,12 @@ export default {
         i++;
         j++;
 
-        let locations = _.keyBy(await Promise.all(
-          this.trip.locations.map(async location => {
-            const { id } = location;
-            return get(this.$router, `locations/id/${id}`);
-          })
-        ), 'id');
 
         /* push the location items in */
         this.trip.locations
           .filter(item => moment(item.startTime).isSame(date, 'day'))
           .forEach(location => {
+            console.log(date);
             Vue.set(this.chips, i, {
               id: location.id,
               label: locations[location.id].name,
@@ -139,6 +143,27 @@ export default {
         isIndicator: true
       });
       i++;
+
+      /* push the location items in */
+      this.trip.locations
+        .filter(item => moment(item.startTime).isSame(this.endDate, 'day'))
+        .forEach(location => {
+          Vue.set(this.chips, i, {
+            id: location.id,
+            label: locations[location.id].name,
+            subLabel: location.description,
+            date: this.endDate,
+            startTime: {
+              HH: moment(location.startTime).hour() || '00',
+              mm: moment(location.startTime).minute() || '00'
+            },
+            endTime: {
+              HH: moment(location.endTime).hour() || '00',
+              mm: moment(location.endTime).minute() || '00'
+            }
+          });
+          i++;
+        });
 
       this.hasLoaded = true;
     },

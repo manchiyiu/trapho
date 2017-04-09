@@ -6,6 +6,7 @@
       <!-- header -->
       <md-layout md-align="end" md-gutter="16">
         <md-layout md-flex="33">
+          <md-button class="md-icon-button" v-if="trip && trip.userId === currentUserId" @click.native="remove"><md-icon>delete</md-icon></md-button>
           <md-button class="md-icon-button" v-if="trip && trip.userId === currentUserId"><router-link :to="`/edit-trip/${trip.id}`"><md-icon>create</md-icon></router-link></md-button>
           <md-button class="md-icon-button" @click.native="print"><md-icon>print</md-icon></md-button>
         </md-layout>
@@ -16,7 +17,7 @@
           <md-input disabled v-model="name"></md-input>
         </md-input-container>
       </div>
-      
+
       <!-- trip content -->
       <div v-for="(day, index) in days" :key="index">
         <div class="trip-item trip-day-header">{{day.label}}</div>
@@ -83,7 +84,7 @@
 import Vue from 'vue';
 import moment from 'moment';
 
-import { get } from '../../utils.js';
+import { get, del } from '../../utils.js';
 
 export default {
   props: ['tripId'],
@@ -116,18 +117,11 @@ export default {
       }
     },
     deserializeTrip: async function(trip) {
-      const minTime = trip.locations.reduce(
-        (a, b) => moment(a.startTime).isBefore(b.startTime) ? a : b
-      ).startTime;
-      const maxTime = trip.locations.reduce(
-        (a, b) => moment(a.endTime).isAfter(b.endTime) ? a: b
-      ).endTime;
-
-      let startDate = moment(minTime);
-      let endDate = moment(maxTime);
+      let startDate = moment(new Date(trip.startDate));
+      let endDate = moment(new Date(trip.endDate));
 
       let i = 0;
-      for(let date = moment(startDate); date.diff(endDate) < 0; date.add('days', 1)) {
+      for(let date = moment(startDate); date.diff(endDate) <= 0; date.add(1, 'day')) {
         Vue.set(this.days, i, {
           label: `Day ${i + 1} (${this.toHumanDate(date)})`,
           date: date.toDate().toString(),
@@ -163,6 +157,14 @@ export default {
     },
     print: async function () {
       window.print();
+    },
+    remove: async function () {
+      try {
+        await del(this.$router, `trips/id/${this.tripId}`);
+        this.$router.push('/feed');
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
 };

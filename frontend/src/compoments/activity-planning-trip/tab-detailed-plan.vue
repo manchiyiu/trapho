@@ -59,9 +59,6 @@ export default {
     tripName: '',
     createdId: null
   }),
-  beforeMount: function () {
-    this.updateRange();
-  },
   watch: {
     hasCommitted: function () {
       this.updateRange();
@@ -147,6 +144,8 @@ export default {
         let { id } = await post(this.$router, 'trips', {
           name: this.tripName.trim(),
           timestamp: moment().toISOString(),
+          startDate: this.startDate.toISOString(),
+          endDate: this.endDate.toISOString(),
           locations
         });
         this.createdId = id;
