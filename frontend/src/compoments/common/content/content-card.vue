@@ -42,11 +42,11 @@
         <md-divider style="margin-top: 10px;"></md-divider>
         <div style="color: #aaa; margin-top: 10px;" v-if="tags.length > 0">
           <b style="color: #888;">Location tags:</b>
-          <i v-for="tag in tags" @click="onTagClicked(tag)">#{{tag}} </i>
+          <i v-for="tag in tags" @click="onLocationTagClicked(tag)">#{{tag}} </i>
         </div>
         <div style="color: #aaa; margin-top: 5px;" v-if="photoTags.length > 0">
           <b style="color: #888;">Photos tags:</b>
-          <i v-for="tag in photoTags" @click="onTagClicked(tag)">#{{tag}} </i>
+          <i v-for="tag in photoTags" @click="onPhotoTagClicked(tag)">#{{tag}} </i>
         </div>
       </md-card-content>
 
@@ -247,8 +247,11 @@ export default {
         console.error(e);
       }
     },
-    onTagClicked: function (tag) {
-      this.$emit('onTagClicked', tag);
+    onLocationTagClicked: function (tag) {
+      this.$emit('onLocationTagClicked', tag);
+    },
+    onPhotoTagClicked: function (tag) {
+      this.$emit('onPhotoTagClicked', tag);
     }
   },
   data: () => ({

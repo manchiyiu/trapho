@@ -6,7 +6,8 @@
       <common-content-empty v-if="hasEnded && !hasContent" />
       <div v-for="photo in photos" class="content-card-list">
         <common-content-card
-          @onTagClicked="onTagClicked"
+          @onLocationTagClicked="onLocationTagClicked"
+          @onPhotoTagClicked="onPhotoTagClicked"
           :photoId="photo.id"
           :username="photo.username"
           :userId="photo.userId"
@@ -51,8 +52,11 @@ export default {
     }
   },
   methods: {
-    onTagClicked: function (tag) {
-      this.$emit('onTagClicked', tag);
+    onLocationTagClicked: function (tag) {
+      this.$emit('onLocationTagClicked', tag);
+    },
+    onPhotoTagClicked: function (tag) {
+      this.$emit('onPhotoTagClicked', tag);
     }
   }
 };

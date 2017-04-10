@@ -30,8 +30,13 @@
               </md-input-container>
               <md-input-container>
                 <md-icon>bookmark</md-icon>
-                <label>Tags</label>
+                <label>Location tags</label>
                 <md-input v-model="filter.tags"></md-input>
+              </md-input-container>
+              <md-input-container>
+                <md-icon>bookmark</md-icon>
+                <label>Photo tags</label>
+                <md-input v-model="filter.photoTags"></md-input>
               </md-input-container>
               <md-card-actions>
                 <md-button class="md-primary" @click.native="clearFilter">Clear</md-button>
@@ -81,7 +86,8 @@
       md-align="center"
       v-infinite-scroll="loadMore">
       <common-content-card-list
-        @onTagClicked="onTagClicked"
+        @onLocationTagClicked="onLocationTagClicked"
+        @onPhotoTagClicked="onPhotoTagClicked"
         style="padding-left: 10px; padding-right: 10px;"
         :hasEnded="hasEnded"
         :photos="photos">
@@ -124,7 +130,8 @@ export default {
     filter: {
       username: '',
       locationName: '',
-      tags: ''
+      tags: '',
+      photoTags: ''
     },
     hasEnded: false // whether or not the feed loading has reached the end
   }),
@@ -148,12 +155,33 @@ export default {
       return getPhotoUrl(_.get(this.photos, `${this.currentIndex}.url`, ''));
     },
     isFilterFilled: function () {
-      return this.filter.username.length > 0 || this.filter.locationName.length > 0 || this.filter.tags.length > 0;
+      return this.filter.username.length > 0 ||
+        this.filter.locationName.length > 0 ||
+        this.filter.tags.length > 0 ||
+        this.filter.photoTags.length > 0;
     }
   },
   methods: {
-    loadPosts: async function (skip, username, locationName, tags, count = 5) {
-      let { photos } = await get(this.$router, 'photos/stream', { count, skip, username, locationName, tags });
+    loadPosts: async function (skip, username, locationName, tags, photoTags, count = 5) {
+      let query = { count, skip };
+
+      if (_.isString(username) && username.trim().length > 0) {
+        query.username = username;
+      }
+
+      if (_.isString(locationName) && locationName.trim().length > 0) {
+        query.locationName = locationName;
+      }
+
+      if (_.isString(tags) && tags.trim().length > 0) {
+        query.tags = tags.trim();
+      }
+
+      if (_.isString(photoTags) && photoTags.trim().length > 0) {
+        query.photoTags = photoTags.trim();
+      }
+
+      let { photos } = await get(this.$router, 'photos/stream', query);
       photos.forEach((photo, index) => {
         const result = _.merge(photo, { index: skip + index });
         Vue.set(this.photos, skip + index, result);
@@ -164,7 +192,13 @@ export default {
       this.currrentIndex = skip + photos.length;
     },
     loadMore: async function () {
-      await this.loadPosts(this.currrentIndex, this.filter.username, this.filter.locationName, this.filter.tags);
+      await this.loadPosts(
+        this.currrentIndex,
+        this.filter.username,
+        this.filter.locationName,
+        this.filter.tags,
+        this.filter.photoTags
+      );
     },
     onLastPhoto: function () {
       this.currentIndex--;
@@ -177,12 +211,19 @@ export default {
     },
     submitFilter: async function () {
       this.resetFeed();
-      await this.loadPosts(this.currrentIndex, this.filter.username, this.filter.locationName, this.filter.tags);
+      await this.loadPosts(
+        this.currrentIndex,
+        this.filter.username,
+        this.filter.locationName,
+        this.filter.tags,
+        this.filter.photoTags
+      );
     },
     clearFilter: async function () {
       this.filter.username = '';
       this.filter.locationName = '';
       this.filter.tags = '';
+      this.filter.photoTags = '';
       this.resetFeed();
       await this.loadPosts(this.currrentIndex);
     },
@@ -191,8 +232,11 @@ export default {
       this.hasEnded = false;
       this.currrentIndex = 0;
     },
-    onTagClicked: function (tag) {
+    onLocationTagClicked: function (tag) {
       this.filter.tags = tag;
+    },
+    onPhotoTagClicked: function (tag) {
+      this.filter.photoTags = tag;
     }
   }
 };
