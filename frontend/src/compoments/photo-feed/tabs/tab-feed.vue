@@ -81,6 +81,7 @@
       md-align="center"
       v-infinite-scroll="loadMore">
       <common-content-card-list
+        @onTagClicked="onTagClicked"
         style="padding-left: 10px; padding-right: 10px;"
         v-if="active"
         :hasEnded="hasEnded"
@@ -190,6 +191,9 @@ export default {
       this.photos = {};
       this.hasEnded = false;
       this.currrentIndex = 0;
+    },
+    onTagClicked: function (tag) {
+      this.filter.tags = tag;
     }
   }
 };

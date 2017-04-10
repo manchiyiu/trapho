@@ -39,10 +39,15 @@
         <i style="color: #aaa; margin-left: 10px;">
           {{toHumanTime(timestamp)}}
         </i>
-        <br>
-        <i style="color: #aaa;">
-          <span v-for="tag in tags">#{{tag}} </span>
-        </i>
+        <md-divider style="margin-top: 10px;"></md-divider>
+        <div style="color: #aaa; margin-top: 10px;" v-if="tags.length > 0">
+          <b style="color: #888;">Location tags:</b>
+          <i v-for="tag in tags" @click="onTagClicked(tag)">#{{tag}} </i>
+        </div>
+        <div style="color: #aaa; margin-top: 5px;" v-if="photoTags.length > 0">
+          <b style="color: #888;">Photos tags:</b>
+          <i v-for="tag in photoTags" @click="onTagClicked(tag)">#{{tag}} </i>
+        </div>
       </md-card-content>
 
       <md-card-media>
@@ -132,6 +137,7 @@ import { getPhotoUrl, get, post, del, patch } from '../../../utils.js';
 export default {
   props: [
     'photoId',
+    'photoTags',
     'username',
     'userId',
     'locationId',
@@ -241,6 +247,9 @@ export default {
         console.error(e);
       }
     },
+    onTagClicked: function (tag) {
+      this.$emit('onTagClicked', tag);
+    }
   },
   data: () => ({
     liked: false,
@@ -258,7 +267,7 @@ export default {
         `likes/users/${this.currentUserId}/photos/${this.photoId}`
       );
       this.liked = liked;
-      
+
     } catch (e) {
       this.liked = false;
     }

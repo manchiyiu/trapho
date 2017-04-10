@@ -6,6 +6,7 @@
       <common-content-empty v-if="hasEnded && !hasContent" />
       <div v-for="photo in photos" class="content-card-list">
         <common-content-card
+          @onTagClicked="onTagClicked"
           :photoId="photo.id"
           :username="photo.username"
           :userId="photo.userId"
@@ -14,6 +15,7 @@
           :locationName="photo.locationName"
           :likesCount="photo.likesCount"
           :photoUrl="photo.url"
+          :photoTags="photo.photoTags"
           :description="photo.description"
           :comments="photo.comments">
         </common-content-card>
@@ -46,6 +48,11 @@ export default {
   computed: {
     hasContent: function () {
       return Object.keys(this.photos).length > 0;
+    }
+  },
+  methods: {
+    onTagClicked: function (tag) {
+      this.$emit('onTagClicked', tag);
     }
   }
 };

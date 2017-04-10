@@ -51,9 +51,12 @@
             <md-textarea v-model="dialogDescription"></md-textarea>
           </md-input-container>
           <md-input-container>
-            <label>Rating</label>
+            <label>Rating (1 - 10)</label>
             <md-input type="number" min="1" max="10" v-model="dialogRating"></md-input>
           </md-input-container>
+          <md-chips v-model="dialogTags" md-input-placeholder="Tags">
+            <template scope="chip">{{chip.value}}</template>
+          </md-chips>
         </md-dialog-content>
         <md-dialog-actions>
           <md-button class="md-primary" @click.native="closeDescriptionModal">Add</md-button>
@@ -132,6 +135,7 @@ export default {
     dialogCurrentIndex: null,
     dialogDescription: '',
     dialogRating: null,
+    dialogTags: null,
     selectedLocation: null,
     dropzone: null
   }),
@@ -167,12 +171,14 @@ export default {
     openDescriptionModal: function(index) {
       this.dialogDescription = this.uploadedFiles[index].description;
       this.dialogRating = this.uploadedFiles[index].rating;
+      this.dialogTags = this.uploadedFiles[index].tags;
       this.dialogCurrentIndex = index;
       this.$refs.dialog.open();
     },
     closeDescriptionModal: function() {
       Vue.set(this.uploadedFiles[this.dialogCurrentIndex], 'description', this.dialogDescription);
       Vue.set(this.uploadedFiles[this.dialogCurrentIndex], 'rating', this.dialogRating);
+      Vue.set(this.uploadedFiles[this.dialogCurrentIndex], 'tags', this.dialogTags);
       this.dialogCurrentIndex = null;
       this.$refs.dialog.close();
     },
@@ -181,8 +187,8 @@ export default {
     },
     submit: async function() {
       const locationId = this.selectedLocation.id;
-      const payloads = this.uploadedFiles.map(({ url, height, width, description, rating }) => ({
-        url, description, locationId, rating
+      const payloads = this.uploadedFiles.map(({ url, height, width, description, rating, tags }) => ({
+        url, description, locationId, rating: parseInt(rating), photoTags: tags
       }));
       try {
         await Promise.all(payloads.map(
