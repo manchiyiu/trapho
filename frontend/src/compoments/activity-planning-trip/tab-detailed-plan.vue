@@ -7,33 +7,37 @@
       <p>Please confirm the basic information before proceeding to this step.</p>
     </md-card-content>
 
-    <div v-if="hasCommitted && !hasSubmitted">
+    <div v-if="hasCommitted && !createdId">
 
-      <gmap-map
-        :center="coordinates"
-        :options="{styles: mapTheme}"
-        :zoom="15"
-        style="margin-bottom: 20px; height: 500px; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); transition: all 0.3s cubic-bezier(.25,.8,.25,1);">
-          <gmap-cluster :gridSize="100">
-            <gmap-marker
-              :key="location.id"
-              v-for="location in selected"
-              :position="location.coordinates"
-              :clickable="false"
-              :draggable="false"
-              :label="location.name">
-            </gmap-marker>
-          </gmap-cluster>
-      </gmap-map>
+      <div class="detailed-plan-row">
+        <gmap-map
+          :center="coordinates"
+          :options="{styles: mapTheme}"
+          :zoom="15"
+          style="margin-bottom: 20px; width: 100vw; max-width: 500px; height: 200px; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); transition: all 0.3s cubic-bezier(.25,.8,.25,1);">
+            <gmap-cluster :gridSize="100">
+              <gmap-marker
+                :key="location.id"
+                v-for="location in selected"
+                :position="location.coordinates"
+                :clickable="false"
+                :draggable="false"
+                :label="location.name">
+              </gmap-marker>
+            </gmap-cluster>
+        </gmap-map>
+      </div>
 
-      <common-plan-edit
-        :createdId="createdId"
-        :hasCommitted="hasCommitted"
-        :data="chips"
-        :updateData="updateChip"
-        :dataTripName="tripName"
-        :updateTripName="updateTripName"
-        @submit="submit" />
+      <div class="detailed-plan-row">
+        <common-plan-edit
+          :createdId="createdId"
+          :hasCommitted="hasCommitted"
+          :data="chips"
+          :updateData="updateChip"
+          :dataTripName="tripName"
+          :updateTripName="updateTripName"
+          @submit="submit" />
+      </div>
 
     </div>
 
@@ -60,6 +64,11 @@
   padding: 20px;
   padding-bottom: 200px;
   overflow-y: scroll;
+}
+.detailed-plan-row {
+  display: flex;
+  width: 100vw;
+  justify-content: center;
 }
 </style>
 

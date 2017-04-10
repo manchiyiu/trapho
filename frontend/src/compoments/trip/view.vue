@@ -2,39 +2,39 @@
 
 <template>
   <div class="trip-container">
-    <div style="margin: 20px;">
+    <div style="margin-top: 20px; margin-bottom: 20px;">
       <!-- header -->
-      <md-layout md-align="end" md-gutter="16">
-        <md-layout md-flex="33">
-          <md-button class="md-icon-button" v-if="trip && trip.userId === currentUserId" @click.native="remove"><md-icon>delete</md-icon></md-button>
-          <md-button class="md-icon-button" v-if="trip && trip.userId === currentUserId"><router-link :to="`/edit-trip/${trip.id}`"><md-icon>create</md-icon></router-link></md-button>
-          <md-button class="md-icon-button" @click.native="print"><md-icon>print</md-icon></md-button>
-        </md-layout>
-      </md-layout>
       <div class="trip-row">
-        <md-input-container style="width: 50%">
+        <md-input-container style="width: 90vw; max-width: 500px;">
           <label>Trip name</label>
           <md-input disabled v-model="name"></md-input>
         </md-input-container>
       </div>
+      <div style="display: flex; justify-content: center; width: 100vw;">
+        <md-button class="md-icon-button" v-if="trip && trip.userId === currentUserId" @click.native="remove"><md-icon>delete</md-icon></md-button>
+        <md-button class="md-icon-button" v-if="trip && trip.userId === currentUserId"><router-link :to="`/edit-trip/${trip.id}`"><md-icon>create</md-icon></router-link></md-button>
+        <md-button class="md-icon-button" @click.native="print"><md-icon>print</md-icon></md-button>
+      </div>
 
       <!-- map -->
-     <gmap-map
-      :center="coordinates"
-      :options="{styles: mapTheme}"
-      :zoom="15"
-      style="margin-bottom: 20px; height: 500px; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); transition: all 0.3s cubic-bezier(.25,.8,.25,1);">
-        <gmap-cluster :gridSize="100">
-          <gmap-marker
-            :key="location.id"
-            v-for="location in locations"
-            :position="location.coordinates"
-            :clickable="false"
-            :draggable="false"
-            :label="location.name">
-          </gmap-marker>
-        </gmap-cluster>
-      </gmap-map>
+      <div class="trip-row" style="margin-top: 30px; margin-bottom: 30px;">
+        <gmap-map
+          :center="coordinates"
+          :options="{styles: mapTheme}"
+          :zoom="15"
+          style="margin-bottom: 20px; width: 100vw; max-width: 500px; height: 200px; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); transition: all 0.3s cubic-bezier(.25,.8,.25,1);">
+          <gmap-cluster :gridSize="100">
+            <gmap-marker
+              :key="location.id"
+              v-for="location in locations"
+              :position="location.coordinates"
+              :clickable="false"
+              :draggable="false"
+              :label="location.name">
+            </gmap-marker>
+          </gmap-cluster>
+        </gmap-map>
+      </div>
 
       <!-- trip content -->
       <div v-for="(day, index) in days" :key="index" id="print-element">
@@ -71,7 +71,7 @@
 .trip-container {
   background-color: #fafafa !important;
   height: 100vh;
-  padding: 20px;
+  width: 100vw;
   padding-bottom: 200px;
   overflow-y: scroll;
 }
@@ -84,8 +84,8 @@
   justify-content: center;
 }
 .trip-item {
-  width: 500px;
-  max-width: 90vw;
+  max-width: 500px;
+  width: 100vw;
   margin-top: 10px;
   margin-bottom: 10px;
 }

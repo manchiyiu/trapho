@@ -3,30 +3,34 @@
 <template>
   <div class="edit-trip-container">
     <div v-if="hasLoaded && !hasSubmitted">
-     <gmap-map
-      :center="coordinates"
-      :options="{styles: mapTheme}"
-      :zoom="15"
-      style="margin-bottom: 20px; height: 500px; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); transition: all 0.3s cubic-bezier(.25,.8,.25,1);">
-        <gmap-cluster :gridSize="100">
-          <gmap-marker
-            :key="location.id"
-            v-for="location in locations"
-            :position="location.coordinates"
-            :clickable="false"
-            :draggable="false"
-            :label="location.name">
-          </gmap-marker>
-        </gmap-cluster>
-      </gmap-map>
-      <common-plan-edit
-        :createdId="createdId"
-        :hasCommitted="true"
-        :data="chips"
-        :updateData="updateChip"
-        :dataTripName="tripName"
-        :updateTripName="updateTripName"
-        @submit="submit" />
+      <div class="edit-trip-row">
+        <gmap-map
+          :center="coordinates"
+          :options="{styles: mapTheme}"
+          :zoom="15"
+          style="margin-bottom: 20px; height: 200px; width: 100vw; max-width: 500px; box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); transition: all 0.3s cubic-bezier(.25,.8,.25,1);">
+          <gmap-cluster :gridSize="100">
+            <gmap-marker
+              :key="location.id"
+              v-for="location in locations"
+              :position="location.coordinates"
+              :clickable="false"
+              :draggable="false"
+              :label="location.name">
+            </gmap-marker>
+          </gmap-cluster>
+        </gmap-map>
+      </div>
+      <div class="edit-trip-row">
+        <common-plan-edit
+          :createdId="createdId"
+          :hasCommitted="true"
+          :data="chips"
+          :updateData="updateChip"
+          :dataTripName="tripName"
+          :updateTripName="updateTripName"
+          @submit="submit" />
+      </div>
     </div>
 
     <div v-if="!hasLoaded" style="display: flex; justify-content: center;">
@@ -55,6 +59,11 @@
   padding: 20px;
   padding-bottom: 200px;
   overflow-y: scroll;
+}
+.edit-trip-row {
+  display: flex;
+  width: 100vw;
+  justify-content: center;
 }
 </style>
 
