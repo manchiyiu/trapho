@@ -104,6 +104,7 @@ router.get('/users/:userId', async (req, res) => {
  * @apiParam {String} locationId              location id where the photo is taken
  * @apiParam {String} url                     url path of the photo
  * @apiParam {String} description             description of the photo added by the user
+ * @apiParam {String[]} photoTags             an *array* of zero or more photo tags 
  *
  * @apiUse objectId
  *
@@ -115,10 +116,10 @@ router.get('/users/:userId', async (req, res) => {
  *
  */
 router.post('/', async (req, res) => {
-  const { locationId, url, description, rating } = req.body;
+  const { locationId, url, description, rating, photoTags } = req.body;
   const userId = req.user.id;
   try {
-    const { id } = await act({ role: 'photo', cmd: 'photoCreate', userId, locationId, url, description, rating });
+    const { id } = await act({ role: 'photo', cmd: 'photoCreate', userId, locationId, url, description, rating, photoTags });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -138,6 +139,7 @@ router.post('/', async (req, res) => {
  * @apiParam {String} [locationId]              location id where the photo is taken
  * @apiParam {String} [url]                     url path of the photo
  * @apiParam {String} [description]             description of the photo added by the user
+ * @apiParam {String[]} [photoTags]             an *array* of zero or more photo tags 
  *
  * @apiUse objectId
  *
@@ -149,9 +151,9 @@ router.post('/', async (req, res) => {
  */
 router.patch('/id/:photoId', async (req, res) => {
   const { photoId } = req.params;
-  const { userId, locationId, url, description } = req.body;
+  const { userId, locationId, url, description, photoTags } = req.body;
   try {
-    const { id } = await act({ role: 'photo', cmd: 'photoPatch', photoId, userId, locationId, url, description });
+    const { id } = await act({ role: 'photo', cmd: 'photoPatch', photoId, userId, locationId, url, description, photoTags });
     res.json({ id });
   } catch (err) {
     res.status(500).json({ error: err.details.message });
@@ -289,6 +291,7 @@ router.get('/', async (req: any, res) => {
  * @apiParam {String} [locationName]            keywords for location name (seperated by comma)
  * @apiParam {String} [tags]                    keywords for tags (seperated by comma)
  * @apiParam {String} [timestamp]               time of the photo created
+ * @apiParam {String} [photoTags]               keywords for photo tags (seperated by comma)
  *
  * @apiSuccessExample  {json} Success-Response:
  * {
@@ -326,8 +329,8 @@ router.get('/', async (req: any, res) => {
  */
 router.get('/stream', async (req: any, res) => {
   try {
-    const { userId, username, locationId, locationName, tags, timestamp, count, skip } = req.query;
-    const { photos } = await act({ role: 'photo', cmd: 'photoStreamRetrieve', userId, username, locationId, locationName, tags, timestamp, count, skip });
+    const { userId, username, locationId, locationName, tags, timestamp, count, skip, photoTags } = req.query;
+    const { photos } = await act({ role: 'photo', cmd: 'photoStreamRetrieve', userId, username, locationId, locationName, tags, timestamp, count, skip, photoTags });
     res.json({ photos });
   } catch (err) {
     res.status(500).json({ error: err.details.message });

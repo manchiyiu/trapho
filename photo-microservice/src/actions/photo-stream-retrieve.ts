@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 export default async(msg, reply) => {
   let batchSize : number;
   let batchNo: number;
-  const { username, userId, locationName, timestamp, tags, locationId } = msg;
+  const { username, userId, locationName, timestamp, tags, locationId, photoTags } = msg;
   const delim = ',';
   let query:any = {};
 
@@ -111,6 +111,19 @@ export default async(msg, reply) => {
     if(_.isString(locationId)){
       query.locationId = locationId;
     }
+
+    if(_.isString(photoTags) && photoTags.trim().length > 0){
+      query.photoTags = {};
+      query.photoTags.$elemMatch = {};
+      query.photoTags.$elemMatch.$in = [];
+      photoTags.trim().split(delim).forEach(
+        photoTag =>{
+          if(photoTags.trim().length > 0){
+            query.photoTags.$elemMatch.$in.push(photoTag.trim());
+          }
+        }
+      );
+    }
     
     let photos : [any] = await Photo.retrieveMany(query, batchSize, batchNo);
     let result = await Promise.all(photos.map(
@@ -146,6 +159,7 @@ export default async(msg, reply) => {
 
         casted_photo.locationId = photo.locationId;
         casted_photo.locationTags = (await locations[photo.locationId]).tags;
+        casted_photo.photoTags = photo.photoTags;
         
         let casted_comments = await Promise.all(casted_photo.comments.map(
           async comment => {

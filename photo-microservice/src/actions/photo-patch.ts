@@ -4,7 +4,7 @@ import Photo from '../model';
 import { isValidUser, isValidLocation, isValidURL, isValidDescription } from '../utils';
 
 export default async (msg, reply) => {
-  const { photoId, userId, locationId, timestamp, url, description } = msg;
+  const { photoId, userId, locationId, timestamp, url, description, photoTags } = msg;
 
   // validate photoId first
   let res;
@@ -53,6 +53,14 @@ export default async (msg, reply) => {
       reply(new Error('descriptionInvalid'), null);
       return;
     }
+  }
+
+  if(!_.isUndefined(photoTags)){
+    if(!_.isArray(photoTags)){
+      reply(new Error('invalidPhotoTags'), null);
+      return;
+    }
+    res.photoTags = photoTags;
   }
 
   try {

@@ -9,33 +9,45 @@ export default class Photo {
   url : String = null;
   description : String = null;
   timestamp: String = null;
+  photoTags: String[] = null;
 
   static schema = new mongoose.Schema({
     userId: String,
     locationId: String,
     url: String,
     description: String,
+    photoTags: [String],
     timestamp: { type: Date, default: Date.now }
   });
 
   static model = mongoose.model('Photo', Photo.schema);
 
   constructor(object : any) {
-    const {userId, locationId, url, description, _id: id, timestamp} = object;
+    const {userId, locationId, url, description, _id: id, timestamp, photoTags} = object;
     this.userId = userId;
     this.locationId = locationId;
     this.url = url;
     this.description = description;
     this.id = id;
+    this.photoTags = photoTags;
     if(_.isUndefined(timestamp)){
       this.timestamp = null;
     }else{
       this.timestamp = timestamp;
     }
+    if(_.isUndefined(photoTags)){
+      this.photoTags = [];
+    }
   }
 
   async save() {
-    const model = new Photo.model({userId: this.userId, locationId: this.locationId, url: this.url, description: this.description});
+    const model = new Photo.model({
+      userId: this.userId, 
+      locationId: this.locationId, 
+      url: this.url, 
+      description: this.description, 
+      photoTags: this.photoTags});
+    
     const product = await model.save();
     return product._id; // _id is String, can use directly for find
   }
@@ -45,7 +57,8 @@ export default class Photo {
       userId: this.userId,
       locationId: this.locationId,
       url: this.url,
-      description: this.description
+      description: this.description,
+      photoTags: this.photoTags
     };
     try {
       await Photo.model.findByIdAndUpdate(this.id, newInfo);
