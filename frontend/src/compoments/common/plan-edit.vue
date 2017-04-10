@@ -98,8 +98,8 @@
 .timetable-item {
   background-color: transparent !important;
   box-shadow: none;
-  width: 500px;
-  max-width: 100vw;
+  width: 100vw;
+  max-width: 500px;
   margin-top: 10px;
   margin-bottom: 10px;
 }

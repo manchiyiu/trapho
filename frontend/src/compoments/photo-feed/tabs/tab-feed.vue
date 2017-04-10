@@ -1,7 +1,7 @@
 <name>photo-feed-tab-feed</name>
 
 <template>
-  <md-layout md-gutter="64">
+  <md-layout md-gutter="64" v-if="active">
     <md-layout
       md-flex-xsmall="100"
       md-flex-small="100"
@@ -11,7 +11,7 @@
       md-align="center">
       <div style="width: 100%; padding-left: 10px; padding-right: 10px;">
         <!--Search Bar-->
-        <md-card md-with-hover style="margin-bottom: 20px">
+        <md-card md-with-hover style="margin-bottom: 20px;">
           <md-card-header style="margin-bottom: 0px">
             <div style="font-weight: bolder;">Filter</div>
           </md-card-header>
@@ -83,7 +83,6 @@
       <common-content-card-list
         @onTagClicked="onTagClicked"
         style="padding-left: 10px; padding-right: 10px;"
-        v-if="active"
         :hasEnded="hasEnded"
         :photos="photos">
       </common-content-card-list>
