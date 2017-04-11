@@ -1,7 +1,7 @@
 <name>edit-trip-view</name>
 
 <template>
-  <div class="edit-trip-container">
+  <div class="edit-trip-container" id="edit-container">
     <div v-if="hasLoaded && !hasSubmitted">
       <div class="edit-trip-row">
         <gmap-map

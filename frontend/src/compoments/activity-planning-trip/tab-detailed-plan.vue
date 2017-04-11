@@ -1,7 +1,7 @@
 <name>activity-planning-trip-tab-detailed-plan</name>
 
 <template>
-  <div class="tab-detailed-plan-container">
+  <div class="tab-detailed-plan-container" id="edit-container">
     <!-- uncommitted -->
     <md-card-content v-if="!hasCommitted && !createdId">
       <p>Please confirm the basic information before proceeding to this step.</p>

@@ -6,7 +6,7 @@
     <md-card-content v-if="!hasSubmitted">
 
       <!-- timetable -->
-      <div class="timetable-container">
+      <div>
 
         <div class="timetable-row">
           <md-input-container style="width: 50%">
@@ -20,9 +20,10 @@
             Backlog
           </div>
         </div>
+
         <draggable
           v-model="chips"
-          :options="{ filter: '.timetable-indicator', handle: '.timetable-item-handle' }"
+          :options="sortableOptions"
           @change="onMoved">
           <div class="timetable-row" v-for="(chip, index) in chips" :key="chip.id">
             <!-- is actual trip item -->
@@ -32,8 +33,8 @@
               :class="{ 'isInvalid': chip.isInvalid, 'isValid': !chip.isInvalid }"
               md-with-hover>
               <md-card-content>
-                <div class="md-title">
-                  <span class="timetable-item-handle">::</span>
+                <div class="md-title timetable-item-handle">
+                  <span>::</span>
                   {{chip.label}}
                 </div>
                 <div class="md-subtitle">{{chip.subLabel}}</div>
@@ -98,6 +99,7 @@
 .timetable-item {
   background-color: transparent !important;
   box-shadow: none;
+  user-select: none;
   width: 100vw;
   max-width: 500px;
   margin-top: 10px;
@@ -151,6 +153,7 @@ import _ from 'lodash';
 import draggable from 'vuedraggable';
 import VueTimepicker from 'vue2-timepicker';
 import { directive as onClickaway } from 'vue-clickaway';
+import SweetScroll from 'sweet-scroll';
 
 export default {
   props: [
@@ -162,7 +165,8 @@ export default {
     'createdId'
   ],
   data: () => ({
-    hasSubmitted: false
+    hasSubmitted: false,
+    sweetScroll: null
   }),
   directives: {
     onClickaway
@@ -170,6 +174,9 @@ export default {
   components: {
     draggable,
     VueTimepicker
+  },
+  mounted: function() {
+    this.sweetScroll = new SweetScroll({}, '.edit-container');
   },
   computed: {
     chips: {
@@ -201,7 +208,18 @@ export default {
             && !chip.isInvalid;
         })
       );
-    }
+    },
+    sortableOptions: function() {
+      return {
+        filter: '.timetable-indicator',
+        handle: '.timetable-item-handle',
+        scroll: true,
+        scrollSpeed: 10,
+        scrollFn: (offsetX, offsetY) => {
+          document.getElementById('edit-container').scrollTop += offsetY;
+        }
+      };
+    },
   },
   watch: {
     hasCommitted: function () {
