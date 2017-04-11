@@ -104,7 +104,7 @@ router.get('/users/:userId', async (req, res) => {
  * @apiParam {String} locationId              location id where the photo is taken
  * @apiParam {String} url                     url path of the photo
  * @apiParam {String} description             description of the photo added by the user
- * @apiParam {String[]} photoTags             an *array* of zero or more photo tags 
+ * @apiParam {String[]} photoTags             an *array* of zero or more photo tags
  *
  * @apiUse objectId
  *
@@ -139,7 +139,7 @@ router.post('/', async (req, res) => {
  * @apiParam {String} [locationId]              location id where the photo is taken
  * @apiParam {String} [url]                     url path of the photo
  * @apiParam {String} [description]             description of the photo added by the user
- * @apiParam {String[]} [photoTags]             an *array* of zero or more photo tags 
+ * @apiParam {String[]} [photoTags]             an *array* of zero or more photo tags
  *
  * @apiUse objectId
  *
@@ -220,7 +220,14 @@ router.post('/upload', async (req: any, res) => {
 
   const { files: file } = req.files;
 
-  if (path.extname(file.name) !== '.jpg' && path.extname(file.name) !== '.png' && path.extname(file.name) !== '.jpeg') {
+  if (
+    path.extname(file.name) !== '.jpg' &&
+    path.extname(file.name) !== '.png' &&
+    path.extname(file.name) !== '.jpeg' &&
+    path.extname(file.name) !== '.JPG' &&
+    path.extname(file.name) !== '.PNG' &&
+    path.extname(file.name) !== '.JPEG'
+  ) {
     return res.status(500).json({ error: 'fileFormatInvalid' });
   }
 
