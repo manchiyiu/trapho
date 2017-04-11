@@ -65,7 +65,17 @@
 <style>
 .activity-planning-view-map {
   z-index: 0;
-  min-height: 500px;
+}
+@media (max-width: 600px) {
+  .activity-planning-view-map {
+    height: 50vh;
+    max-height: 500px;
+  }
+}
+@media (min-width: 600px) {
+  .activity-planning-view-map {
+    height: 100vh;
+  }
 }
 .activity-planning-view-card {
   background-color: white !important;
