@@ -5,17 +5,32 @@ import * as _ from 'lodash';
 export default async (msg, reply) => {
   const { userId, password, email } = msg;
   let hashedPassword;
+  var anyModified = false;
   try {
-    hashedPassword = await bcrypt.hash(password, 10);
+    if(_.isString(password)){
+      if(password.length  == 0){
+        throw new Error('passwordInvalid');
+      }
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
   } catch(e) {
     reply(new Error('passwordInvalid'));
+    return;
   }
 
   try{
     const user: User = await User.retrieveById(userId);
-    user.password = hashedPassword;
+    if(!_.isUndefined(hashedPassword)){
+      user.password = hashedPassword;
+      anyModified = true;
+    }    
     if(!_.isUndefined(email)){
       user.email = email;
+      anyModified = true;
+    }
+    if(!anyModified){
+      reply(new Error('nothingModified'), null);
+      return;
     }
     user.patch();
     reply(null, { "id": userId });
