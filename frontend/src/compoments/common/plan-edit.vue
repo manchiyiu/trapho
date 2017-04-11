@@ -153,7 +153,6 @@ import _ from 'lodash';
 import draggable from 'vuedraggable';
 import VueTimepicker from 'vue2-timepicker';
 import { directive as onClickaway } from 'vue-clickaway';
-import SweetScroll from 'sweet-scroll';
 
 export default {
   props: [
@@ -165,8 +164,7 @@ export default {
     'createdId'
   ],
   data: () => ({
-    hasSubmitted: false,
-    sweetScroll: null
+    hasSubmitted: false
   }),
   directives: {
     onClickaway
@@ -174,9 +172,6 @@ export default {
   components: {
     draggable,
     VueTimepicker
-  },
-  mounted: function() {
-    this.sweetScroll = new SweetScroll({}, '.edit-container');
   },
   computed: {
     chips: {
