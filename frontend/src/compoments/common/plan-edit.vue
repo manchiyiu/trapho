@@ -97,8 +97,7 @@
   justify-content: center;
 }
 .timetable-item {
-  background-color: transparent !important;
-  box-shadow: none;
+  background-color: #fafafa !important;
   user-select: none;
   width: 100vw;
   max-width: 500px;
@@ -108,12 +107,12 @@
 .timetable-item.isValid {
   box-shadow: none;
   border: 1px solid rgba(200, 200, 200, 0.5);
-  border-radius: 2px;
+  border-radius: 5px;
 }
 .timetable-item.isInvalid {
   box-shadow: none;
   border: 1px solid rgba(227, 27, 37, 0.3);
-  border-radius: 2px;
+  border-radius: 5px;
 }
 .timetable-indicator {
   border-top: 1px solid #ddd;
@@ -208,8 +207,11 @@ export default {
       return {
         filter: '.timetable-indicator',
         handle: '.timetable-item-handle',
+        dragClass: '.timetable-row',
         scroll: true,
         scrollSpeed: 10,
+        scrollSensitivity: 100,
+        fallbackTolerance: 100,
         scrollFn: (offsetX, offsetY) => {
           document.getElementById('edit-container').scrollTop += offsetY;
         }
