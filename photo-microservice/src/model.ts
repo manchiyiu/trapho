@@ -42,12 +42,12 @@ export default class Photo {
 
   async save() {
     const model = new Photo.model({
-      userId: this.userId, 
-      locationId: this.locationId, 
-      url: this.url, 
-      description: this.description, 
+      userId: this.userId,
+      locationId: this.locationId,
+      url: this.url,
+      description: this.description,
       photoTags: this.photoTags});
-    
+
     const product = await model.save();
     return product._id; // _id is String, can use directly for find
   }
@@ -124,7 +124,7 @@ export default class Photo {
         .find(conditions)
         .sort({ timestamp: -1 })
         .limit(batchLimit)
-        .skip(batchNo*batchLimit);
+        .skip(batchNo);
     } else {
       searchResult = await Photo.model.find(conditions);
     }
