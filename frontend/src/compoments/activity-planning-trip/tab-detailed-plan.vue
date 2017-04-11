@@ -3,7 +3,7 @@
 <template>
   <div class="tab-detailed-plan-container">
     <!-- uncommitted -->
-    <md-card-content v-if="!hasCommitted">
+    <md-card-content v-if="!hasCommitted && !createdId">
       <p>Please confirm the basic information before proceeding to this step.</p>
     </md-card-content>
 
@@ -41,7 +41,7 @@
 
     </div>
 
-    <md-card-content v-if="hasCommitted && createdId">
+    <md-card-content v-if="createdId">
       <div style="text-align: center; font-size: 20px;">
         <div style="margin-bottom: 20px;">
           <md-icon class="md-size-4x">check</md-icon>
@@ -171,18 +171,23 @@ export default {
     submit: async function () {
       const locations = this.chips
         .filter(item => !item.isIndicator && item.date)
-        .map(location => ({
-          id: location.id,
-          comment: location.comment,
-          startTime: moment(location.date)
-            .hour(location.startTime.HH)
-            .minute(location.startTime.mm)
-            .toISOString(),
-          endTime: moment(location.date)
-            .hour(location.endTime.HH)
-            .minute(location.endTime.mm)
-            .toISOString()
-        }));
+        .map(location => {
+          let payload = {
+            id: location.id,
+            startTime: moment(location.date)
+              .hour(location.startTime.HH)
+              .minute(location.startTime.mm)
+              .toISOString(),
+            endTime: moment(location.date)
+              .hour(location.endTime.HH)
+              .minute(location.endTime.mm)
+              .toISOString()
+          };
+          if (_.isString(location.comment) && location.comment.trim().length > 0) {
+            payload.comment = location.comment;
+          }
+          return payload;
+        })
       try {
         let { id } = await post(this.$router, 'trips', {
           name: this.tripName.trim(),
@@ -192,6 +197,7 @@ export default {
           locations
         });
         this.createdId = id;
+        this.$store.commit('activityPlanningClear');
       } catch (e) {
         console.error(e);
       }

@@ -225,7 +225,10 @@ export default {
       this.trip.locations.sort((a, b) => moment(a.startDate).isBefore(b.startDate));
 
       try {
-        await patch(this.$router, `trips/id/${this.trip.id}`, { locations: this.trip.locations });
+        await patch(this.$router, `trips/id/${this.trip.id}`, {
+          name: this.tripName,
+          locations: this.trip.locations
+        });
         this.hasSubmitted = true;
       } catch (e) {
         console.error(e);

@@ -24,6 +24,12 @@ const mutations = {
   },
   activityPlanningSetCommitted: function (state, payload) {
     Vue.set(state, 'hasCommitted', payload);
+  },
+  activityPlanningClear: function (state) {
+    Vue.set(state, 'selected', {});
+    Vue.set(state, 'startDate', null);
+    Vue.set(state, 'endDate', null);
+    Vue.set(state, 'hasCommitted', false);
   }
 };
 
