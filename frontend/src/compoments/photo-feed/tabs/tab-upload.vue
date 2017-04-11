@@ -170,7 +170,7 @@ export default {
     },
     openDescriptionModal: function(index) {
       this.dialogDescription = this.uploadedFiles[index].description;
-      this.dialogRating = this.uploadedFiles[index].rating;
+      this.dialogRating = this.uploadedFiles[index].rating || 10; // by default give a 10 rating
       this.dialogTags = this.uploadedFiles[index].tags;
       this.dialogCurrentIndex = index;
       this.$refs.dialog.open();
