@@ -37,30 +37,32 @@
       </div>
 
       <!-- trip content -->
-      <div v-for="(day, index) in days" :key="index" id="print-element">
-        <div class="trip-item trip-day-header">{{day.label}}</div>
-        <p class="trip-row" v-if="day.locations.length <= 0">
-          <b><i>No plan for this day?</i></b>
-        <p>
-        <div class="trip-row" v-for="location in day.locations">
-          <md-card  class="trip-item" md-with-hover>
-            <md-card-content>
-              <div class="md-title">{{location.name}}</div>
-              <div class="md-subtitle">{{location.description}}</div>
-              <md-divider style="margin-top: 10px; margin-bottom: 10px;"></md-divider>
-              {{location.comment}}
-              <md-divider style="margin-top: 10px; margin-bottom: 10px;"></md-divider>
-              <!-- show time -->
-              <div>
-                <b style="margin-right: 20px;">From</b>
-                <span>{{toHumanTime(location.startTime)}}</span>
-              </div>
-              <div>
-                <b style="margin-right: 20px;">To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
-                <span>{{toHumanTime(location.endTime)}}</span>
-              </div>
-            </md-card-content>
-          </md-card>
+      <div id="print-element">
+        <div v-for="(day, index) in days" :key="index" style="page-break-before: always;">
+          <div class="trip-item trip-day-header">{{day.label}}</div>
+          <p class="trip-row" v-if="day.locations.length <= 0">
+            <b><i>No plan for this day?</i></b>
+          <p>
+          <div class="trip-row" v-for="location in day.locations">
+            <md-card class="trip-item" md-with-hover>
+              <md-card-content>
+                <div class="md-title">{{location.name}}</div>
+                <div class="md-subtitle">{{location.description}}</div>
+                <md-divider style="margin-top: 10px; margin-bottom: 10px;"></md-divider>
+                {{location.comment}}
+                <md-divider style="margin-top: 10px; margin-bottom: 10px;"></md-divider>
+                <!-- show time -->
+                <div>
+                  <b style="margin-right: 20px;">From</b>
+                  <span>{{toHumanTime(location.startTime)}}</span>
+                </div>
+                <div>
+                  <b style="margin-right: 20px;">To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</b>
+                  <span>{{toHumanTime(location.endTime)}}</span>
+                </div>
+              </md-card-content>
+            </md-card>
+          </div>
         </div>
       </div>
     </div>
