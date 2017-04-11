@@ -8,7 +8,7 @@
           <md-icon class="menu-icon">menu</md-icon>
         </md-button>
         <div class="logo">
-          <img :src="logopath" class="logo-img"></img>
+          <md-image :md-src="logopath" class="logo-img" style="image-rendering: -webkit-optimize-contrast;"></md-image>
         </div>
       </md-toolbar>
     </md-whiteframe>
@@ -63,6 +63,7 @@
 }
 .logo-img {
   margin: 0px 10px 0px 5px;
+  height: 40px;
 }
 .menu-icon {
   color: black;

@@ -1,7 +1,7 @@
 <name>common-plan-edit</name>
 
 <template>
-  <div>
+  <div style="width: 100%;">
   <!-- committed -->
     <md-card-content v-if="!hasSubmitted">
 
@@ -211,7 +211,6 @@ export default {
         scroll: true,
         scrollSpeed: 10,
         scrollSensitivity: 100,
-        fallbackTolerance: 100,
         scrollFn: (offsetX, offsetY) => {
           document.getElementById('edit-container').scrollTop += offsetY;
         }
