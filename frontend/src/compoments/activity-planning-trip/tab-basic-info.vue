@@ -131,10 +131,14 @@ export default {
   },
   watch: {
     startDate: function () {
-      this.endPickerElm.setMinDate(this.startDate.toDate());
+      if (this.startDate) {
+        this.endPickerElm.setMinDate(this.startDate.toDate());
+      }
     },
     endDate: function () {
-      this.startPickerElm.setMaxDate(this.endDate.toDate());
+      if (this.endDate) {
+        this.startPickerElm.setMaxDate(this.endDate.toDate());
+      }
     }
   },
   computed: {

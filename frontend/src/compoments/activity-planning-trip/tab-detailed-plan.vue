@@ -67,7 +67,7 @@
 }
 .detailed-plan-row {
   display: flex;
-  width: 100vw;
+  width: 100%;
   justify-content: center;
 }
 </style>
@@ -102,7 +102,9 @@ export default {
   }),
   watch: {
     hasCommitted: function () {
-      this.updateRange();
+      if (this.hasCommitted === true) {
+        this.updateRange();
+      }
     }
   },
   computed: {
@@ -146,7 +148,7 @@ export default {
       let endDate = moment(this.endDate);
 
       let j = 1;
-      for(let date = moment(this.startDate); date.diff(this.endDate) < 0; date.add('days', 1)) {
+      for(let date = moment(this.startDate); date.diff(this.endDate) < 0; date.add(1, 'day')) {
         Vue.set(this.chips, i, {
           id: `day_${j}`,
           label: `Day ${j} (${this.toHumanDate(date)})`,
