@@ -38,6 +38,7 @@
                   {{chip.label}}
                 </div>
                 <div class="md-subtitle">{{chip.subLabel}}</div>
+                <a :href="`#/location/${chip.id}`"target="_blank">(View)</a>
                 <md-divider style="margin-top: 10px;"></md-divider>
                 <md-input-container md-inline>
                   <label>Comment</label>

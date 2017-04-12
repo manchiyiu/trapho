@@ -78,7 +78,7 @@ Vue.use(VueGoogleMaps, {
 });
 
 export default {
-  props: ['userId', 'locationId'],
+  props: ['locationId'],
   data: () => ({
     mapTheme,
     currentIndex: 0,
@@ -95,7 +95,7 @@ export default {
     await this.load();
   },
   watch: {
-    $route: async function () {
+    locationId: async function () {
       await this.load();
     }
   },

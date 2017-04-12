@@ -46,7 +46,11 @@
           <div class="trip-row" v-for="location in day.locations">
             <md-card class="trip-item" md-with-hover>
               <md-card-content>
-                <div class="md-title">{{location.name}}</div>
+                <div class="md-title">
+                  <router-link :to="`/location/${location.id}`">
+                    {{location.name}}
+                  </router-link>
+                </div>
                 <div class="md-subtitle">{{location.description}}</div>
                 <md-divider style="margin-top: 10px; margin-bottom: 10px;"></md-divider>
                 {{location.comment}}
