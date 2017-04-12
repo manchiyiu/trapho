@@ -90,14 +90,19 @@
         ref="comment_box">
       </md-dialog-prompt>
 
-      <md-dialog-prompt
-        v-model="descriptionValue"
-        md-title="Edit photo description"
-        md-ok-text="Edit"
-        md-cancel-text="Cancel"
-        @close="editPost"
-        ref="edit_box">
-      </md-dialog-prompt>
+      <md-dialog ref="edit_box">
+        <md-dialog-title>Edit photo description</md-dialog-title>
+        <md-dialog-content>
+          <md-input-container>
+            <label>Description</label>
+            <md-textarea v-model="descriptionValue"></md-textarea>
+          </md-input-container>
+        </md-dialog-content>
+        <md-dialog-actions>
+          <md-button class="md-primary" @click.native="closeDialog('edit_box')">Cancel</md-button>
+          <md-button class="md-primary" @click.native="editPost">Edit</md-button>
+        </md-dialog-actions>
+      </md-dialog>
 
     </md-card>
 
@@ -227,6 +232,7 @@ export default {
          });
         this.description = this.descriptionValue;
         this.descriptionValue = '';
+        this.closeDialog('edit_box');
       } catch (e) {
         console.error(e);
       }
