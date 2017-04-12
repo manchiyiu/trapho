@@ -111,25 +111,36 @@ export default {
         return;
       }
 
-      let { error2, id } = await patch(this.$router, `auth/id/${this.userId}`, { userId: this.userId, password: this.newpassword, email: this.email });
-      if (error2) {
-        switch (error2) {
-          case 'userNotExist':
-            this.errorMessage = 'User does not exist. Please try again.';
-            break;
-          default:
-            this.errorMessage = error;
-        }
-        this.$refs.snackbar.open();
-        return;
+      let error2 = '';
+
+      if (this.newpassword == '') {
+        let { error2, id } = await patch(this.$router, `auth/id/${this.userId}`, { userId: this.userId, email: this.email });
+      } else if (this.email == '') {
+        let { error2, id } = await patch(this.$router, `auth/id/${this.userId}`, { userId: this.userId, password: this.newpassword });
       } else {
-        this.errorMessage = 'Personal information has been changed.';
-        password = '';
-        newpassword = '';
-        newpassword2 = '';
-        email = '';
-        this.$refs.snackbar.open();
+        let { error2, id } = await patch(this.$router, `auth/id/${this.userId}`, { userId: this.userId, password: this.newpassword, email: this.email });
       }
+
+      if (error2) {
+          switch (error2) {
+            case 'userNotExist':
+              this.errorMessage = 'User does not exist. Please try again.';
+              break;
+            default:
+              this.errorMessage = error;
+          }
+          this.$refs.snackbar.open();
+          return;
+        } else {
+          this.errorMessage = 'Personal information has been changed.';
+          this.password = '';
+          this.newpassword = '';
+          this.newpassword2 = '';
+          this.email = '';
+          this.$refs.snackbar.open();
+        }
+      
+      
     }
   }
 }
