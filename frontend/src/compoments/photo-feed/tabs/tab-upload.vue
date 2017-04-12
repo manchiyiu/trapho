@@ -172,7 +172,10 @@ export default {
       this.dialogDescription = this.uploadedFiles[index].description;
       this.dialogRating = this.uploadedFiles[index].rating || 10; // by default give a 10 rating
       this.dialogTags = this.uploadedFiles[index].tags;
-      Vue.set(this, 'dialogTags', []);
+
+      if (!_.isArray(this.dialogTags)) {
+        Vue.set(this, 'dialogTags', []);
+      }
 
       this.dialogCurrentIndex = index;
       this.$refs.dialog.open();
