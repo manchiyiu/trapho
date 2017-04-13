@@ -18,6 +18,6 @@ passport.use(new LocalStrategy(
 export const generateTokenMiddleware = function (req, res, next) {
   req.token = jwt.sign({
     id: req.user.id
-  }, SERVER_SECRET, { expiresIn: '2h' });
+  }, SERVER_SECRET, { expiresIn: '24h' });
   next();
 };
