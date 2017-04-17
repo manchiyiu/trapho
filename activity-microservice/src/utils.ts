@@ -114,7 +114,7 @@ export async function checkLocations(locations : [any], optional: boolean){
         else return 0;
     });
     for(var i = 1; i<locations_casted.length; i++){
-        if(locations_casted[i - 1].endTime >= locations_casted[i].startTime){
+        if(locations_casted[i - 1].endTime > locations_casted[i].startTime){
             throw new Error("startEndTimeError");
         }
     }
