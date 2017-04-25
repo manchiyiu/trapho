@@ -1,0 +1,1 @@
+// register all the components within this module

@@ -1,7 +1,9 @@
+<!-- this page component is the page in which user will select a list of locations to go to -->
 <name>activity-planning-view</name>
 
 <template>
   <md-layout md-gutter style="height: 100%; width: 100vw; overflow: none;">
+    <!-- the location map of the left showing the selected locations on a Google Map -->
     <md-layout
       class="activity-planning-view-map"
       md-flex-xsmall="100"
@@ -15,7 +17,7 @@
         :options="{styles: mapTheme}"
         :zoom="12"
         style="height: 100%; width: 100%;">
-        <gmap-cluster :gridSize="100">
+        <gmap-cluster :gridSize="100"><!-- group the locations into a cluster if too many -->
           <gmap-marker
             v-for="(location, index) in selected"
             :key="index"
@@ -28,6 +30,7 @@
         </gmap-cluster>
       </gmap-map>
     </md-layout>
+    <!-- the location list on the right on which users can select the location to go to -->
     <md-layout
       md-flex-xsmall="100"
       md-flex-small="100"
@@ -39,16 +42,16 @@
         <md-subheader><b><u>Step 1</u></b></md-subheader>
         <md-subheader>Select locations that you can to go to from your wishlist:</md-subheader>
         <md-tabs md-centered class="md-transparent">
-          <md-tab md-label="Wishlist">
+          <md-tab md-label="Wishlist"><!-- this tab element shows the list of locations from user wishlist -->
             <activity-planning-wishlist
               :toggleSelected="toggleSelected"
               :locations="locations" />
           </md-tab>
-          <md-tab md-label="More">
+          <md-tab md-label="More"><!-- this tab element allows user to add more location by name or location tags -->
             <activity-planning-more
               :toggleSelected="toggleSelected" />
           </md-tab>
-          <md-tab md-label="Selected">
+          <md-tab md-label="Selected"><!-- this tab element shows the list of location that have been selected -->
             <activity-planning-wishlist
               :toggleSelected="toggleSelected"
               :locations="selected" />
@@ -56,6 +59,7 @@
         </md-tabs>
       </md-whiteframe>
     </md-layout>
+    <!-- upon clicking the button, user will be redirected to the trip planning page -->
     <md-button class="md-fab plan-next-fab" :disabled="!hasSelected" @click.native="nextStep">
       <md-icon>navigate_next</md-icon>
     </md-button>
@@ -100,15 +104,15 @@ import { get } from '../../utils.js';
 
 export default {
   data: () => ({
-    mapTheme,
-    center: {
+    mapTheme, // custom theme for the Google Map component
+    center: { // initialize the map to centered at Chinese University
       lat: 22.4213,
       lng: 114.2071
     },
     locations: []
   }),
   computed: {
-    selected: {
+    selected: { // retrieve the list of selected location from the vuex store
       get: function () {
         return this.$store.state.ActivityPlanning.selected;
       },
@@ -116,26 +120,26 @@ export default {
         this.$store.state.commit('activityPlanningSetSelected', value);
       }
     },
-    hasSelected: function () {
+    hasSelected: function () { // a boolean denoting whether or not the user has selected any location
       return Object.keys(this.selected).length > 0;
     }
   },
-  mounted: function () {
+  mounted: function () { // on component loaded, retrieve user's wishlist from backend
     this.load();
   },
   methods: {
-    load: async function () {
+    load: async function () { // retrieve user's wishlist from backend
       let { locations } = await get(this.$router, `locations/wishlist`);
-      this.locations = locations;
+      this.locations = locations; // store the list internally
     },
-    toggleSelected: function(location) {
+    toggleSelected: function(location) { // to toggle the this.selected boolean
       if (!this.selected[location.id]) {
         Vue.set(this.selected, location.id, location);
       } else {
         Vue.delete(this.selected, location.id);
       }
     },
-    nextStep: function () {
+    nextStep: function () { // go to the trip planning page
       this.$router.push('/plan-trip');
     }
   }

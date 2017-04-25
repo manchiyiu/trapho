@@ -1,14 +1,17 @@
+<!-- a component for user to conduct timetable planning for trip -->
 <name>activity-planning-trip-tab-detailed-plan</name>
 
 <template>
   <div class="tab-detailed-plan-container" id="edit-container">
-    <!-- uncommitted -->
+
+    <!-- message to be shown if basic info are still uncommitted -->
     <md-card-content v-if="!hasCommitted && !createdId">
       <p>Please confirm the basic information before proceeding to this step.</p>
     </md-card-content>
 
+    <!-- this will be shown if basic info committed and form not submitted -->
     <div v-if="hasCommitted && !createdId">
-
+      <!-- a map showing the list of selected location -->
       <div class="detailed-plan-row">
         <gmap-map
           :center="coordinates"
@@ -28,6 +31,7 @@
         </gmap-map>
       </div>
 
+      <!-- a component to allow user to do timetable planning, for detail, see the <commin-plan-edit> component -->
       <div class="detailed-plan-row">
         <common-plan-edit
           :createdId="createdId"
@@ -41,6 +45,7 @@
 
     </div>
 
+    <!-- this will be shown when the trip has been created -->
     <md-card-content v-if="createdId">
       <div style="text-align: center; font-size: 20px;">
         <div style="margin-bottom: 20px;">
@@ -48,6 +53,7 @@
         </div>
         Congrats. Trip created.
         <div style="margin-top: 10px">
+          <!-- upon clicking this link, user will be redirected to the trip page -->
           <router-link :to="`trip/${this.createdId}`">View here</router-link>
         </div>
       </div>
@@ -81,6 +87,7 @@ import * as VueGoogleMaps from 'vue2-google-maps';
 import { post } from '../../utils.js';
 import mapTheme from '../common/config/map-theme.js';
 
+// load the Google Map component
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyAoH1TSHe7EpvUrTY51p15d0hndY7ZRGEQ',
@@ -90,76 +97,76 @@ Vue.use(VueGoogleMaps, {
 });
 
 export default {
-  props: ['hasCommitted'],
+  props: ['hasCommitted'], // whether user has committed the basic info or not
   data: () => ({
-    mapTheme,
-    coordinates: { lat: 22.4213, lng: 114.2071 },
-    dates: [],
-    chips: [],
-    selectedDate: 0,
-    tripName: '',
-    createdId: null
+    mapTheme, // custom theme for Google Map
+    coordinates: { lat: 22.4213, lng: 114.2071 }, // the center of the map, initially set to the coordinate of CUHK
+    dates: [], // a list of date object, each representing a date in the trip
+    chips: [], // a list of drag-and-droppable location items
+    tripName: '', // the value of the user inputted trip name
+    createdId: null // the tripId (if the user has submitted this form)
   }),
   watch: {
-    hasCommitted: function () {
-      if (this.hasCommitted === true) {
-        this.updateRange();
+    hasCommitted: function () { // will be invoked on each hasCommitted change
+      if (this.hasCommitted === true) { // if user has just commited the basic info
+        this.updateRange(); // update this.dates and this.chips to reflect the change
       }
     }
   },
   computed: {
-    startDate: function () {
+    startDate: function () { // start date of the trip
       return this.$store.state.ActivityPlanning.startDate;
     },
-    endDate: function () {
+    endDate: function () { // end date of the trip
       return this.$store.state.ActivityPlanning.endDate;
     },
-    selected: function () {
+    selected: function () { // list of selected locations
       return this.$store.state.ActivityPlanning.selected;
     }
   },
   methods: {
-    updateChip: function (chips) {
+    updateChip: function (chips) { // to update this.chip, for drag-and-drop component
       this.chips = chips;
     },
-    updateTripName: function (tripName) {
+    updateTripName: function (tripName) { // to update trip name, for trip name input element
       this.tripName = tripName;
     },
-    updateRange: function () {
+    updateRange: function () { // update this.date and this.chip according the start and end date and selected locations
       this.chips = [];
 
       let i = 0;
 
-      // push selected locations
+      // push selected locations into this.chips
       _.forEach(this.selected, location => {
         Vue.set(this.chips, i, {
           id: location.id,
-          label: location.name,
-          subLabel: location.comment,
-          date: null,
-          comment: '',
-          startTime: { HH: null, mm: null },
-          endTime: { HH: null, mm: null }
+          label: location.name, // label for the item
+          subLabel: location.comment, // description for the item
+          date: null, // this will store the date at which this location will be visited
+          comment: '', // custom user comment
+          startTime: { HH: null, mm: null }, // start time (HH: hour, mm: minute)
+          endTime: { HH: null, mm: null } // end time
         });
         i++;
       });
 
-      let startDate = moment(this.startDate);
-      let endDate = moment(this.endDate);
+      let startDate = moment(this.startDate); // start date
+      let endDate = moment(this.endDate); // end date
 
       let j = 1;
+      // iterate from the startDate until the endDate, increment by one date each time
       for(let date = moment(this.startDate); date.diff(this.endDate) < 0; date.add(1, 'day')) {
-        Vue.set(this.chips, i, {
+        Vue.set(this.chips, i, { // push a new date header object into this.chips
           id: `day_${j}`,
-          label: `Day ${j} (${this.toHumanDate(date)})`,
+          label: `Day ${j} (${this.toHumanDate(date)})`, // generate a human readable label to denote each date
           date: date.toDate().toString(),
-          isIndicator: true
+          isIndicator: true // to denote that this is not a location item, therefore should not be draggable
         });
         i++;
         j++;
       }
 
-      Vue.set(this.chips, i, {
+      Vue.set(this.chips, i, { // push the end date header object into this.chips
         id: `day_${j}`,
         label: `Day ${j} (${this.toHumanDate(this.endDate)})`,
         date: this.endDate.toDate().toString(),
@@ -167,13 +174,13 @@ export default {
       });
       i++;
     },
-    toHumanDate: function (date) {
+    toHumanDate: function (date) { // convert a JavaScript date into human readable format
       return moment(date).format('ll');
     },
-    submit: async function () {
+    submit: async function () { // submit the form
       const locations = this.chips
-        .filter(item => !item.isIndicator && item.date)
-        .map(location => {
+        .filter(item => !item.isIndicator && item.date) // filter all items that are not location items
+        .map(location => { // transform our internal format into backend readable format
           let payload = {
             id: location.id,
             startTime: moment(location.date)
@@ -185,21 +192,21 @@ export default {
               .minute(location.endTime.mm)
               .toISOString()
           };
-          if (_.isString(location.comment) && location.comment.trim().length > 0) {
-            payload.comment = location.comment;
+          if (_.isString(location.comment) && location.comment.trim().length > 0) { // if there is comments for the location
+            payload.comment = location.comment; // add the comment into the object
           }
           return payload;
         })
       try {
-        let { id } = await post(this.$router, 'trips', {
-          name: this.tripName.trim(),
-          timestamp: moment().toISOString(),
-          startDate: this.startDate.toISOString(),
-          endDate: this.endDate.toISOString(),
-          locations
+        let { id } = await post(this.$router, 'trips', { // send the trip info to backend to create a new trip
+          name: this.tripName.trim(), // trip name
+          timestamp: moment().toISOString(), // time when this trip is created
+          startDate: this.startDate.toISOString(), // trip start date
+          endDate: this.endDate.toISOString(), // trip end date
+          locations // location items
         });
-        this.createdId = id;
-        this.$store.commit('activityPlanningClear');
+        this.createdId = id; // store the newly created trip ID
+        this.$store.commit('activityPlanningClear'); // clear all the activity planning data in the vuex store
       } catch (e) {
         console.error(e);
       }

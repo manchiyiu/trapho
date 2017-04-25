@@ -7,6 +7,7 @@ import TabFeed from './tabs/tab-feed.vue';
 import TabLocations from './tabs/tab-locations.vue';
 import TabUpload from './tabs/tab-upload.vue';
 
+// register all the components within this module
 Vue.component('photo-feed-toolbar', Toolbar);
 
 Vue.component('photo-feed-tab-feed', TabFeed);

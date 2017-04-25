@@ -1,11 +1,13 @@
 import 'whatwg-fetch';
 
+// import all the vue component dependency
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueLazyload from 'vue-lazyload';
 import InfiniteScroll from 'vue-infinite-scroll';
 import VueProgressiveImage from 'vue-progressive-image';
 
+// import Trapho custom component
 import './theme';
 import './compoments/edit-profile/module';
 import './compoments/login-page/module';
@@ -21,6 +23,7 @@ import store from './vuex/store';
 
 import App from './app.vue';
 
+// import Trapho page component
 import LoginPageView from './compoments/login-page/view.vue';
 import EditView from './compoments/edit-profile/view.vue';
 import PhotoFeedView from './compoments/photo-feed/view.vue';
@@ -31,6 +34,7 @@ import Location from './compoments/location/view.vue';
 import Trip from './compoments/trip/view.vue';
 import EditTrip from './compoments/edit-trip/view.vue';
 
+// tell Vue to register all imported vue component
 Vue.use(VueLazyload, {
   lazyComponent: true,
   preLoad: 5
@@ -39,44 +43,45 @@ Vue.use(VueRouter);
 Vue.use(InfiniteScroll);
 Vue.use(VueProgressiveImage);
 
+// define which page component will be rendered for different URL pattern
 const routes = [
   {
-    path: '/',
+    path: '/', // login page
     component: LoginPageView
   },
   {
-    path: '/feed',
+    path: '/feed', // photo feed page
     component: PhotoFeedView
   },
   {
-    path: '/edit',
+    path: '/edit', // edit user profile page
     component: EditView
   },
   {
-    path: '/plan-select',
+    path: '/plan-select', // create new trip: select location to go
     component: ActivityPlanningSelect
   },
   {
-    path: '/plan-trip',
+    path: '/plan-trip', // create new trip: planning timetable
     component: ActivityPlanningTrip
   },
   {
-    path: '/profile/:userId',
+    path: '/profile/:userId', // user profile page
     components: { default: Profile },
     props: { default: true }
   },
   {
-    path: '/location/:locationId',
+    path: '/location/:locationId', // location page
     components: { default: Location },
     props: { default: true }
   },
   {
-    path: '/trip/:tripId',
+    path: '/trip/:tripId', // trip page
     components: { default: Trip },
     props: { default: true }
   },
   {
-    path: '/edit-trip/:tripId',
+    path: '/edit-trip/:tripId', // trip edit page
     components: { default: EditTrip },
     props: { default: true }
   }
@@ -84,6 +89,7 @@ const routes = [
 
 const router = new VueRouter({ routes });
 
+// kickstart the Vue instance on the HTML DOM
 new Vue({
   router,
   store,

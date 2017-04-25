@@ -1,3 +1,4 @@
+<!-- this component allows user to edit the basic info of the trip that he/she is creating -->
 <name>activity-planning-trip-tab-basic-info</name>
 
 <template>
@@ -14,10 +15,12 @@
         <md-divider></md-divider>
         <div style="margin-top: 20px; border-left: 1px solid #ccc; padding-left: 15px;">
           <i>When will you have the trip? Select a start date and end date so you can start planning your trip.</i>
+          <!-- start date picker -->
           <div style="margin-top: 20px;">
             <div style="margin-right: 24px; font-weight: bolder;">Start Date</div>
             <input :disabled="hasCommitted" class="date-input" type="text" id="start-picker">
           </div>
+          <!-- end date picker -->
           <div style="margin-top: 10px;">
             <div style="margin-right: 30px; font-weight: bolder;">End Date</div>
             <input :disabled="hasCommitted" class="date-input" type="text" id="end-picker">
@@ -33,9 +36,11 @@
           <i v-if="hasSelected">
             Below is the list of location that you have selected for the trip. Click <u><router-link to="/plan-select">here</router-link></u> to modify.
           </i>
+          <!-- will be displayed if user has not selected any location in the previous step -->
           <i v-if="!hasSelected">
             It seems that you have not selected any location. Click <u><router-link to="/plan-select">here</router-link></u> to add.
           </i>
+          <!-- a list of locations that the users has selected -->
           <div style="margin-top: 20px; margin-bottom: 20px;">
             <md-chip v-for="location in selected" key="location.id" class="activity-planning-trip-chip">
               <div style="overflow: hidden; width: 100%;">
@@ -49,9 +54,11 @@
 
       <form @submit.prevent="submit">
         <div class="tab-basic-info-submit">
+          <!-- button to allow user to commit the basic info so he/she can start timetable planning -->
           <md-button type="submit" :disabled="hasCommitted || !hasCompleted" class="md-raised md-fab md-primary">
             <md-icon>check</md-icon>
           </md-button>
+          <!-- button to reset the entire basic info form to its initial state -->
           <md-button @click.native="reset" :disabled="!hasCommitted" class="md-raised md-fab md-accent">
             <md-icon>refresh</md-icon>
           </md-button>
@@ -97,61 +104,61 @@ import _ from 'lodash';
 import moment from 'moment';
 
 export default {
-  props: ['hasCommitted'],
+  props: ['hasCommitted'], // whether user has commited the basic info or not
   data: () => ({
-    startPickerElm: null,
-    endPickerElm: null
+    startPickerElm: null, // the DOM element reference to the start date picker
+    endPickerElm: null // the DOM element reference to the end date picker
   }),
   mounted: function () {
     const self = this;
 
-    this.startPickerElm = new pikaday({
+    this.startPickerElm = new pikaday({ // initialize a new date picker
       field: document.getElementById('start-picker'),
       yearRange: 1,
       onSelect: function () { self.startDate = this.getMoment(); }
     });
 
-    this.endPickerElm = new pikaday({
+    this.endPickerElm = new pikaday({ // initialize a new date picker
       field: document.getElementById('end-picker'),
       yearRange: 1,
       onSelect: function () { self.endDate = this.getMoment(); }
     });
 
     if (this.startDate != null) {
-      this.startPickerElm.setDate(this.startDate.toDate());
+      this.startPickerElm.setDate(this.startDate.toDate()); // set the value of start date picker to the current stored value (if any)
     } else {
-      this.startPickerElm.setDate(new Date()); // set to today
+      this.startPickerElm.setDate(new Date()); // else, set the value of start date picker to today
     }
 
     if (this.endDate != null) {
-      this.endPickerElm.setDate(this.endDate.toDate());
+      this.endPickerElm.setDate(this.endDate.toDate()); // set the value of end date picker to the current stored value (if any)
     } else {
-      this.endPickerElm.setDate(new Date()); // set to today
+      this.endPickerElm.setDate(new Date()); // else, set the value of end date picker to today
     }
   },
   watch: {
-    startDate: function () {
+    startDate: function () { // invoke every time the start date value is changed
       if (this.startDate) {
-        this.endPickerElm.setMinDate(this.startDate.toDate());
+        this.endPickerElm.setMinDate(this.startDate.toDate()); // change the first date selectable in the end date picker to the start date
       }
     },
     endDate: function () {
       if (this.endDate) {
-        this.startPickerElm.setMaxDate(this.endDate.toDate());
+        this.startPickerElm.setMaxDate(this.endDate.toDate());  // change the last date selectable in the start date picker to the end date
       }
     }
   },
   computed: {
-    selected: function () {
+    selected: function () { // whether user has selected any location at all
       return this.$store.state.ActivityPlanning.selected;
     },
-    hasSelected: function () {
+    hasSelected: function () { // whether user has selected any location at all
       return Object.keys(this.selected).length > 0;
     },
-    hasCompleted: function () {
+    hasCompleted: function () { // whether user has completed the basic info form
       return this.hasSelected && this.startDate && this.endDate;
     },
-    startDate: {
+    startDate: { // the start date value is synced with the vuex store
       get: function () {
         return this.$store.state.ActivityPlanning.startDate;
       },
@@ -159,7 +166,7 @@ export default {
         this.$store.commit('activityPlanningSetTripStartDate', value);
       }
     },
-    endDate: {
+    endDate: { // the end date value is synced with the vuex store
       get: function () {
         return this.$store.state.ActivityPlanning.endDate;
       },
@@ -169,10 +176,10 @@ export default {
     }
   },
   methods: {
-    submit: function () {
+    submit: function () { // commit the form
       this.$store.commit('activityPlanningSetCommitted', true);
     },
-    reset: function () {
+    reset: function () { // reset the form to the initial state
       this.$store.commit('activityPlanningSetCommitted', false);
       this.startDate = null;
       this.endDate = null;
