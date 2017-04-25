@@ -1,3 +1,5 @@
+// this file stores the custom theme for the Google Map component
+
 export default [
   {
     "featureType": "administrative",

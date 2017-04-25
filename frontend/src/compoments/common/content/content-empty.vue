@@ -1,3 +1,4 @@
+<!-- this compoent will be shown when the photo feed has not item -->
 <name>common-content-empty</name>
 
 <template>

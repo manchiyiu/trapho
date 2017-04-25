@@ -1,3 +1,4 @@
+<!-- this component allows user to edit the timetable of a trip -->
 <name>common-plan-edit</name>
 
 <template>
@@ -26,7 +27,7 @@
           :options="sortableOptions"
           @change="onMoved">
           <div class="timetable-row" v-for="(chip, index) in chips" :key="chip.id">
-            <!-- is actual trip item -->
+            <!-- is actual trip item, a location item -->
             <md-card
               v-if="!chip.isIndicator"
               class="timetable-item"
@@ -35,15 +36,18 @@
               <md-card-content>
                 <div class="md-title timetable-item-handle">
                   <span>::</span>
+                  <!-- location name -->
                   {{chip.label}}
                 </div>
                 <div class="md-subtitle">{{chip.subLabel}}</div>
                 <a :href="`#/location/${chip.id}`"target="_blank">(View)</a>
                 <md-divider style="margin-top: 10px;"></md-divider>
+                <!-- location item comment -->
                 <md-input-container md-inline>
                   <label>Comment</label>
                   <md-textarea v-model="chip.comment"></md-textarea>
                 </md-input-container>
+                <!-- start time and end time picker -->
                 <md-layout md-gutter v-if="chip.date">
                   <md-layout md-flex="50" style="display: flex; align-items: center;">
                     <b style="margin-top: 10px; height: inherit; margin-right: 5px;">From:</b>
@@ -70,7 +74,7 @@
                 </md-layout>
               </md-card-content>
             </md-card>
-            <!-- is indicator item -->
+            <!-- is indicator item, i.e. not a location item -->
             <div v-if="chip.isIndicator" class="timetable-item timetable-indicator">
               {{chip.label}}
             </div>
@@ -78,6 +82,7 @@
         </draggable>
       </div>
 
+      <!-- button to submit all changes -->
       <div class="tab-detailed-plan-submit">
         <md-divider></md-divider>
         <md-button @click.native="submit" :disabled="!hasCompleted" class="md-raised md-fab md-primary">
@@ -156,25 +161,25 @@ import { directive as onClickaway } from 'vue-clickaway';
 
 export default {
   props: [
-    'data',
-    'updateData',
-    'dataTripName',
-    'updateTripName',
-    'hasCommitted',
-    'createdId'
+    'data', // trip data
+    'updateData', // method to tell parent to update trip data
+    'dataTripName', // new trip name
+    'updateTripName', // method to tell parent to update new trip name
+    'hasCommitted', // whether user has commited the location list
+    'createdId' // if trip created, this will be the tripId
   ],
   data: () => ({
-    hasSubmitted: false
+    hasSubmitted: false // whether the user has submitted the form
   }),
   directives: {
-    onClickaway
+    onClickaway // a directive for checking if user clicked outside the element
   },
   components: {
-    draggable,
-    VueTimepicker
+    draggable, // drag and drop component
+    VueTimepicker // time picker component
   },
   computed: {
-    chips: {
+    chips: { // this.chips is synced with the parent's data
       get: function () {
         return this.data;
       },
@@ -182,7 +187,7 @@ export default {
         this.updateData(data);
       }
     },
-    tripName: {
+    tripName: { // this.tripName is synced with the parent's data
       get: function () {
         return this.dataTripName;
       },
@@ -190,9 +195,9 @@ export default {
         this.updateTripName(tripName);
       }
     },
-    hasCompleted: function () {
-      return this.tripName.trim().length > 0 && _.every(
-        this.chips.map(chip => {
+    hasCompleted: function () { // check if the form has been completed, if:
+      return this.tripName.trim().length > 0 && _.every( // trip name is not empty
+        this.chips.map(chip => { // every location item has a proper start time and end time
           if (chip.isIndicator) {
             return true;
           }
@@ -204,53 +209,52 @@ export default {
         })
       );
     },
-    sortableOptions: function() {
+    sortableOptions: function() { // config for the drag and drop component
       return {
-        filter: '.timetable-indicator',
-        handle: '.timetable-item-handle',
+        filter: '.timetable-indicator', // only location item can be dragged
+        handle: '.timetable-item-handle', // a drag can only started by dragging the location name
         dragClass: '.timetable-row',
-        scroll: true,
+        scroll: true, // enable auto scroll
         scrollSpeed: 10,
         scrollSensitivity: 100,
         scrollFn: (offsetX, offsetY) => {
-          document.getElementById('edit-container').scrollTop += offsetY;
+          document.getElementById('edit-container').scrollTop += offsetY; // auto scroll when the dragged item is at the edge of the screen
         }
       };
     },
   },
   watch: {
-    hasCommitted: function () {
-      this.onTimeUpdate();
+    hasCommitted: function () { // when hasCommitted has changed
+      this.onTimeUpdate(); // to do a validation to see if any location item value are currently invalid
     },
     chips: function () {
-      this.onTimeUpdate();
+      this.onTimeUpdate(); // to do a validation to see if any location item value are currently invalid
     }
   },
   beforeMount: function () {
     this.onTimeUpdate();
   },
   methods: {
-    onMoved: function (change) {
+    onMoved: function (change) { // on a location item moved
       const { newIndex } = change.moved;
       for (let i = newIndex - 1; i >= 0; i--) {
         // do a reverse search and find an indicator element so as to locate the date
         if (this.chips[i].isIndicator === true) { // found
           this.chips[newIndex].date = this.chips[i].date;
-          // console.log('location moved to', this.chips[i].date);
           break;
         }
       }
-      this.onTimeUpdate();
+      this.onTimeUpdate(); // to do a validation to see if any location item value are currently invalid
     },
-    getTimeValue: function (time) {
+    getTimeValue: function (time) { // get the serialized time value from a time object for comparing time
       return parseInt(time.HH) * 60 + parseInt(time.mm);
     },
-    onTimeUpdate: function () {
+    onTimeUpdate: function () { // to do a validation to see if any location item value are currently invalid
       if (!this.chips) {
         return;
       }
 
-      this.chips.filter(chip => !chip.isIndicator).forEach(chip => {
+      this.chips.filter(chip => !chip.isIndicator).forEach(chip => { // filter all non-location-item, and iterate through them
         if (!chip.startTime.HH || !chip.startTime.mm || !chip.endTime.HH || !chip.endTime.mm) {
           Vue.set(chip, 'isInvalid', true);
           return;
@@ -263,9 +267,9 @@ export default {
         }
 
         const dateHeaderIndex = _.findIndex(this.chips, item => item.date == chip.date);
+
         // iterate through all the location items within the same date, check if any time conflict
         let isInvalid = false;
-
         const sameDateLocation = this.chips
           .filter(item =>
             !item.isIndicator &&
@@ -274,7 +278,6 @@ export default {
             item.startTime && item.startTime.HH && item.startTime.mm &&
             item.endTime && item.endTime.HH && item.endTime.mm
           );
-
         sameDateLocation.forEach(other => {
           const otherStartTime = this.getTimeValue(other.startTime);
           const otherEndTime = this.getTimeValue(other.endTime);
@@ -285,15 +288,15 @@ export default {
           }
         });
 
-        Vue.set(chip, 'isInvalid', isInvalid);
+        Vue.set(chip, 'isInvalid', isInvalid); // flag the location item as invalid if it is invalid
       });
     },
-    toggleTimepicker: function (index) {
+    toggleTimepicker: function (index) { // close the time picker component
       this.$refs[`start_${index}`][0].showDropdown = false;
       this.$refs[`end_${index}`][0].showDropdown = false;
     },
-    submit: function () {
-      this.$emit('submit');
+    submit: function () { // on user clicking submit
+      this.$emit('submit'); // emit a submit event for parent to catch
       this.hasSubmitted = true;
     }
   }
