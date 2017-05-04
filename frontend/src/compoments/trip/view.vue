@@ -1,3 +1,4 @@
+<!-- component for showing trip information -->
 <name>trip-view</name>
 
 <template>
@@ -115,6 +116,7 @@ import * as VueGoogleMaps from 'vue2-google-maps';
 import mapTheme from '../common/config/map-theme.js';
 import { get, del } from '../../utils.js';
 
+// initialize the Google Map
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyAoH1TSHe7EpvUrTY51p15d0hndY7ZRGEQ',
@@ -124,31 +126,36 @@ Vue.use(VueGoogleMaps, {
 });
 
 export default {
-  props: ['tripId'],
+  props: ['tripId'], // retrieve tripId from parent
   data: () => ({
-    name: '',
-    trip: null,
-    days: {},
-    mapTheme,
-    locations: [],
-    coordinates: { lat: 22.4213, lng: 114.2071 }
+    name: '', // trip name
+    trip: null, // trip object
+    days: {}, // breakdown of the trip object by day
+    mapTheme, // custom theme for Google Map
+    locations: [], // list of selected locations
+    coordinates: { lat: 22.4213, lng: 114.2071 } // center of the map, defaulted to CUHK
   }),
+  // trigger trip information load before rendering the component
   beforeMount: async function () {
     await this.loadTrip();
   },
   computed: {
+    // user id of the current user
     currentUserId: function () {
       return this.$store.state.User.info.id;
     }
   },
   watch: {
+    // monitor the $route, if changed, reload trip
     $route: async function () {
       await this.loadTrip();
     }
   },
   methods: {
+    // method to load trip information
     loadTrip: async function () {
       try {
+        // retrieve trip info from backend by tripId
         this.trip = await get(this.$router, `trips/id/${this.tripId}`);
         this.name = this.trip.name;
         this.deserializeTrip(this.trip);
@@ -156,12 +163,16 @@ export default {
         console.error(e);
       }
     },
+    // method to extract the trip start date, end date, list of locations and draggable items
     deserializeTrip: async function(trip) {
+
+      // extract date
       let startDate = moment(new Date(trip.startDate));
       let endDate = moment(new Date(trip.endDate));
 
       this.locations = [];
 
+      // push the day header to list of draggable items
       let i = 0;
       for(let date = moment(startDate); date.diff(endDate) <= 0; date.add(1, 'day')) {
         Vue.set(this.days, i, {
@@ -177,6 +188,7 @@ export default {
          Vue.set(this.days[diff].locations, this.days[diff].locations.length, location);
       });
 
+      // push the list of locations to draggable item list
       let locationResults = await _.map(this.days, async (day, index) => {
         let results = await Promise.all(
           day.locations.map(location => get(this.$router, `locations/id/${location.id}`))
@@ -190,20 +202,25 @@ export default {
           );
         });
       });
-
     },
+    // method to convert JavaScript date to human readable date
     toHumanDate: function (date) {
       return moment(date).format('ll');
     },
+    // method to convert JavaScript time to human readable time
     toHumanTime: function (time) {
       return moment(time).format('LLL');
     },
+    // method to trigger browser print dialog
     print: async function () {
       printElement(document.getElementById('print-element'));
     },
+    // method to delete trip
     remove: async function () {
       try {
+        // ask backend to delete the trip
         await del(this.$router, `trips/id/${this.tripId}`);
+        // redirect the user to photo feed page
         this.$router.push('/feed');
       } catch (e) {
         console.error(e);
