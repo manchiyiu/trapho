@@ -1,3 +1,4 @@
+<!-- component for the upload photo tab -->
 <name>photo-feed-tab-upload</name>
 
 <template>
@@ -123,28 +124,30 @@ Dropzone.autoDiscover = false;
 
 export default {
   props: [
-    'active',
-    'toggleUpload'
+    'active' // whether this tab is currently active
   ],
   components: {
     Waterfall,
     WaterfallSlot
   },
   data: () => ({
-    uploadedFiles: [],
-    dialogCurrentIndex: null,
-    dialogDescription: '',
-    dialogRating: null,
-    dialogTags: [],
-    selectedLocation: null,
-    dropzone: null
+    uploadedFiles: [], // list of uploaed files
+    dialogCurrentIndex: null, // the index of the current photo associated with the dialog
+    dialogDescription: '', // input value field for photo description
+    dialogRating: null, // rating field
+    dialogTags: [], // photo tags field
+    selectedLocation: null, // the locationId of the selected location
+    dropzone: null // the dropzone component instance
   }),
   computed: {
+    // whether the form has been component
     isCompleted: function() {
       return this.uploadedFiles.length > 0 && !!this.selectedLocation;
     }
   },
+  // on component rendered
   mounted: function() {
+    // initialize a new drop zone instane
     this.dropzone = new Dropzone('#upload-dropzone', {
       url: UPLOAD_PATH,
       acceptedFiles: 'image/*',
@@ -153,45 +156,54 @@ export default {
         'Authorization': `Bearer ${localStorage.token}`
       }
     });
+    // triggered when an image uploaded
     this.dropzone.on('success', (file, res, test) => {
       const { width, height } = file;
       res.width = width;
       res.height = height;
-      this.uploadedFiles.push(res);
+      this.uploadedFiles.push(res); // push the image just uploaded to the this.uploadedFiles
     });
     this.clear();
   },
   methods: {
     getPhotoUrl,
+    // method to set everything to inital state
     clear: function() {
       this.selectedLocation = null;
       this.uploadedFiles = [];
-      this.dropzone.removeAllFiles();
+      this.dropzone.removeAllFiles(); // remove all uploaded file from dropzone instance
     },
+    // triggered when a description modal opened
     openDescriptionModal: function(index) {
+      // set the description value to the value of uploaded value
       this.dialogDescription = this.uploadedFiles[index].description;
       this.dialogRating = this.uploadedFiles[index].rating || 10; // by default give a 10 rating
       this.dialogTags = this.uploadedFiles[index].tags;
 
+      // if dialogTag is not an array, set to a default value
       if (!_.isArray(this.dialogTags)) {
         Vue.set(this, 'dialogTags', []);
       }
 
       this.dialogCurrentIndex = index;
-      this.$refs.dialog.open();
+      this.$refs.dialog.open(); // display the modal
     },
     closeDescriptionModal: function() {
+      // save the value to this.uploadedFiles
       Vue.set(this.uploadedFiles[this.dialogCurrentIndex], 'description', this.dialogDescription);
       Vue.set(this.uploadedFiles[this.dialogCurrentIndex], 'rating', this.dialogRating);
       Vue.set(this.uploadedFiles[this.dialogCurrentIndex], 'tags', this.dialogTags);
       this.dialogCurrentIndex = null;
-      this.$refs.dialog.close();
+      this.$refs.dialog.close(); // close the diagram
     },
+    // method triggered when the selected location is changed
     onMapChange: function(location) {
       this.selectedLocation = location;
     },
+    // method to submit tab upload
     submit: async function() {
       const locationId = this.selectedLocation.id;
+      // submitted the list of uploaded photos to backend
       const payloads = this.uploadedFiles.map(({ url, height, width, description, rating, tags }) => ({
         url, description, locationId, rating: parseInt(rating), photoTags: tags
       }));
@@ -199,7 +211,7 @@ export default {
         await Promise.all(payloads.map(
           payload => post(this.$router, 'photos', payload)
         ));
-        this.$refs.snackbar.open();
+        this.$refs.snackbar.open(); // show the success message
         this.clear();
       } catch (e) {
         console.error(e);

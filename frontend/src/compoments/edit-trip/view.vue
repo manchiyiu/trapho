@@ -1,9 +1,12 @@
+<!-- the main page component for editing existing trip -->
 <name>edit-trip-view</name>
 
 <template>
   <div class="edit-trip-container" id="edit-container">
+    <!-- only display if the trip is loaded and form not subbmitted -->
     <div v-if="hasLoaded && !hasSubmitted">
       <div class="edit-trip-row">
+        <!-- map component showing the list of locations in the trip -->
         <gmap-map
           :center="coordinates"
           :options="{styles: mapTheme}"
@@ -22,6 +25,7 @@
         </gmap-map>
       </div>
       <div class="edit-trip-row">
+        <!-- edit trip component -->
         <common-plan-edit
           :createdId="createdId"
           :hasCommitted="true"
@@ -33,10 +37,12 @@
       </div>
     </div>
 
+    <!-- if not loaded, show a spinner -->
     <div v-if="!hasLoaded" style="display: flex; justify-content: center;">
       <md-spinner md-indeterminate></md-spinner>
     </div>
 
+    <!-- if user has submitted -->
     <md-card-content v-if="hasSubmitted && hasLoaded">
       <div style="text-align: center; font-size: 20px;">
         <div style="margin-bottom: 20px;">
@@ -44,6 +50,7 @@
         </div>
         Congrats. Trip edited.
         <div style="margin-top: 10px">
+          <!-- link to the trip page -->
           <router-link :to="`/trip/${this.trip.id}`">View here</router-link>
         </div>
       </div>
@@ -76,6 +83,7 @@ import * as VueGoogleMaps from 'vue2-google-maps';
 import { get, patch } from '../../utils.js';
 import mapTheme from '../common/config/map-theme.js';
 
+// initialize the google map API
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyAoH1TSHe7EpvUrTY51p15d0hndY7ZRGEQ',
@@ -85,49 +93,58 @@ Vue.use(VueGoogleMaps, {
 });
 
 export default {
-  props: ['tripId'],
+  props: ['tripId'], // retrieve id of the trip from parent component
   data: () => ({
-    mapTheme,
-    trip: null,
-    tripName: '',
-    chips: [],
-    coordinates: { lat: 22.4213, lng: 114.2071 },
-    createdId: null,
-    startDate: null,
-    endDate: null,
-    hasLoaded: false,
-    hasSubmitted: false,
-    locations: []
+    mapTheme, // custom theme of google map
+    trip: null, // the trip object
+    tripName: '', // trip name
+    chips: [], // array storing all draggable items
+    coordinates: { lat: 22.4213, lng: 114.2071 }, // default to CUHK coordinate
+    createdId: null, // will equal trip id if submitted, else null
+    startDate: null, // start date of the trip
+    endDate: null, // end date of the trip
+    hasLoaded: false, // the trip info has been loaded
+    hasSubmitted: false, // the trip edit has been submitted
+    locations: [] // the list of selected locations
   }),
   watch: {
+    // on page enter, load trip info
     $route: async function() {
       await this.load();
     }
   },
+  // before component is rendered, load trip info
   beforeMount: async function() {
     await this.load();
   },
   methods: {
+    // method to load trip info
     load: async function() {
-      this.trip = await get(this.$router, `trips/id/${this.tripId}`)
+      this.trip = await get(this.$router, `trips/id/${this.tripId}`); // retrieve trip by id from backend
       this.tripName = this.trip.name;
-      this.deserializeTrip(this.trip);
+      this.deserializeTrip(this.trip); // extract list of locations, start and end date, and draggable items from trip object
     },
+    // method to update chip
     updateChip: function (chips) {
       this.chips = chips;
     },
+    // method to update trip name
     updateTripName: function (tripName) {
       this.tripName = tripName;
     },
+    // method to convert javscript date into human-readable format
     toHumanDate: function (date) {
       return moment(date).format('ll');
     },
+    // method to extract list of locations, start and end date, and draggable items from trip object
     deserializeTrip: async function(trip) {
       this.hasLoaded = false;
 
+      // extract date
       this.startDate = moment(new Date(trip.startDate));
       this.endDate = moment(new Date(trip.endDate));
 
+      // extract list of locations
       this.locations = await Promise.all(
         trip.locations.map(async location => {
           const { id } = location;
@@ -136,11 +153,14 @@ export default {
 
       let locations = _.keyBy(this.locations, 'id');
 
+      // extract draggable items
+
       let i = 0;
       let j = 1;
 
       for(let date = this.startDate; date.diff(this.endDate) < 0; date.add(1, 'day')) {
 
+        // push the date header in
         Vue.set(this.chips, i, {
           id: `day_${j}`,
           label: `Day ${j} (${this.toHumanDate(date)})`,
@@ -151,7 +171,7 @@ export default {
         i++;
         j++;
 
-        /* push the location items in */
+        // push the location items in
         this.trip.locations
           .filter(item => moment(item.startTime).isSame(date, 'day'))
           .forEach(location => {
@@ -182,7 +202,7 @@ export default {
       });
       i++;
 
-      /* push the location items in */
+      // push the location items in
       this.trip.locations
         .filter(item => moment(item.startTime).isSame(this.endDate, 'day'))
         .forEach(location => {
@@ -206,7 +226,9 @@ export default {
 
       this.hasLoaded = true;
     },
+    // method to submit the form
     submit: async function () {
+      // convert the list of draggable items to list of locations (with start and end time, comment, locationId)
       this.trip.locations = this.chips
         .filter(item => !item.isIndicator && item.date)
         .map(location => ({
@@ -215,21 +237,23 @@ export default {
           startTime: moment(location.date)
             .hour(location.startTime.HH)
             .minute(location.startTime.mm)
-            .toISOString(),
+            .toISOString(), // convert Javascript date into ISO format
           endTime: moment(location.date)
             .hour(location.endTime.HH)
             .minute(location.endTime.mm)
-            .toISOString()
+            .toISOString() // convert Javascript date into ISO format
         }));
 
+      // sort the locations by start date
       this.trip.locations.sort((a, b) => moment(a.startDate).isBefore(b.startDate));
 
+      // submit the resulting trip location to the backend
       try {
         await patch(this.$router, `trips/id/${this.trip.id}`, {
           name: this.tripName,
           locations: this.trip.locations
         });
-        this.hasSubmitted = true;
+        this.hasSubmitted = true; // submit successful
       } catch (e) {
         console.error(e);
       }

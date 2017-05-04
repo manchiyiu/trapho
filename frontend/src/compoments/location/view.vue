@@ -1,3 +1,4 @@
+<!-- main component for the location page -->
 <name>location-page</name>
 
 <template>
@@ -13,6 +14,7 @@
         <div style="width: 100%; padding-left: 10px; padding-right: 10px;">
           <md-card md-with-hover style="margin-bottom: 20px">
             <md-card-header>
+              <!-- location info -->
               <div class="md-title">{{locationName}}</div>
               <div
                 class="md-subhead"
@@ -26,6 +28,7 @@
               </div>
             </md-card-header>
           </md-card>
+          <!-- display the location in a google map -->
           <gmap-map
             :center="coordinates"
             :options="{styles: mapTheme}"
@@ -43,6 +46,7 @@
           </gmap-map>
         </div>
       </md-layout>
+      <!-- list of photos associated with that location -->
       <md-layout
         md-flex-xsmall="100"
         md-flex-small="100"
@@ -69,6 +73,7 @@ import * as VueGoogleMaps from 'vue2-google-maps';
 import mapTheme from '../common/config/map-theme.js';
 import { get, getPhotoUrl } from '../../utils.js';
 
+// initialize the google map
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyAoH1TSHe7EpvUrTY51p15d0hndY7ZRGEQ',
@@ -78,41 +83,45 @@ Vue.use(VueGoogleMaps, {
 });
 
 export default {
-  props: ['locationId'],
+  props: ['locationId'], // obtain the locationId from parent
   data: () => ({
-    mapTheme,
-    currentIndex: 0,
-    username: '',
-    photos: {},
-    locationName: '',
-    tags: {},
-    rating: null,
-    trips: null,
-    coordinates: { lat: 22.4213, lng: 114.2071 },
+    mapTheme, // custom google map theme
+    currentIndex: 0, // current index of the image last loaded
+    photos: {}, // object containing all the loaded photos
+    locationName: '', // name of location
+    tags: {}, // location tags list
+    rating: null, // rating of location
+    trips: null, // list of trips associated with the location
+    coordinates: { lat: 22.4213, lng: 114.2071 }, // default the map coordinate to CUHK
     hasEnded: false // whether or not the feed loading has reached the end
   }),
+  // before component is loaded, load location information
   beforeMount: async function () {
     await this.load();
   },
   watch: {
+    // trigger a reload whenever this.locationId has changed
     locationId: async function () {
       await this.load();
     }
   },
   methods: {
+    // method to load photos, locations, rating
     load: async function () {
       await this.loadPosts(0);
       await this.loadLocation();
       await this.loadRating();
     },
+    // method to load all photos
     loadPosts: async function (skip = 0, locationId = this.locationId, count = 5) {
       try {
+        // retrieve {{count}} photos associated with the location, starting at index {{skip}}
         let { photos } = await get(this.$router, 'photos/stream', { count, skip, locationId });
         photos.forEach((photo, index) => {
           const result = _.merge(photo, { index: skip + index });
           Vue.set(this.photos, skip + index, result);
         });
-        this.currrentIndex = skip + photos.length;
+        this.currrentIndex = skip + photos.length; // set currentIndex to index of image last laoded
         if (photos.length == 0) {
           this.hasEnded = true;
         }
@@ -120,8 +129,10 @@ export default {
         console.error(e);
       }
     },
+    // method to load location information
     loadLocation: async function (locationId = this.locationId) {
       try {
+        // retrieve location name, tags and coordinate from backend
         let { name, tags, coordinates } = await get(this.$router, `locations/id/${locationId}`, { locationId });
         this.locationName = name;
         this.tags = tags;
@@ -130,14 +141,17 @@ export default {
         console.error(e);
       }
     },
+    // method to load location rating
     loadRating: async function (locationId = this.locationId) {
       try {
+        // retrieve location rating
         let { rating } = await get(this.$router, `ratings/locations/${locationId}`, { locationId });
         this.rating = rating;
       } catch (e) {
         console.error(e);
       }
     },
+    // method to load more photos (starting at {{currentIndex}}, a total of {{count = 5}} photos)
     loadMore: async function () {
       await this.loadPosts(this.currrentIndex);
     }

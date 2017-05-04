@@ -9,9 +9,9 @@ export default async (msg, reply) => {
 
   /* check if user already exists */
   let result: User;
-  try{
+  try {
      result = await User.retrieve({ username });
-     if(result){
+     if (result) {
       throw new Error('alreadyExist');
      }
   }catch(e){
