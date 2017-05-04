@@ -14,7 +14,7 @@ export async function isValidLocation(locationId : String) {
 }
 
 export async function isValidUser(userId : String) {
-  try{     
+  try {     
     await act({ role: 'auth', cmd: 'userRetrieve', userId }); 
   } catch(e) {     
     throw e; 
@@ -34,20 +34,20 @@ export function isValidDescription(description : String) {
 }
 
 export async function retrieveUser(userId : String) {
-  try{     
+  try {     
     return await act({ role: 'auth', cmd: 'userRetrieve', userId }); 
   } catch(e) {     
     throw e; 
   }
 }
 
-export async function retrieveUsersByNames(usernames : String[]){
-  try{
+export async function retrieveUsersByNames(usernames : String[]) {
+  try {
     let query:any = {};
     query.username = {};
     query.username.$in = usernames;
     return await act({ role: 'auth', cmd: 'userRetrieve', query });
-  } catch(e){
+  } catch(e) {
     console.log("communicationError");
   }
 }
@@ -61,11 +61,11 @@ export async function retrieveLocation(locationId : String) {
   }
 }
 
-export async function retrieveLocations(locationNames: String[], tags: String[]){
-  try{
+export async function retrieveLocations(locationNames: String[], tags: String[]) {
+  try {
     let index;
     let result:any[] = [];
-    for(index = 0; index < locationNames.length; index++){
+    for(index = 0; index < locationNames.length; index++) {
       const {locations} = await act({ role: 'location', cmd: 'locationRetrieve', query: {name: locationNames[index]} });
       locations.forEach(location => {
         result.push(location);

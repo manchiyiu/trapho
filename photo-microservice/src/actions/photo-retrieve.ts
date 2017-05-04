@@ -2,12 +2,13 @@ import Photo from '../model';
 import * as _ from 'lodash';
 import { isValidUser, isValidLocation } from '../utils';
 
+// action to retrieve photo by photoId, locationId or userId
 // will retrieve by EITHER userId or photoId
 export default async (msg, reply) => {
   const { userId, photoId, locationId } = msg;
 
   // retrieve by photoId
-  if (!_.isUndefined(photoId)){
+  if (!_.isUndefined(photoId)) {
     try {
       let res = await Photo.retrieveById(photoId);
       reply(null, {photos: res});
@@ -18,12 +19,12 @@ export default async (msg, reply) => {
   }
 
   // retrieve all photos corr. to userId
-  if (!_.isUndefined(userId)){
+  if (!_.isUndefined(userId)) {
     try {
       await isValidUser(userId);
       let res = await Photo.retrieveByUserId(userId);
       reply(null, {photos: res});
-    } catch(e){
+    } catch(e) {
       reply(new Error('userNotExist'), null);
     }
     return;

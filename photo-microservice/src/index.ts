@@ -14,12 +14,15 @@ import photoRetrieveAll from'./actions/photo-retrieveAll';
 import photoStreamRetrieve from'./actions/photo-stream-retrieve';
 import photoCreateTest from './actions/photo-create-test';
 
+// connect to the database
 mongoose.connect('mongodb://mongo:27017/photo');
 
+// error handler
 mongoose.connection.on('error', () => {
   console.error('MongoDB connection error.');
 });
 
+// listen to all the microservice call, also ready to be called
 seneca
   .client({ host: process.env.BRIDGE_ADDRESS, port: '3001', pin: 'role:activity' })
   .client({ host: process.env.BRIDGE_ADDRESS, port: '3002', pin: 'role:auth' })
@@ -27,7 +30,7 @@ seneca
   .listen({ port: '3004', pin: 'role:photo' })
   .client({ host: process.env.BRIDGE_ADDRESS, port: '3005', pin: 'role:timeline' })
   .ready(() => {
-    seneca
+    seneca // register to seneca the actions that this microservice can handle
       .add('cmd:test', test)
       .add('cmd:photoCreate', photoCreate)
       .add('cmd:photoCreateTest', photoCreateTest)

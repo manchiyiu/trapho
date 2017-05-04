@@ -3,24 +3,24 @@ import { isValidUser, isValidLocation, isValidURL, isValidDescription } from '..
 import { act } from '../utils';
 import * as _ from 'lodash';
 
-
+// action to create new photo
 export default async (msg, reply) => {
   const { userId, locationId, url, description , rating, photoTags } = msg;
 
   // check if all valid
-  try{
+  try {
     await isValidUser(userId);
     await isValidLocation(locationId);
     isValidURL(url);
     isValidDescription(description);
-    if(!_.isNumber(rating) || rating < 0 || rating > 10){
+    if (!_.isNumber(rating) || rating < 0 || rating > 10) {
       throw new Error("invalidRatingError");
     }
-    if(!_.isArray(photoTags)){
+    if (!_.isArray(photoTags)) {
       throw new Error("invalidPhotoTags");
     }
   } catch(e) {
-    reply(e, null);
+    reply(e, null);  // propagate the error to send if any
     return;
   }
 

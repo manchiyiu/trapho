@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import Photo from '../model';
 import { isValidUser, isValidLocation, isValidURL, isValidDescription } from '../utils';
 
+// action to modify an existing photo
 export default async (msg, reply) => {
   const { photoId, userId, locationId, timestamp, url, description, photoTags } = msg;
 
@@ -55,8 +56,8 @@ export default async (msg, reply) => {
     }
   }
 
-  if(!_.isUndefined(photoTags)){
-    if(!_.isArray(photoTags)){
+  if (!_.isUndefined(photoTags)) {
+    if (!_.isArray(photoTags)) {
       reply(new Error('invalidPhotoTags'), null);
       return;
     }

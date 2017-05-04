@@ -3,12 +3,14 @@ import * as _ from 'lodash';
 
 export default class Location {
 
+  // initialize the structure of location object
   id : string = null;
   name : string = null;
   description : string = null;
   tags : string[] = null;
   coordinates: any = null;
 
+  // define the location schema
   static schema = new mongoose.Schema({
     name: String,
     description: String,
@@ -20,8 +22,10 @@ export default class Location {
     }
   });
 
+  // define a new model according to the schema
   static model = mongoose.model('Location', Location.schema);
 
+  // create the new object and assigned to this
   constructor(object : any) {
     const {
       name,

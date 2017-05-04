@@ -10,12 +10,15 @@ import userRetrieve from './actions/user-retrieve';
 import userPatch from './actions/user-patch';
 import userDelete from './actions/user-delete';
 
+// connect to mongodb
 mongoose.connect('mongodb://mongo:27017/user');
 
+// error handler
 mongoose.connection.on('error', () => {
   console.error('MongoDB connection error.');
 });
 
+// listen to all the microservice call, also ready to be called
 seneca
   .client({ host: process.env.BRIDGE_ADDRESS, port: '3001', pin: 'role:activity' })
   .listen({ port: '3002', pin: 'role:auth' })
@@ -23,7 +26,7 @@ seneca
   .client({ host: process.env.BRIDGE_ADDRESS, port: '3004', pin: 'role:photo' })
   .client({ host: process.env.BRIDGE_ADDRESS, port: '3005', pin: 'role:timeline' })
   .ready(() => {
-    seneca
+    seneca // register to seneca the actions that this microservice can handle
       .add('cmd:test', test)
       .add('cmd:userLogin', userLogin)
       .add('cmd:userCreate', userCreate)

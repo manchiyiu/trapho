@@ -2,13 +2,14 @@ import * as mongoose from 'mongoose';
 
 export default class Comment {
 
+  // initialize the structure of comment object
   id : String = null;
   userId : String = null;
   photoId : String = null;
   timestamp : String = null;
   content : String = null;
 
-
+  // define the comment schema
   static schema = new mongoose.Schema({
     userId: String,
     photoId: String,
@@ -16,9 +17,11 @@ export default class Comment {
     content: String
   });
 
+  // define a new model according to the schema
   static model = mongoose.model('Comment', Comment.schema);
 
-  constructor(object: any){
+  // create the new object and assigned to this
+  constructor(object: any) {
     const {userId, photoId, timestamp, content, _id: id} = object;
     this.userId = userId;
     this.photoId = photoId;
@@ -27,52 +30,58 @@ export default class Comment {
     this.id = id;
   }
 
-  async save(){
+  // save the comment object
+  async save() {
     const model = new Comment.model({userId: this.userId, photoId: this.photoId, timestamp: this.timestamp, content: this.content});
     const product = await model.save();
-    return product._id;
+    return product._id; // return the id of the created comment
   }
 
-  static async retrieveById(commentId){
+  // retrieve comment by commentId
+  static async retrieveById(commentId) {
     let res;
-    try{
+    try {
         res = await Comment.model.findById(commentId);
-    }catch(e){
+    } catch(e) {
         throw new Error('commentNotExist');
     }
-    if (res == null){
+    if (res == null) {
         throw new Error('commentNotExist');
     }
-    return new Comment(res);
+    return new Comment(res); // return the comment object encapsulated in the Like object
   }
 
-  static async remove(commentId){
+  // remove comment by commentId
+  static async remove(commentId) {
       await Comment.model.findByIdAndRemove(commentId);
   }
 
-  static async retrieveByPhotoId(photoId){
+  // retrieve photo by photoId
+  static async retrieveByPhotoId(photoId) {
     let res;
     try {
       res = await this.model.find({ photoId });
       res = res.map(item => new Comment(item));
-      return res;
+      return res; // return the comment object encapsulated in the Comment object
     } catch (e) {
       throw new Error('databaseError');
     }
   }
 
-  static async retrieveByUserId(userId){
+  // retrieve photo by userId
+  static async retrieveByUserId(userId) {
     let res;
     try {
       res = await this.model.find({ userId });
       res = res.map(item => new Comment(item));
-      return res;
+      return res; // return the comment object encapsulated in the Comment object
     } catch (e) {
       throw new Error('databaseError');
     }
   }
 
-  async patch(){
+  // modify the comment
+  async patch() {
     const newInfo = {
       userId: this.userId,
       photoId: this.photoId,

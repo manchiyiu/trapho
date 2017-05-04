@@ -2,20 +2,21 @@ import * as bcrypt from 'bcryptjs';
 
 import User from '../model';
 
+// action to create a user
 export default async (msg, reply) => {
 
   const { username, password, email } = msg;
   let hashedPassword = await bcrypt.hash(password, 10);
 
-  /* check if user already exists */
+  // check if user already exists
   let result: User;
   try {
      result = await User.retrieve({ username });
      if (result) {
       throw new Error('alreadyExist');
      }
-  }catch(e){
-    reply(e, null);
+  } catch(e) {
+    reply(e, null);  // propagate the error to send if any
     return;
   }
 

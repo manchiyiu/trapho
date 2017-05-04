@@ -2,80 +2,88 @@ import * as mongoose from 'mongoose';
 
 export default class Like {
 
+  // initialize the structure of like object
   id : String = null;
   userId : String = null;
   photoId : String = null;
 
-
+  // define the like schema
   static schema = new mongoose.Schema({
     userId: String,
     photoId: String
   });
 
+  // define a new model according to the schema
   static model = mongoose.model('Like', Like.schema);
 
-  constructor(object: any){
+  // create the new object and assigned to this
+  constructor(object: any) {
     const {userId, photoId, _id: id} = object;
     this.userId = userId;
     this.photoId = photoId;
     this.id = id;
   }
 
-  async save(){
-    const model = new Like.model({userId: this.userId, photoId: this.photoId})
+  // save the object
+  async save() {
+    const model = new Like.model({ userId: this.userId, photoId: this.photoId });
     const product = await model.save();
-    return product._id;
+    return product._id; // return the id of the created object
   }
 
-  static async retrieveById(likeId: String){
+  // retrieve the object by likeId
+  static async retrieveById(likeId: String) {
     let res;
-    try{
+    try {
       res = await this.model.findById(likeId);
     } catch(e) {
       throw new Error('likeNotExist');
     }
-    if (res == null){
+    if (res == null) {
       throw new Error('likeNotExist');
     }
-    return new Like(res);
+    return new Like(res); // return the like object encapsulated in Like object
   }
 
-  static async retrieveUniquelyByQuery(query){
+  // retrieve like by userId and photoId, only return the first one
+  static async retrieveUniquelyByQuery(query) {
     const {userId, photoId} = query;
     let res;
-    try{
+    try {
       res = await this.model.findOne({userId, photoId});
     } catch(e) {
       throw new Error('likeNotExist');
     }
-    if (res == null){
+    if (res == null) {
       throw new Error('likeNotExist');
     }
     return new Like(res);
   }
 
-  static async remove(likeId: String){
+  // remove the like by likeId
+  static async remove(likeId: String) {
     await this.model.findByIdAndRemove(likeId);
   }
 
-  static async retrieveByUserId(userId: String){
+  // retrieve like by userId
+  static async retrieveByUserId(userId: String) {
     let res;
     try {
       res = await this.model.find({ userId }, '-__v');
       res = res.map(item => new Like(item));
-      console.log(res);
-      return res;
+      return res; // return the like object encapsulated in the Like object
     } catch (e) {
       throw new Error('databaseError');
     }
   }
 
-  static async retrieveByPhotoId(photoId: String){
+  // retrieve like objects associated with a particular photoId
+  static async retrieveByPhotoId(photoId: String) {
     let res;
     try {
       res = await this.model.find({ photoId }, '-__v');
       res = res.map(item => new Like(item));
-      return res;
+      return res; // return the like object encapsulated in the Like object
     } catch (e) {
       throw new Error('databaseError');
     }

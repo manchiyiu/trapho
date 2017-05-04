@@ -160,7 +160,7 @@ router.patch('/id/:userId', async (req, res) => {
  */
 router.delete('/id/:userId', async (req, res) => {
   const { userId } = req.params;
-  try{
+  try {
     const id = await act({ role: 'auth', cmd: 'userDelete', userId });
     res.json(id);
   } catch(err) {
