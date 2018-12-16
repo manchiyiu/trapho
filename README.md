@@ -2,11 +2,7 @@
 
 ## Information for TA
 
-* A backend server (with partial functionality) has been deployed at https://www.isaac-unfold.me:3000.
-
-* The frontend server has been deployed at: https://www.isaac-unfold.me, the authentication information will be added to here later.
-
-* We have define all API endpoints for our backend server, which are available at `csci3100-project/api-gateway/src/routes/*.ts`. We have also documented the input and output of each API endpoints, the API documentation is available here: http://ymcatar.github.io/csci3100-project.
+* We have define all API endpoints for our backend server, which are available at `api-gateway/src/routes/*.ts`. We have also documented the input and output of each API endpoints, the API documentation is available here: http://ymcatar.github.io/trapho.
 
 ## Basic architecture
 
